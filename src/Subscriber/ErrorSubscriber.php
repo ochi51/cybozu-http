@@ -5,6 +5,7 @@ namespace CybozuHttp\Subscriber;
 use GuzzleHttp\Event\ErrorEvent;
 use GuzzleHttp\Event\RequestEvents;
 use GuzzleHttp\Event\SubscriberInterface;
+use GuzzleHttp\Message\ResponseInterface;
 use CybozuHttp\Config;
 use CybozuHttp\Exception\FailedAuthException;
 use CybozuHttp\Exception\JsonResponseException;
@@ -43,19 +44,30 @@ class ErrorSubscriber implements SubscriberInterface
             return;
         }
 
-        $body = $response->getBody()->getContents();
+        $this->authError($response);
+        $this->jsonError($response);
+    }
+
+    private function authError(ResponseInterface $response)
+    {
+        $body = (string)$response->getBody();
         if (preg_match("/<[^<]+>/", $body) != 0) {
             throw new FailedAuthException('Invalid auth');
         }
+    }
 
+    private function jsonError(ResponseInterface $response)
+    {
         try {
             $json = $response->json();
         } catch (\RuntimeException $e) {
-            return;
+            // Uncaught response
+            return false;
         }
+
         $message = $json['message'];
         if (isset($json['errors']) && is_array($json['errors'])) {
-            $message .= $this->makeErrorMessages($json['errors']);
+            $message .= $this->addErrorMessages($json['errors']);
         }
         throw new JsonResponseException($message);
     }
@@ -64,16 +76,17 @@ class ErrorSubscriber implements SubscriberInterface
      * @param array $errors
      * @return string
      */
-    private function makeErrorMessages(array $errors)
+    private function addErrorMessages(array $errors)
     {
         $message = ' (';
         foreach ($errors as $k => $err) {
+            $message .= $k . ' : ';
             if (is_array($err['messages'])) {
                 foreach ($err['messages'] as $m) {
-                    $message .= $k . ' : ' . $m . PHP_EOL;
+                    $message .= $m . ' ';
                 }
             } else {
-                $message .= $k . ' : ' . $err['messages'] . PHP_EOL;
+                $message .= $err['messages'];
             }
         }
         $message .= ' )';

@@ -134,15 +134,31 @@ class Config
                 return false;
             }
         }
-        if ($this->get('useBasic') &&
-            (!$this->get('basicLogin') || !$this->get('basicPassword'))) {
+        if (!$this->hasKeysByUse('useBasic', ['basicLogin', 'basicPassword'])) {
             return false;
         }
-        if ($this->get('useClientCert') &&
-            (!$this->get('certFile') || !$this->get('certPassword'))) {
+        if (!$this->hasKeysByUse('useClientCert', ['certFile', 'certPassword'])) {
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * @param bool $use
+     * @param array $keys
+     * @return bool
+     */
+    private function hasKeysByUse($use, array $keys)
+    {
+        if (!$this->get($use)) {
+            return true;
+        }
+        foreach ($keys as $key) {
+            if (!$this->get($key)) {
+                return false;
+            }
+        }
         return true;
     }
 

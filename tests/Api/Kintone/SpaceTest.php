@@ -85,12 +85,12 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
     {
         $space = $this->api->space()->get($this->spaceId);
         if ($space['useMultiThread']) {
-            $this->api->space()->putBody($this->spaceId, 'Change body');
+            $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
             $space = $this->api->space()->get($this->spaceId);
-            $this->assertEquals('Change body', $space['body']);
+            $this->assertEquals('<p>Change body</p>', $space['body']);
         } else {
             try {
-                $this->api->space()->putBody($this->spaceId, 'Change body');
+                $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
                 $this->fail("ERROR!! Not throw exception");
             } catch (RequestException $e) {
                 $this->assertTrue(true);

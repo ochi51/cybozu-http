@@ -10,7 +10,7 @@ parameters:
     certFile: change_me
     certPassword: change_me
 space:
-    templateId: 1
+    templateId: 2
 graph:
     appId: 425
     reportId: 5094824
