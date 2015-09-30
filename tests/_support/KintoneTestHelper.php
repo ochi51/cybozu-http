@@ -445,6 +445,7 @@ class KintoneTestHelper
     {
         $yml = Yaml::parse(__DIR__ . '/../../parameters.yml');
         $config = $yml['parameters'];
+        $config['debug'] = true;
         $config['logfile'] = __DIR__ . '/../_output/connection.log';
         if ($config['useBasic'] and $config['useClientCert']) {
             $config['useClientCert'] = false;

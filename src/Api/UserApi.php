@@ -70,28 +70,18 @@ class UserApi
      */
     private $organizationUsers;
 
-    public function __construct(
-        Client $client,
-        Csv $csv = null,
-        Users $users = null,
-        Organizations $organizations = null,
-        Titles $titles = null,
-        Groups $groups = null,
-        UserOrganizations $userOrganizations = null,
-        UserGroups $userGroups = null,
-        UserServices $userServices = null,
-        OrganizationUsers $organizationUsers = null)
+    public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->csv = $csv ? $csv : new Csv($client);
-        $this->users = $users ? $users : new Users($client, $this->csv);
-        $this->organizations = $organizations ? $organizations : new Organizations($client, $this->csv);
-        $this->titles = $titles ? $titles : new Titles($client, $this->csv);
-        $this->groups = $groups ? $groups : new Groups($client, $this->csv);
-        $this->userOrganizations = $userOrganizations ? $userOrganizations : new UserOrganizations($client, $this->csv);
-        $this->userGroups = $userGroups ? $userGroups : new UserGroups($client, $this->csv);
-        $this->userServices = $userServices ? $userServices : new UserServices($client, $this->csv);
-        $this->organizationUsers = $organizationUsers ? $organizationUsers : new OrganizationUsers($client);
+        $this->csv = new Csv($client);
+        $this->users = new Users($client, $this->csv);
+        $this->organizations = new Organizations($client, $this->csv);
+        $this->titles = new Titles($client, $this->csv);
+        $this->groups = new Groups($client, $this->csv);
+        $this->userOrganizations = new UserOrganizations($client, $this->csv);
+        $this->userGroups = new UserGroups($client, $this->csv);
+        $this->userServices = new UserServices($client, $this->csv);
+        $this->organizationUsers = new OrganizationUsers($client);
     }
 
     /**

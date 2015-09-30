@@ -90,7 +90,7 @@ To run the tests, you need to following process.
 
 - Prepare your kintone account.
     - Free trial is [here](https://www.cybozu.com/jp/service/com/trial/?fcode=F00000081)
-- Create kintone space template.
+- Create kintone space template. (Enable multiple thread)
 - Create graph.
 - Edit `parameters.yml`.
 

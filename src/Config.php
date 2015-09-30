@@ -134,18 +134,37 @@ class Config
                 return false;
             }
         }
-        if ($this->get('useBasic') &&
-            (!$this->get('basicLogin') || !$this->get('basicPassword'))) {
+        if (!$this->hasKeysByUse('useBasic', ['basicLogin', 'basicPassword'])) {
             return false;
         }
-        if ($this->get('useClientCert') &&
-            (!$this->get('certFile') || !$this->get('certPassword'))) {
+        if (!$this->hasKeysByUse('useClientCert', ['certFile', 'certPassword'])) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * @param string $use
+     * @param string[] $keys
+     * @return bool
+     */
+    private function hasKeysByUse($use, array $keys)
+    {
+        if (!$this->get($use)) {
+            return true;
+        }
+        foreach ($keys as $key) {
+            if (!$this->get($key)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return string
+     */
     public function getBaseUrl()
     {
         $subdomain = $this->config['subdomain'];

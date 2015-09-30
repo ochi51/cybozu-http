@@ -35,13 +35,13 @@ class Apps
      * @param integer $guestSpaceId
      * @return array
      */
-    public function get($ids = [], $codes = [], $name = null, $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null)
+    public function get(array $ids = [], array $codes = [], $name = null, array $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null)
     {
         $options = ['json' => [
-            'ids' => (!empty($ids) ? $ids : []),
-            'codes' => (!empty($codes) ? $codes : []),
-            'name' => ($name ? $name : null),
-            'spaceIds' => (!empty($spaceIds) ? $spaceIds : []),
+            'ids' => $ids,
+            'codes' => $codes,
+            'name' => $name,
+            'spaceIds' => $spaceIds,
         ]];
         $options['json']['limit'] = $limit;
         $options['json']['offset'] = $offset;

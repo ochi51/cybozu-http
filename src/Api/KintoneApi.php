@@ -77,30 +77,19 @@ class KintoneApi
      */
     private $guests;
 
-    public function __construct(
-        Client $client,
-        App $app = null,
-        Apps $apps = null,
-        PreviewApp $preview = null,
-        Record $record = null,
-        Records $records = null,
-        File $file = null,
-        Graph $graph = null,
-        Space $space = null,
-        Thread $thread = null,
-        Guests $guests = null)
+    public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->app = $app ? $app : new App($client);
-        $this->apps = $apps ? $apps : new Apps($client);
-        $this->preview = $preview ? $preview : new PreviewApp($client);
-        $this->record = $record ? $record : new Record($client);
-        $this->records = $records ? $records : new Records($client);
-        $this->file = $file ? $file : new File($client);
-        $this->graph = $graph ? $graph : new Graph($client);
-        $this->space = $space ? $space : new Space($client);
-        $this->thread = $thread ? $thread : new Thread($client);
-        $this->guests = $guests ? $guests : new Guests($client);
+        $this->app = new App($client);
+        $this->apps = new Apps($client);
+        $this->preview = new PreviewApp($client);
+        $this->record = new Record($client);
+        $this->records = new Records($client);
+        $this->file = new File($client);
+        $this->graph = new Graph($client);
+        $this->space = new Space($client);
+        $this->thread = new Thread($client);
+        $this->guests = new Guests($client);
     }
 
     /**
