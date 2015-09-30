@@ -40,7 +40,7 @@ class ErrorSubscriber implements SubscriberInterface
     public function onError(ErrorEvent $event)
     {
         $response = $event->getResponse();
-        if (!$response->getStatusCode() || !$response->getBody()) {
+        if (!$response || !$response->getStatusCode() || !$response->getBody()) {
             return;
         }
 

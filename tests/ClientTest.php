@@ -179,16 +179,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     break;
             }
         } catch (BadResponseException $e) {
+            file_put_contents(
+                __DIR__ . '/_output/connectionTestError.html',
+                (string)$e->getResponse()->getBody()
+            );
+            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+        } catch (RequestException $e) {
             switch ($pattern) {
                 case self::CHANGE_BASIC_LOGIN:
                 case self::CHANGE_BASIC_PASSWORD:
                     $this->assertTrue(true);
                     break;
                 default:
-                    file_put_contents(
-                        __DIR__ . '/_output/connectionTestError.html',
-                        $e->getResponse()->getBody()->getContents()
-                    );
                     $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
                     break;
             }

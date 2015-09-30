@@ -145,8 +145,8 @@ class Config
     }
 
     /**
-     * @param bool $use
-     * @param array $keys
+     * @param string $use
+     * @param string[] $keys
      * @return bool
      */
     private function hasKeysByUse($use, array $keys)
@@ -162,6 +162,9 @@ class Config
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getBaseUrl()
     {
         $subdomain = $this->config['subdomain'];
