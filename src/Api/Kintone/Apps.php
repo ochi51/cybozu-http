@@ -38,10 +38,10 @@ class Apps
     public function get($ids = [], $codes = [], $name = null, $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null)
     {
         $options = ['json' => [
-            'ids' => (($ids && count($ids)) ? $ids : []),
-            'codes' => (($codes && count($codes)) ? $codes : []),
+            'ids' => (!empty($ids) ? $ids : []),
+            'codes' => (!empty($codes) ? $codes : []),
             'name' => ($name ? $name : null),
-            'spaceIds' => (($spaceIds && count($spaceIds)) ? $spaceIds : []),
+            'spaceIds' => (!empty($spaceIds) ? $spaceIds : []),
         ]];
         $options['json']['limit'] = $limit;
         $options['json']['offset'] = $offset;

@@ -134,12 +134,12 @@ class Config
                 return false;
             }
         }
-        if ($this->get('useBasic') and
-            (!$this->get('basicLogin') or !$this->get('basicPassword'))) {
+        if ($this->get('useBasic') &&
+            (!$this->get('basicLogin') || !$this->get('basicPassword'))) {
             return false;
         }
-        if ($this->get('useClientCert') and
-            (!$this->get('certFile') or !$this->get('certPassword'))) {
+        if ($this->get('useClientCert') &&
+            (!$this->get('certFile') || !$this->get('certPassword'))) {
             return false;
         }
 

@@ -41,8 +41,8 @@ class Users
     public function get(array $ids = [], array $codes = [], $offset = 0, $limit = self::MAX_GET_USERS)
     {
         $options = ['json' => [
-            'ids' => (($ids && count($ids)) ? $ids : []),
-            'codes' => (($codes && count($codes)) ? $codes : [])
+            'ids' => (!empty($ids) ? $ids : []),
+            'codes' => (!empty($codes) ? $codes : [])
         ]];
         $options['json']['size'] = $limit;
         $options['json']['offset'] = $offset;

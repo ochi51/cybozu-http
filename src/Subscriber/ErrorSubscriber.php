@@ -39,7 +39,7 @@ class ErrorSubscriber implements SubscriberInterface
     public function onError(ErrorEvent $event)
     {
         $response = $event->getResponse();
-        if (!$response->getStatusCode() or !$response->getBody()) {
+        if (!$response->getStatusCode() || !$response->getBody()) {
             return;
         }
 
@@ -54,19 +54,30 @@ class ErrorSubscriber implements SubscriberInterface
             return;
         }
         $message = $json['message'];
-        if (isset($json['errors'])) {
-            $message .= ' (';
-            foreach ($json['errors'] as $k => $err) {
-                if (is_array($err['messages'])) {
-                    foreach ($err['messages'] as $m) {
-                        $message .= $k . ' : ' . $m . PHP_EOL;
-                    }
-                } else {
-                    $message .= $k . ' : ' . $err['messages'] . PHP_EOL;
-                }
-            }
-            $message .= ' )';
+        if (isset($json['errors']) && is_array($json['errors'])) {
+            $message .= $this->makeErrorMessages($json['errors']);
         }
         throw new JsonResponseException($message);
+    }
+
+    /**
+     * @param array $errors
+     * @return string
+     */
+    private function makeErrorMessages(array $errors)
+    {
+        $message = ' (';
+        foreach ($errors as $k => $err) {
+            if (is_array($err['messages'])) {
+                foreach ($err['messages'] as $m) {
+                    $message .= $k . ' : ' . $m . PHP_EOL;
+                }
+            } else {
+                $message .= $k . ' : ' . $err['messages'] . PHP_EOL;
+            }
+        }
+        $message .= ' )';
+
+        return $message;
     }
 }
