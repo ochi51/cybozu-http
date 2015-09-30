@@ -1,0 +1,16 @@
+parameters:
+    domain: cybozu.com
+    subdomain: change_me
+    login: change_me
+    password: change_me
+    useBasic: false
+    basicLogin: change_me
+    basicPassword: change_me
+    useClientCert: false
+    certFile: change_me
+    certPassword: change_me
+space:
+    templateId: 1
+graph:
+    appId: 425
+    reportId: 5094824

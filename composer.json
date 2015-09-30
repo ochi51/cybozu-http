@@ -1,0 +1,61 @@
+{
+  "name": "ochi51/cybozu-http",
+  "type": "library",
+  "description": "A PHP HTTP client library for cybozu.com API (kintone API and User API)",
+  "authors": [
+    {
+      "name": "Yuichi Ochiai",
+      "email": "ochiai@cstap.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "guzzlehttp/guzzle": "~5.3",
+    "guzzlehttp/log-subscriber": "~1.0",
+    "incenteev/composer-parameter-handler": "~2.1",
+    "symfony/yaml": "~2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8",
+    "jwage/easy-csv": "0.0.3.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "CybozuHttp\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CybozuHttp\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ],
+    "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ]
+  },
+  "extra": {
+    "incenteev-parameters": {
+      "file": "parameters.yml",
+      "dist-file": "parameters.dist.yml",
+      "env-map": {
+        "domain":         "CYBOZU_DOMAIN",
+        "subdomain":      "CYBOZU_SUB_DOMAIN",
+        "login":          "CYBOZU_LOGIN",
+        "password":       "CYBOZU_PASSWORD",
+        "useBasic":       "CYBOZU_USE_BASIC",
+        "basicLogin":     "CYBOZU_BASIC_LOGIN",
+        "basicPassword":  "CYBOZU_BASIC_PASSWORD",
+        "useClientCert":  "CYBOZU_USE_CERT_FILE",
+        "certFile":       "CYBOZU_CERT_FILE_PASS",
+        "certPassword":   "CYBOZU_CERT_PASSWORD"
+      }
+    }
+  }
+}

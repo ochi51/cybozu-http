@@ -1,0 +1,6 @@
+/vendor/
+parameters.yml
+/tests/_output
+
+# PHPStorm
+.idea
