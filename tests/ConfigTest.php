@@ -12,8 +12,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
+            'useApiToken' => false,
             'login' => 'test@ochi51.com',
-            'password' => 'password'
+            'password' => 'password',
+            'useBasic' => true,
+            'basicLogin' => 'basic',
+            'basicPassword' => 'password',
+            'useClientCert' => true,
+            'certFile' => '/path/to/cert',
+            'certPassword' => 'password'
         ]);
 
         $reflection = new \ReflectionClass($config);
@@ -21,7 +28,39 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
         $method->invoke($config);
         $this->assertArrayHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
-        $this->assertFalse($config->get('defaults')['verify']);
+        $this->assertEquals($config->get('defaults')['auth'], ['basic', 'password']);
+        $this->assertTrue($config->get('defaults')['verify']);
+        $this->assertEquals($config->get('defaults')['cert'], ['/path/to/cert','password']);
+    }
+
+    public function testConfigureAuth()
+    {
+        $config = new Config([
+            'domain' => 'cybozu.com',
+            'subdomain' => 'test',
+            'useApiToken' => false,
+            'login' => 'test@ochi51.com',
+            'password' => 'password'
+        ]);
+        $reflection = new \ReflectionClass($config);
+        $method = $reflection->getMethod('configureAuth');
+        $method->setAccessible(true);
+        $method->invoke($config);
+        $this->assertArrayHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
+        $this->assertArrayNotHasKey('X-Cybozu-API-Token', $config->get('defaults')['headers']);
+
+        $config = new Config([
+            'domain' => 'cybozu.com',
+            'subdomain' => 'test',
+            'useApiToken' => true,
+            'token' => 'test_token'
+        ]);
+        $reflection = new \ReflectionClass($config);
+        $method = $reflection->getMethod('configureAuth');
+        $method->setAccessible(true);
+        $method->invoke($config);
+        $this->assertArrayNotHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
+        $this->assertArrayHasKey('X-Cybozu-API-Token', $config->get('defaults')['headers']);
     }
 
     public function testGetBasicAuthOptions()
@@ -141,6 +180,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config([
             'subdomain' => 'test',
+            'useApiToken' => true,
+            'token' => 'test_token'
+        ]);
+        $this->assertTrue($config->hasRequired());
+
+        $config = new Config([
+            'login' => 'test@ochi51.com',
+            'password' => 'password'
+        ]);
+        $this->assertFalse($config->hasRequired());
+
+        $config = new Config([
+            'subdomain' => 'test',
             'login' => 'test@ochi51.com'
         ]);
         $this->assertFalse($config->hasRequired());
@@ -148,6 +200,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'subdomain' => 'test',
             'password' => 'password'
+        ]);
+        $this->assertFalse($config->hasRequired());
+
+        $config = new Config([
+            'subdomain' => 'test',
+            'useApiToken' => true
         ]);
         $this->assertFalse($config->hasRequired());
     }
