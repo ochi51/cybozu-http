@@ -1,4 +1,4 @@
-Cybozu HTTP client for PHP
+Cybozu HTTP client for PHP[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](https://github.com/ochi51/cybozu-http/tree/master/LICENSE)
 =======================
 
 [![Circle CI](https://circleci.com/gh/ochi51/cybozu-http/tree/master.svg?style=svg)](https://circleci.com/gh/ochi51/cybozu-http/tree/master)
@@ -97,13 +97,12 @@ To run the tests, you need to following process.
 Run the following command from the project folder.
 
 ```{.bash}
-    $ composer test
+    $ php ./bin/phpunit
 ```
 
 TODO
 ------------
 
-- Add tests that User API using CSV format.
 - Japanese documentation.
 
 License
