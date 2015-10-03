@@ -1,6 +1,6 @@
 <?php
 
-namespace Cert;
+namespace CybozuHttp\Tests\Cert;
 
 use CybozuHttp\Cert\Pfx;
 

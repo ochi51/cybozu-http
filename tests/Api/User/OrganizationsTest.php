@@ -1,6 +1,6 @@
 <?php
 
-namespace CybozuHttp\tests\Api\User;
+namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
 use UserTestHelper;

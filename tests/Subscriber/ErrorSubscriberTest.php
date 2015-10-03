@@ -1,6 +1,6 @@
 <?php
 
-namespace CybozuHttp\tests\Subscriber;
+namespace CybozuHttp\Tests\Subscriber;
 
 use GuzzleHttp\Message\Response;
 use GuzzleHttp\Stream\Stream;
