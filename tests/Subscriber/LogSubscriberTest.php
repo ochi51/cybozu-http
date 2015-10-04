@@ -1,6 +1,6 @@
 <?php
 
-namespace CybozuHttp\tests\Subscriber;
+namespace CybozuHttp\Tests\Subscriber;
 
 use CybozuHttp\Config;
 use CybozuHttp\Subscriber\LogSubscriber;

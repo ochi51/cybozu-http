@@ -17,7 +17,7 @@ test:
     - touch tests/_data/test.pem
     - echo $CYBOZU_CERT_FILE_CONTENT > tests/_data/test.pem
   override:
-    - phpunit --coverage-text --coverage-clover=coverage.clover
+    - php ./bin/phpunit --coverage-text --coverage-clover=coverage.clover
   post:
     - wget https://scrutinizer-ci.com/ocular.phar
     - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

@@ -1,6 +1,6 @@
 <?php
 
-namespace CybozuHttp\tests\Api\Kintone;
+namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
 use CybozuHttp\Api\Kintone\Apps;
