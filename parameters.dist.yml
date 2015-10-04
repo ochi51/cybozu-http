@@ -3,12 +3,12 @@ parameters:
     subdomain: change_me
     login: change_me
     password: change_me
-    useBasic: false
-    basicLogin: change_me
-    basicPassword: change_me
-    useClientCert: false
-    certFile: change_me
-    certPassword: change_me
+    use_basic: false
+    basic_login: change_me
+    basic_password: change_me
+    use_client_cert: false
+    cert_file: change_me
+    cert_password: change_me
 space:
     templateId: 2
 graph:

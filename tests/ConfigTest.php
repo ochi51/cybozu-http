@@ -12,15 +12,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
-            'useApiToken' => false,
+            'use_api_token' => false,
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'useBasic' => true,
-            'basicLogin' => 'basic',
-            'basicPassword' => 'password',
-            'useClientCert' => true,
-            'certFile' => '/path/to/cert',
-            'certPassword' => 'password'
+            'use_basic' => true,
+            'basic_login' => 'basic',
+            'basic_password' => 'password',
+            'use_client_cert' => true,
+            'cert_file' => '/path/to/cert',
+            'cert_password' => 'password'
         ]);
 
         $reflection = new \ReflectionClass($config);
@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
-            'useApiToken' => false,
+            'use_api_token' => false,
             'login' => 'test@ochi51.com',
             'password' => 'password'
         ]);
@@ -52,7 +52,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
-            'useApiToken' => true,
+            'use_api_token' => true,
             'token' => 'test_token'
         ]);
         $reflection = new \ReflectionClass($config);
@@ -70,9 +70,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'useBasic' => true,
-            'basicLogin' => 'basic',
-            'basicPassword' => 'password'
+            'use_basic' => true,
+            'basic_login' => 'basic',
+            'basic_password' => 'password'
         ]);
 
         $reflection = new \ReflectionClass($config);
@@ -87,8 +87,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'subdomain' => 'test',
                 'login' => 'test@ochi51.com',
                 'password' => 'password',
-                'useBasic' => true,
-                'basicLogin' => 'basic'
+                'use_basic' => true,
+                'basic_login' => 'basic'
             ]);
             $this->fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
@@ -103,10 +103,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'useBasic' => false,
-            'useClientCert' => true,
-            'certFile' => '/path/to/cert',
-            'certPassword' => 'password'
+            'use_basic' => false,
+            'use_client_cert' => true,
+            'cert_file' => '/path/to/cert',
+            'cert_password' => 'password'
         ]);
 
         $reflection = new \ReflectionClass($config);
@@ -121,9 +121,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'subdomain' => 'test',
                 'login' => 'test@ochi51.com',
                 'password' => 'password',
-                'useBasic' => false,
-                'useClientCert' => true,
-                'certFile' => '/path/to/cert'
+                'use_basic' => false,
+                'use_client_cert' => true,
+                'cert_file' => '/path/to/cert'
             ]);
             $this->fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
@@ -138,8 +138,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'useBasic' => false,
-            'useClientCert' => false,
+            'use_basic' => false,
+            'use_client_cert' => false,
             'debug' => false
         ]);
 
@@ -148,8 +148,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $array['subdomain']);
         $this->assertEquals('test@ochi51.com', $array['login']);
         $this->assertEquals('password', $array['password']);
-        $this->assertEquals(false, $array['useBasic']);
-        $this->assertEquals(false, $array['useClientCert']);
+        $this->assertEquals(false, $array['use_basic']);
+        $this->assertEquals(false, $array['use_client_cert']);
         $this->assertEquals(false, $array['debug']);
     }
 
@@ -180,7 +180,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config([
             'subdomain' => 'test',
-            'useApiToken' => true,
+            'use_api_token' => true,
             'token' => 'test_token'
         ]);
         $this->assertTrue($config->hasRequired());
@@ -205,7 +205,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $config = new Config([
             'subdomain' => 'test',
-            'useApiToken' => true
+            'use_api_token' => true
         ]);
         $this->assertFalse($config->hasRequired());
     }
@@ -224,9 +224,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'useClientCert' => true,
-            'certFile' => '/path/to/cert',
-            'certPassword' => 'password'
+            'use_client_cert' => true,
+            'cert_file' => '/path/to/cert',
+            'cert_password' => 'password'
         ]))->getBaseUrl());
     }
 }
