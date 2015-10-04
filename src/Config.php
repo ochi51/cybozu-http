@@ -21,9 +21,9 @@ class Config
      */
     private $default = [
         'domain' => "cybozu.com",
-        'useApiToken' => false,
-        'useBasic' => false,
-        'useClientCert' => false,
+        'use_api_token' => false,
+        'use_basic' => false,
+        'use_client_cert' => false,
         'base_url' => null,
         'defaults' => [],
         'debug' => false
@@ -35,9 +35,9 @@ class Config
     private $required = [
         'domain',
         'subdomain',
-        'useApiToken',
-        'useBasic',
-        'useClientCert',
+        'use_api_token',
+        'use_basic',
+        'use_client_cert',
         'base_url',
         'defaults',
         'debug'
@@ -64,7 +64,7 @@ class Config
 
     private function configureAuth()
     {
-        if ($this->get('useApiToken')) {
+        if ($this->get('use_api_token')) {
             $this->config['defaults']['headers']['X-Cybozu-API-Token'] = $this->get('token');
         } else {
             $this->config['defaults']['headers']['X-Cybozu-Authorization'] =
@@ -74,14 +74,14 @@ class Config
 
     private function configureBasicAuth()
     {
-        if ($this->get('useBasic')) {
+        if ($this->get('use_basic')) {
             $this->config['defaults']['auth'] = $this->getBasicAuthOptions();
         }
     }
 
     private function configureCert()
     {
-        if ($this->get('useClientCert')) {
+        if ($this->get('use_client_cert')) {
             $this->config['defaults']['verify'] = true;
             $this->config['defaults']['cert'] = $this->getCertOptions();
         } else {
@@ -96,8 +96,8 @@ class Config
     {
         if ($this->hasRequiredOnBasicAuth()) {
             return [
-                $this->get('basicLogin'),
-                $this->get('basicPassword')
+                $this->get('basic_login'),
+                $this->get('basic_password')
             ];
         }
         throw new NotExistRequiredException("kintone.empty_basic_password");
@@ -110,8 +110,8 @@ class Config
     {
         if ($this->hasRequiredOnCert()) {
             return [
-                $this->get('certFile'),
-                $this->get('certPassword')
+                $this->get('cert_file'),
+                $this->get('cert_password')
             ];
         }
         throw new NotExistRequiredException("kintone.empty_cert");
@@ -159,7 +159,7 @@ class Config
      */
     private function hasRequiredOnAuth()
     {
-        if ($this->get('useApiToken')) {
+        if ($this->get('use_api_token')) {
             return !empty($this->get('token'));
         }
 
@@ -171,7 +171,7 @@ class Config
      */
     private function hasRequiredOnBasicAuth()
     {
-        return $this->hasKeysByUse('useBasic', ['basicLogin', 'basicPassword']);
+        return $this->hasKeysByUse('use_basic', ['basic_login', 'basic_password']);
     }
 
     /**
@@ -179,7 +179,7 @@ class Config
      */
     private function hasRequiredOnCert()
     {
-        return $this->hasKeysByUse('useClientCert', ['certFile', 'certPassword']);
+        return $this->hasKeysByUse('use_client_cert', ['cert_file', 'cert_password']);
     }
 
     /**
@@ -211,7 +211,7 @@ class Config
         $uri = "https://" . $subdomain;
 
         if (strpos($subdomain, '.') === false) {
-            if ($this->get('useClientCert')) {
+            if ($this->get('use_client_cert')) {
                 $uri .= ".s";
             }
 

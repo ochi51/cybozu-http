@@ -84,22 +84,22 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $config = $this->config;
 
-        $this->successConnection($config, $config['useBasic'], $config['useClientCert']);
+        $this->successConnection($config, $config['use_basic'], $config['use_client_cert']);
 
-        if ($config['useBasic'] and $config['useClientCert']) {
-            $config['useBasic'] = true;
-            $config['useClientCert'] = false;
+        if ($config['use_basic'] and $config['use_client_cert']) {
+            $config['use_basic'] = true;
+            $config['use_client_cert'] = false;
             $this->successConnection($config, true, false);
             $this->successConnection($config, false, true);
         }
         $this->errorConnection($config, self::CHANGE_SUB_DOMAIN);
         $this->errorConnection($config, self::CHANGE_LOGIN);
         $this->errorConnection($config, self::CHANGE_PASSWORD);
-        if ($config['useBasic']) {
+        if ($config['use_basic']) {
             $this->errorConnection($config, self::CHANGE_BASIC_LOGIN);
             $this->errorConnection($config, self::CHANGE_BASIC_PASSWORD);
         }
-        if ($config['useClientCert']) {
+        if ($config['use_client_cert']) {
             $this->errorConnection($config, self::CHANGE_CERT_FILE);
             $this->errorConnection($config, self::CHANGE_CERT_PASSWORD);
         }
@@ -113,8 +113,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     private function successConnection(array $config, $useBasic = true, $useCert = true)
     {
-        $config['useBasic'] = $useBasic;
-        $config['useClientCert'] = $useCert;
+        $config['use_basic'] = $useBasic;
+        $config['use_client_cert'] = $useCert;
         $client = Client::factory($config);
         try {
             $client->connectionTest();
@@ -152,16 +152,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 $config['password'] = 'change_me';
                 break;
             case self::CHANGE_BASIC_LOGIN:
-                $config['basicLogin'] = 'change_me';
+                $config['basic_login'] = 'change_me';
                 break;
             case self::CHANGE_BASIC_PASSWORD:
-                $config['basicPassword'] = 'change_me';
+                $config['basic_password'] = 'change_me';
                 break;
             case self::CHANGE_CERT_FILE:
-                $config['certFile'] = 'change_me';
+                $config['cert_file'] = 'change_me';
                 break;
             case self::CHANGE_CERT_PASSWORD:
-                $config['certPassword'] = 'change_me';
+                $config['cert_password'] = 'change_me';
                 break;
         }
         $client = Client::factory($config);

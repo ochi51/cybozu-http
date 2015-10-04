@@ -447,8 +447,8 @@ class KintoneTestHelper
         $config = $yml['parameters'];
         $config['debug'] = true;
         $config['logfile'] = __DIR__ . '/../_output/connection.log';
-        if ($config['useBasic'] and $config['useClientCert']) {
-            $config['useClientCert'] = false;
+        if ($config['use_basic'] and $config['use_client_cert']) {
+            $config['use_client_cert'] = false;
         }
         self::$config = $config;
         self::$spaceTemplateId = $yml['space']['templateId'];

@@ -49,12 +49,12 @@
         "subdomain":      "CYBOZU_SUB_DOMAIN",
         "login":          "CYBOZU_LOGIN",
         "password":       "CYBOZU_PASSWORD",
-        "useBasic":       "CYBOZU_USE_BASIC",
-        "basicLogin":     "CYBOZU_BASIC_LOGIN",
-        "basicPassword":  "CYBOZU_BASIC_PASSWORD",
-        "useClientCert":  "CYBOZU_USE_CERT_FILE",
-        "certFile":       "CYBOZU_CERT_FILE_PASS",
-        "certPassword":   "CYBOZU_CERT_PASSWORD"
+        "use_basic":       "CYBOZU_USE_BASIC",
+        "basic_login":     "CYBOZU_BASIC_LOGIN",
+        "basic_password":  "CYBOZU_BASIC_PASSWORD",
+        "use_client_cert":  "CYBOZU_USE_CERT_FILE",
+        "cert_file":       "CYBOZU_CERT_FILE_PASS",
+        "cert_password":   "CYBOZU_CERT_PASSWORD"
       }
     }
   }
