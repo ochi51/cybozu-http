@@ -55,6 +55,27 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testChangeAuthOptions()
+    {
+        try {
+            $client = Client::factory([
+                'domain' => 'cybozu.com',
+                'subdomain' => 'test',
+                'login' => 'test@ochi51.com',
+                'password' => 'password'
+            ]);
+            $client->changeAuthOptions([
+                'use_api_token' => true,
+                'token' => 'token'
+            ]);
+            $headers = $client->getDefaultOption('headers/headers');
+            $this->assertEquals($headers['X-Cybozu-API-Token'], 'token');
+            $this->assertFalse(isset($headers['X-Cybozu-Authorization']));
+        } catch (NotExistRequiredException $e) {
+            $this->fail("ERROR!! NotExistRequiredException");
+        }
+    }
+
     public function testFactory()
     {
         try {

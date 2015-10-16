@@ -52,6 +52,20 @@ class Client extends GuzzleClient
     }
 
     /**
+     * @param array $config
+     */
+    public function changeAuthOptions(array $config)
+    {
+        $mergeConfig = $config + $this->config->toArray();
+        $config = (new Config($mergeConfig));
+        $options = $config->toArray()['defaults'];
+        foreach ($options as $key => $option) {
+            $this->setDefaultOption($key, $options);
+        }
+        $this->config = $config;
+    }
+
+    /**
      * @param string $prefix
      * @throws FailedAuthException
      */
