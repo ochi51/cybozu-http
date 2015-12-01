@@ -37,10 +37,18 @@ class Client extends GuzzleClient
         $emitter->attach(new ErrorSubscriber($config));
 
         if ($config->get('debug') && $config->get('logfile')) {
-            $emitter->attach(new LogSubscriber(fopen($config->get('logfile'), 'a'), Formatter::DEBUG));
+            $client->attachLogSubscriber();
         }
 
         return $client;
+    }
+
+    protected function attachLogSubscriber()
+    {
+        $emitter = $this->getEmitter();
+        if ($this->config->get('debug') && $this->config->get('logfile')) {
+            $emitter->attach(new LogSubscriber(fopen($this->config->get('logfile'), 'a'), Formatter::DEBUG));
+        }
     }
 
     /**
@@ -63,8 +71,13 @@ class Client extends GuzzleClient
         $config = (new Config($mergeConfig));
         $options = $config->toArray()['defaults'];
         foreach ($options as $key => $option) {
-            $this->setDefaultOption($key, $options);
+            $this->setDefaultOption($key, $option);
         }
+
+        if ($config->get('debug') && $config->get('logfile')) {
+            $this->attachLogSubscriber();
+        }
+
         $this->config = $config;
     }
 

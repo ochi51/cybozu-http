@@ -99,7 +99,7 @@ class KintoneApi
      */
     public static function generateUrl($api, $guestSpaceId = null)
     {
-        if ($guestSpaceId !== null) {
+        if (!empty($guestSpaceId)) {
             return self::GUEST_SPACE_PREFIX . $guestSpaceId . "/v1/" . $api;
         }
 
