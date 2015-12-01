@@ -68,7 +68,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'use_api_token' => true,
                 'token' => 'token'
             ]);
-            $headers = $client->getDefaultOption('headers/headers');
+            $headers = $client->getDefaultOption('headers');
             $this->assertEquals($headers['X-Cybozu-API-Token'], 'token');
             $this->assertFalse(isset($headers['X-Cybozu-Authorization']));
         } catch (NotExistRequiredException $e) {
