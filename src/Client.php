@@ -6,7 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Subscriber\Log\Formatter;
 use CybozuHttp\Exception\FailedAuthException;
 use CybozuHttp\Exception\NotExistRequiredException;
-use CybozuHttp\Subscriber\LogSubscriber;
+use GuzzleHttp\Subscriber\Log\LogSubscriber;
 use CybozuHttp\Subscriber\ErrorSubscriber;
 
 /**

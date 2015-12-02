@@ -48,14 +48,21 @@ class ErrorSubscriber implements SubscriberInterface
         $this->jsonError($response);
     }
 
+    /**
+     * @param ResponseInterface $response
+     */
     private function authError(ResponseInterface $response)
     {
         $body = (string)$response->getBody();
         if (preg_match("/<[^<]+>/", $body) != 0) {
-            throw new FailedAuthException('Invalid auth');
+            throw new FailedAuthException('Invalid auth.');
         }
     }
 
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
     private function jsonError(ResponseInterface $response)
     {
         try {
