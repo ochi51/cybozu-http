@@ -31,7 +31,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /**
      * @var integer
      */
+    private $guestSpaceId;
+
+    /**
+     * @var array
+     */
+    private $guestSpace;
+
+    /**
+     * @var integer
+     */
     private $appId;
+
+    /**
+     * @var integer
+     */
+    private $guestAppId;
 
     protected function setup()
     {
@@ -40,6 +55,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->space = $this->api->space()->get($this->spaceId);
         $this->appId = $this->api->preview()
             ->post('test app', $this->spaceId, $this->space['defaultThread'])['app'];
+
+        $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
+        $this->guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
+        $this->guestAppId = $this->api->preview()
+            ->post('test app', $this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId)['app'];
     }
 
     public function testFile()
@@ -55,6 +75,18 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey);
+        $this->assertEquals(file_get_contents($filename), $content);
+
+        $key = $this->api->file()->post($filename, $this->guestSpaceId);
+
+        $this->api->preview()->putCustomize($this->guestAppId, [[
+            'type' => 'FILE',
+            'file' => ['fileKey' => $key]
+        ]], [], [], $this->guestSpaceId);
+        $fileKey = $this->api->preview()
+            ->getCustomize($this->guestAppId, $this->guestSpaceId)['desktop']['js'][0]['file']['fileKey'];
+
+        $content = $this->api->file()->get($fileKey, $this->guestSpaceId);
         $this->assertEquals(file_get_contents($filename), $content);
     }
 
