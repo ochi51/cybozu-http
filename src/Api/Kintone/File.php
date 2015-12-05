@@ -25,13 +25,14 @@ class File
      * Get file
      * https://cybozudev.zendesk.com/hc/ja/articles/202166180#step1
      *
-     * @param $fileKey
+     * @param string $fileKey
+     * @param int $guestSpaceId
      * @return string
      */
-    public function get($fileKey)
+    public function get($fileKey, $guestSpaceId = null)
     {
         $options = ['json' => ['fileKey' => $fileKey]];
-        $response = $this->client->get(KintoneApi::generateUrl('file.json'), $options);
+        $response = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
 
         return (string)$response->getBody();
     }
@@ -41,15 +42,16 @@ class File
      * https://cybozudev.zendesk.com/hc/ja/articles/201941824#step1
      *
      * @param string $filename
+     * @param int $guestSpaceId
      * @return string
      */
-    public function post($filename)
+    public function post($filename, $guestSpaceId = null)
     {
         $options = ['body' => [
             'file' => fopen($filename, 'r')
         ]];
         return $this->client
-            ->post(KintoneApi::generateUrl('file.json'), $options)
+            ->post(KintoneApi::generateUrl('file.json', $guestSpaceId), $options)
             ->json()["fileKey"];
     }
 }
