@@ -9,6 +9,8 @@ use CybozuHttp\Api\Kintone\PreviewApp;
 use CybozuHttp\Api\Kintone\Record;
 use CybozuHttp\Api\Kintone\Records;
 use CybozuHttp\Api\Kintone\File;
+use CybozuHttp\Api\Kintone\Comment;
+use CybozuHttp\Api\Kintone\Comments;
 use CybozuHttp\Api\Kintone\Graph;
 use CybozuHttp\Api\Kintone\Space;
 use CybozuHttp\Api\Kintone\Thread;
@@ -58,6 +60,16 @@ class KintoneApi
     private $file;
 
     /**
+     * @var Comment
+     */
+    private $comment;
+
+    /**
+     * @var Comments
+     */
+    private $comments;
+
+    /**
      * @var Graph
      */
     private $graph;
@@ -86,6 +98,8 @@ class KintoneApi
         $this->record = new Record($client);
         $this->records = new Records($client);
         $this->file = new File($client);
+        $this->comment = new Comment($client);
+        $this->comments = new Comments($client);
         $this->graph = new Graph($client);
         $this->space = new Space($client);
         $this->thread = new Thread($client);
@@ -160,6 +174,22 @@ class KintoneApi
     public function file()
     {
         return $this->file;
+    }
+
+    /**
+     * @return Comment
+     */
+    public function comment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @return Comments
+     */
+    public function comments()
+    {
+        return $this->comments;
     }
 
     /**
