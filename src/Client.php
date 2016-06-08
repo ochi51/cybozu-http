@@ -4,10 +4,10 @@ namespace CybozuHttp;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Subscriber\Log\Formatter;
-use CybozuHttp\Exception\FailedAuthException;
-use CybozuHttp\Exception\NotExistRequiredException;
 use GuzzleHttp\Subscriber\Log\LogSubscriber;
 use CybozuHttp\Subscriber\ErrorSubscriber;
+use CybozuHttp\Exception\FailedAuthException;
+use CybozuHttp\Exception\NotExistRequiredException;
 
 /**
  * @author ochi51<ochiai07@gmail.com>
@@ -20,34 +20,40 @@ class Client extends GuzzleClient
     protected $config;
 
     /**
+     * Client constructor.
      * @param array $config
-     * @return Client
-     * @throws NotExistRequiredException
      */
-    public static function factory($config = [])
+    public function __construct($config = [])
     {
         $config = new Config($config);
         if (!$config->hasRequired()) {
             throw new NotExistRequiredException();
         }
 
-        $client = new self($config->toArray());
-        $client->config = $config;
-        $emitter = $client->getEmitter();
-        $emitter->attach(new ErrorSubscriber($config));
+        parent::__construct($config->toArray());
 
-        if ($config->get('debug') && $config->get('logfile')) {
-            $client->attachLogSubscriber();
-        }
+        $this->config = $config;
 
-        return $client;
+        $this->attachErrorSubscriber($config);
+        $this->attachLogSubscriber($config);
     }
 
-    protected function attachLogSubscriber()
+    /**
+     * @param Config $config
+     */
+    protected function attachErrorSubscriber(Config $config)
     {
-        $emitter = $this->getEmitter();
-        if ($this->config->get('debug') && $this->config->get('logfile')) {
-            $emitter->attach(new LogSubscriber(fopen($this->config->get('logfile'), 'a'), Formatter::DEBUG));
+        $this->getEmitter()->attach(new ErrorSubscriber($config));
+    }
+
+    /**
+     * @param Config $config
+     */
+    protected function attachLogSubscriber(Config $config)
+    {
+        if ($config->get('debug') && $config->get('logfile')) {
+            $logSubscriber = new LogSubscriber(fopen($config->get('logfile'), 'a'), Formatter::DEBUG);
+            $this->getEmitter()->attach($logSubscriber);
         }
     }
 
@@ -74,9 +80,7 @@ class Client extends GuzzleClient
             $this->setDefaultOption($key, $option);
         }
 
-        if ($config->get('debug') && $config->get('logfile')) {
-            $this->attachLogSubscriber();
-        }
+        $this->attachLogSubscriber($config);
 
         $this->config = $config;
     }

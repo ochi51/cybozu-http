@@ -454,7 +454,7 @@ class KintoneTestHelper
         self::$spaceTemplateId = $yml['space']['templateId'];
         self::$graph = $yml['graph'];
 
-        self::$api = new KintoneApi(Client::factory($config));
+        self::$api = new KintoneApi(new Client($config));
 
         return self::$api;
     }
