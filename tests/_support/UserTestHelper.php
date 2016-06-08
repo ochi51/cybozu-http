@@ -36,7 +36,7 @@ class UserTestHelper
         }
         self::$config = $config;
 
-        self::$api = new UserApi(Client::factory($config));
+        self::$api = new UserApi(new Client($config));
 
         return self::$api;
     }
