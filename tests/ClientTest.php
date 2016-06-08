@@ -39,7 +39,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig()
     {
         try {
-            $client = Client::factory([
+            $client = new Client([
                 'domain' => 'cybozu.com',
                 'subdomain' => 'test',
                 'login' => 'test@ochi51.com',
@@ -58,7 +58,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testChangeAuthOptions()
     {
         try {
-            $client = Client::factory([
+            $client = new Client([
                 'domain' => 'cybozu.com',
                 'subdomain' => 'test',
                 'login' => 'test@ochi51.com',
@@ -76,10 +76,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testFactory()
+    public function testConstruct()
     {
         try {
-            Client::factory([
+            new Client([
                 'domain' => 'cybozu.com',
                 'subdomain' => 'test',
                 'login' => 'test@ochi51.com',
@@ -91,7 +91,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(true);
 
         try {
-            Client::factory([
+            new Client([
                 'domain' => 'cybozu.com',
                 'subdomain' => 'test'
             ]);
@@ -136,7 +136,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $config['use_basic'] = $useBasic;
         $config['use_client_cert'] = $useCert;
-        $client = Client::factory($config);
+        $client = new Client($config);
         try {
             $client->connectionTest();
         } catch (FailedAuthException $e) {
@@ -185,7 +185,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 $config['cert_password'] = 'change_me';
                 break;
         }
-        $client = Client::factory($config);
+        $client = new Client($config);
         try {
             $client->connectionTest();
         } catch (NotExistRequiredException $e) {

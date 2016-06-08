@@ -26,6 +26,9 @@ class Config
         'use_client_cert' => false,
         'base_url' => null,
         'defaults' => [],
+        'use_cache' => false,
+        'cache_dir' => null,
+        'cache_ttl' => 0,
         'debug' => false
     ];
 
@@ -40,6 +43,7 @@ class Config
         'use_client_cert',
         'base_url',
         'defaults',
+        'use_cache',
         'debug'
     ];
 
@@ -151,7 +155,8 @@ class Config
 
         return $this->hasRequiredOnAuth()
                 && $this->hasRequiredOnBasicAuth()
-                && $this->hasRequiredOnCert();
+                && $this->hasRequiredOnCert()
+                && $this->hasRequiredOnCache();
     }
 
     /**
@@ -183,6 +188,14 @@ class Config
     }
 
     /**
+     * @return bool
+     */
+    private function hasRequiredOnCache()
+    {
+        return $this->hasKeysByUse('use_cache', ['cache_dir', 'cache_ttl']);
+    }
+
+    /**
      * @param string $use
      * @param string[] $keys
      * @return bool
@@ -194,7 +207,7 @@ class Config
         }
 
         foreach ($keys as $key) {
-            if (!$this->get($key)) {
+            if (is_null($this->get($key)) || $this->get($key) === false) {
                 return false;
             }
         }
