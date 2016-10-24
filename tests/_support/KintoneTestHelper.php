@@ -443,7 +443,7 @@ class KintoneTestHelper
 
     public static function createKintoneApi()
     {
-        $yml = Yaml::parse(__DIR__ . '/../../parameters.yml');
+        $yml = Yaml::parse(file_get_contents(__DIR__ . '/../../parameters.yml'));
         $config = $yml['parameters'];
         $config['debug'] = true;
         $config['logfile'] = __DIR__ . '/../_output/connection.log';
