@@ -22,7 +22,7 @@ class CacheClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $yml = Yaml::parse(__DIR__ . '/../parameters.yml');
+        $yml = Yaml::parse(file_get_contents(__DIR__ . '/../parameters.yml'));
         $this->config = $yml['parameters'];
         $this->config['debug']     = true;
         $this->config['logfile']   = __DIR__ . '/_output/connection.log';
@@ -35,7 +35,23 @@ class CacheClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new CacheClient($this->config);
         $api = new KintoneApi($client);
-        $spaceId = KintoneTestHelper::createTestSpace();
+        KintoneTestHelper::createKintoneApi();
+
+        $members = [[
+            "entity" => [
+                "type" => "USER",
+                "code" => $this->config['login']
+            ],
+            "isAdmin" => true
+        ]];
+        $resp = $api->space()->post(
+            KintoneTestHelper::getSpaceTemplateId(),
+            'cybozu-http test space',
+            $members,
+            true
+        );
+
+        $spaceId = $resp['id'];
 
         $space = $api->space()->get($spaceId);
         $api->space()->delete($spaceId);

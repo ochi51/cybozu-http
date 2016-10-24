@@ -30,7 +30,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $yml = Yaml::parse(__DIR__ . '/../parameters.yml');
+        $yml = Yaml::parse(file_get_contents(__DIR__ . '/../parameters.yml'));
         $this->config = $yml['parameters'];
         $this->config['debug'] = true;
         $this->config['logfile'] = __DIR__ . '/_output/connection.log';
@@ -207,6 +207,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         } catch (RequestException $e) {
             switch ($pattern) {
+                case self::CHANGE_LOGIN:
+                case self::CHANGE_PASSWORD:
                 case self::CHANGE_BASIC_LOGIN:
                 case self::CHANGE_BASIC_PASSWORD:
                     $this->assertTrue(true);
