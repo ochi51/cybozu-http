@@ -47,6 +47,19 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(true);
     }
 
+    public function testComment()
+    {
+        $space = $this->api->space()->get($this->spaceId);
+        $this->api->thread()->comment($this->spaceId, $space['defaultThread'], 'test thread comment');
+        // kintone does not have the get thread api.
+        $this->assertTrue(true);
+
+        $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
+        $this->api->thread()->comment($this->guestSpaceId, $guestSpace['defaultThread'], 'test thread comment', [], [], $this->guestSpaceId);
+        // kintone does not have the get thread api.
+        $this->assertTrue(true);
+    }
+
     protected function tearDown()
     {
         $this->api->space()->delete($this->spaceId);

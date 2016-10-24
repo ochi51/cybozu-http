@@ -45,4 +45,32 @@ class Thread
             ->json();
     }
 
+    /**
+     * Post thread comment
+     * https://cybozudev.zendesk.com/hc/ja/articles/209732306
+     *
+     * @param int $spaceId
+     * @param int $threadId
+     * @param string $comment
+     * @param array $mentions
+     * @param array $files
+     * @param int $guestSpaceId
+     * @return array
+     */
+    public function comment($spaceId, $threadId, $comment, $mentions = [], $files = [], $guestSpaceId = null)
+    {
+        $options = ['json' => [
+            'space'  => $spaceId,
+            'thread' => $threadId,
+            'comment'  => [
+                'text' => $comment,
+                'mentions' => $mentions,
+                'files' => $files
+            ],
+        ]];
+
+        return $this->client
+            ->post(KintoneApi::generateUrl('space/thread/comment.json', $guestSpaceId), $options)
+            ->json();
+    }
 }
