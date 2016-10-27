@@ -34,7 +34,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -52,7 +52,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/settings.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -69,7 +69,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('form.json', $guestSpaceId), $options)
-            ->json()['properties'];
+            ->getBody()->jsonSerialize()['properties'];
     }
 
     /**
@@ -87,7 +87,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/form/fields.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -105,7 +105,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/form/layout.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -123,7 +123,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/views.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -141,7 +141,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -159,7 +159,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('record/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -177,7 +177,7 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('field/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -194,6 +194,6 @@ class App
 
         return $this->client
             ->get(KintoneApi::generateUrl('app/customize.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

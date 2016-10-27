@@ -33,7 +33,7 @@ class Guests
 
         return $this->client
             ->post(KintoneApi::generateUrl('guests.json'), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -49,7 +49,7 @@ class Guests
 
         return $this->client
             ->delete(KintoneApi::generateUrl('guests.json'), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
 }

@@ -7,31 +7,6 @@ use CybozuHttp\Exception\NotExistRequiredException;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConfigureDefaults()
-    {
-        $config = new Config([
-            'domain' => 'cybozu.com',
-            'subdomain' => 'test',
-            'use_api_token' => false,
-            'login' => 'test@ochi51.com',
-            'password' => 'password',
-            'use_basic' => true,
-            'basic_login' => 'basic',
-            'basic_password' => 'password',
-            'use_client_cert' => true,
-            'cert_file' => '/path/to/cert',
-            'cert_password' => 'password'
-        ]);
-
-        $reflection = new \ReflectionClass($config);
-        $method = $reflection->getMethod('configureDefaults');
-        $method->setAccessible(true);
-        $method->invoke($config);
-        $this->assertArrayHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
-        $this->assertEquals($config->get('defaults')['auth'], ['basic', 'password']);
-        $this->assertTrue($config->get('defaults')['verify']);
-        $this->assertEquals($config->get('defaults')['cert'], ['/path/to/cert','password']);
-    }
 
     public function testConfigureAuth()
     {
@@ -46,8 +21,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('configureAuth');
         $method->setAccessible(true);
         $method->invoke($config);
-        $this->assertArrayHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
-        $this->assertArrayNotHasKey('X-Cybozu-API-Token', $config->get('defaults')['headers']);
+        self::assertArrayHasKey('X-Cybozu-Authorization', $config->get('headers'));
+        self::assertArrayNotHasKey('X-Cybozu-API-Token', $config->get('headers'));
 
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -59,8 +34,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('configureAuth');
         $method->setAccessible(true);
         $method->invoke($config);
-        $this->assertArrayNotHasKey('X-Cybozu-Authorization', $config->get('defaults')['headers']);
-        $this->assertArrayHasKey('X-Cybozu-API-Token', $config->get('defaults')['headers']);
+        self::assertArrayNotHasKey('X-Cybozu-Authorization', $config->get('headers'));
+        self::assertArrayHasKey('X-Cybozu-API-Token', $config->get('headers'));
     }
 
     public function testGetBasicAuthOptions()
@@ -79,7 +54,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('getBasicAuthOptions');
         $method->setAccessible(true);
         $res = $method->invoke($config);
-        $this->assertEquals($res, ['basic', 'password']);
+        self::assertEquals($res, ['basic', 'password']);
 
         try {
             new Config([
@@ -90,9 +65,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'use_basic' => true,
                 'basic_login' => 'basic'
             ]);
-            $this->fail('Not throw NotExistRequiredException.');
+            self::fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
@@ -113,7 +88,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('getCertOptions');
         $method->setAccessible(true);
         $res = $method->invoke($config);
-        $this->assertEquals($res, ['/path/to/cert', 'password']);
+        self::assertEquals($res, ['/path/to/cert', 'password']);
 
         try {
             new Config([
@@ -125,32 +100,38 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'use_client_cert' => true,
                 'cert_file' => '/path/to/cert'
             ]);
-            $this->fail('Not throw NotExistRequiredException.');
+            self::fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
-    public function testToArray()
+    public function testToGuzzleConfig()
     {
         $config = new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password',
-            'use_basic' => false,
-            'use_client_cert' => false,
+            'use_basic' => true,
+            'basic_login' => 'basic',
+            'basic_password' => 'password',
+            'use_client_cert' => true,
+            'cert_file' => '/path/to/cert',
+            'cert_password' => 'password',
             'debug' => false
         ]);
 
-        $array = $config->toArray();
-        $this->assertEquals('cybozu.com', $array['domain']);
-        $this->assertEquals('test', $array['subdomain']);
-        $this->assertEquals('test@ochi51.com', $array['login']);
-        $this->assertEquals('password', $array['password']);
-        $this->assertEquals(false, $array['use_basic']);
-        $this->assertEquals(false, $array['use_client_cert']);
-        $this->assertEquals(false, $array['debug']);
+        $array = $config->toGuzzleConfig();
+        self::assertTrue((bool)$array['handler']);
+        self::assertEquals('https://test.s.cybozu.com', $array['base_uri']);
+        self::assertEquals([
+            'X-Cybozu-Authorization' => base64_encode("test@ochi51.com:password")
+        ], $array['headers']);
+        self::assertEquals(['basic', 'password'], $array['auth']);
+        self::assertTrue($array['verify']);
+        self::assertEquals(['/path/to/cert', 'password'], $array['cert']);
+        self::assertFalse($array['debug']);
     }
 
     public function testGet()
@@ -162,11 +143,43 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'password' => 'password'
         ]);
 
-        $this->assertEquals('cybozu.com', $config->get('domain'));
-        $this->assertEquals('test', $config->get('subdomain'));
-        $this->assertEquals('test@ochi51.com', $config->get('login'));
-        $this->assertEquals('password', $config->get('password'));
-        $this->assertFalse($config->get('not_exist_parameter'));
+        self::assertEquals('cybozu.com', $config->get('domain'));
+        self::assertEquals('test', $config->get('subdomain'));
+        self::assertEquals('test@ochi51.com', $config->get('login'));
+        self::assertEquals('password', $config->get('password'));
+        self::assertFalse($config->get('not_exist_parameter'));
+    }
+
+    public function testGetConfig()
+    {
+        $config = new Config([
+            'domain' => 'cybozu.com',
+            'subdomain' => 'test',
+            'login' => 'test@ochi51.com',
+            'password' => 'password',
+            'use_basic' => true,
+            'basic_login' => 'basic',
+            'basic_password' => 'password',
+            'use_client_cert' => true,
+            'cert_file' => '/path/to/cert',
+            'cert_password' => 'password',
+            'debug' => false
+        ]);
+
+        $c = $config->getConfig();
+
+        self::assertEquals('cybozu.com', $c['domain']);
+        self::assertEquals('test', $c['subdomain']);
+        self::assertEquals('test@ochi51.com', $c['login']);
+        self::assertTrue($c['use_basic']);
+        self::assertEquals('basic', $c['basic_login']);
+        self::assertEquals('password', $c['basic_password']);
+        self::assertTrue($c['use_client_cert']);
+        self::assertEquals('/path/to/cert', $c['cert_file']);
+        self::assertEquals('password', $c['cert_password']);
+        self::assertFalse($c['debug']);
+        self::assertArrayHasKey('handler', $c);
+        self::assertArrayHasKey('base_uri', $c);
     }
 
     public function testHasRequired()
@@ -176,50 +189,50 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'login' => 'test@ochi51.com',
             'password' => 'password'
         ]);
-        $this->assertTrue($config->hasRequired());
+        self::assertTrue($config->hasRequired());
 
         $config = new Config([
             'subdomain' => 'test',
             'use_api_token' => true,
             'token' => 'test_token'
         ]);
-        $this->assertTrue($config->hasRequired());
+        self::assertTrue($config->hasRequired());
 
         $config = new Config([
             'login' => 'test@ochi51.com',
             'password' => 'password'
         ]);
-        $this->assertFalse($config->hasRequired());
+        self::assertFalse($config->hasRequired());
 
         $config = new Config([
             'subdomain' => 'test',
             'login' => 'test@ochi51.com'
         ]);
-        $this->assertFalse($config->hasRequired());
+        self::assertFalse($config->hasRequired());
 
         $config = new Config([
             'subdomain' => 'test',
             'password' => 'password'
         ]);
-        $this->assertFalse($config->hasRequired());
+        self::assertFalse($config->hasRequired());
 
         $config = new Config([
             'subdomain' => 'test',
             'use_api_token' => true
         ]);
-        $this->assertFalse($config->hasRequired());
+        self::assertFalse($config->hasRequired());
     }
 
     public function testGetBaseUrl()
     {
-        $this->assertEquals("https://test.cybozu.com", (new Config([
+        self::assertEquals("https://test.cybozu.com", (new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password'
-        ]))->getBaseUrl());
+        ]))->getBaseUri());
 
-        $this->assertEquals("https://test.s.cybozu.com", (new Config([
+        self::assertEquals("https://test.s.cybozu.com", (new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
@@ -227,6 +240,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'use_client_cert' => true,
             'cert_file' => '/path/to/cert',
             'cert_password' => 'password'
-        ]))->getBaseUrl());
+        ]))->getBaseUri());
     }
 }

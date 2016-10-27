@@ -66,9 +66,9 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             if ($code == 'table') {
                 continue;
             }
-            $this->assertEquals($field['value'], $record[$code]['value']);
+            self::assertEquals($field['value'], $record[$code]['value']);
         }
-        $this->assertEquals(5, $resp['totalCount']);
+        self::assertEquals(5, $resp['totalCount']);
 
         $this->api->records()->put($this->appId, [[
             'id' => $ids[0],
@@ -77,13 +77,13 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             ]
         ]]);
         $record = $this->api->record()->get($this->appId, $ids[0]);
-        $this->assertEquals('change single_text value', $record['single_text']['value']);
+        self::assertEquals('change single_text value', $record['single_text']['value']);
 
         $this->api->records()->delete($this->appId, [1]);
         $resp = $this->api->records()->get($this->appId);
         $record = $resp['records'][0];
-        $this->assertEquals(4, $resp['totalCount']);
-        $this->assertNotEquals('change single_text value', $record['single_text']['value']);
+        self::assertEquals(4, $resp['totalCount']);
+        self::assertNotEquals('change single_text value', $record['single_text']['value']);
 
 
         $ids = $this->api->records()->post(
@@ -99,9 +99,9 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             if ($code == 'table') {
                 continue;
             }
-            $this->assertEquals($field['value'], $record[$code]['value']);
+            self::assertEquals($field['value'], $record[$code]['value']);
         }
-        $this->assertEquals(5, $resp['totalCount']);
+        self::assertEquals(5, $resp['totalCount']);
 
         $this->api->records()->put($this->guestAppId, [[
             'id' => $ids[0],
@@ -111,14 +111,14 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         ]], $this->guestSpaceId);
         $record = $this->api->record()
             ->get($this->guestAppId, $ids[0], $this->guestSpaceId);
-        $this->assertEquals('change single_text value', $record['single_text']['value']);
+        self::assertEquals('change single_text value', $record['single_text']['value']);
 
         $this->api->records()->delete($this->guestAppId, [1], $this->guestSpaceId);
         $resp = $this->api->records()
             ->get($this->guestAppId, '', $this->guestSpaceId);
         $record = $resp['records'][0];
-        $this->assertEquals(4, $resp['totalCount']);
-        $this->assertNotEquals('change single_text value', $record['single_text']['value']);
+        self::assertEquals(4, $resp['totalCount']);
+        self::assertNotEquals('change single_text value', $record['single_text']['value']);
     }
 
     public function testStatus()

@@ -30,9 +30,9 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -48,9 +48,9 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -61,12 +61,12 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         while ($row = $getCsv->getRow()) {
             if ("example-title1" == reset($row)) {
-                $this->assertEquals($row, [
+                self::assertEquals($row, [
                     "test1@example.com","ki","ga","sa","of"
                 ]);
             }
             if ("example-title2" == reset($row)) {
-                $this->assertEquals($row, [
+                self::assertEquals($row, [
                     "test2@example.com","ki","sa"
                 ]);
             }
@@ -83,9 +83,9 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }

@@ -47,11 +47,16 @@ class File
      */
     public function post($filename, $guestSpaceId = null)
     {
-        $options = ['body' => [
-            'file' => fopen($filename, 'r')
+        $options = ['multipart' =>  [
+            [
+                'name' => 'file',
+                'filename' => basename($filename),
+                'contents' => fopen($filename, 'r')
+            ]
         ]];
+
         return $this->client
             ->post(KintoneApi::generateUrl('file.json', $guestSpaceId), $options)
-            ->json()["fileKey"];
+            ->getBody()->jsonSerialize()["fileKey"];
     }
 }

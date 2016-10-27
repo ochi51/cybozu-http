@@ -75,7 +75,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey);
-        $this->assertEquals(file_get_contents($filename), $content);
+        self::assertEquals(file_get_contents($filename), $content);
 
         $key = $this->api->file()->post($filename, $this->guestSpaceId);
 
@@ -87,7 +87,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->guestAppId, $this->guestSpaceId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey, $this->guestSpaceId);
-        $this->assertEquals(file_get_contents($filename), $content);
+        self::assertEquals(file_get_contents($filename), $content);
     }
 
     protected function tearDown()

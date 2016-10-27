@@ -37,9 +37,9 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -57,7 +57,7 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 $flg2 = true;
             }
         }
-        $this->assertTrue($flg1 and $flg2);
+        self::assertTrue($flg1 and $flg2);
 
         $filename = __DIR__ . '/../../_output/export-organizations.csv';
         $id = $this->api->organizations()->postByCsv($filename);
@@ -67,9 +67,9 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }

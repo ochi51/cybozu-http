@@ -84,7 +84,7 @@ class Csv
 
         return $this->client
             ->post(UserApi::generateUrl("csv/{$type}.json"), $options)
-            ->json()['id'];
+            ->getBody()->jsonSerialize()['id'];
     }
 
     /**
@@ -96,13 +96,17 @@ class Csv
      */
     public function file($filename)
     {
-        $options = ['body' => [
-            'file' => fopen($filename, 'r')
+        $options = ['multipart' =>  [
+            [
+                'name' => 'file',
+                'filename' => basename($filename),
+                'contents' => fopen($filename, 'r')
+            ]
         ]];
 
         return $this->client
             ->post(UserApi::generateUrl('file.json'), $options)
-            ->json()["fileKey"];
+            ->getBody()->jsonSerialize()["fileKey"];
     }
 
     /**
@@ -118,6 +122,6 @@ class Csv
 
         return $this->client
             ->get(UserApi::generateUrl('csv/result.json'), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

@@ -56,7 +56,7 @@ class PreviewApp
 
         return $this->client
             ->post(KintoneApi::generateUrl('preview/app/deploy.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -86,7 +86,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/deploy.json', $guestSpaceId), $options)
-            ->json()['apps'];
+            ->getBody()->jsonSerialize()['apps'];
     }
 
     /**
@@ -109,7 +109,7 @@ class PreviewApp
 
         return $this->client
             ->post(KintoneApi::generateUrl('preview/app.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -127,7 +127,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/settings.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -145,7 +145,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -163,7 +163,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/form/layout.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -181,7 +181,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/views.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -199,7 +199,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -217,7 +217,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/record/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -235,7 +235,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/field/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -252,7 +252,7 @@ class PreviewApp
 
         return $this->client
             ->get(KintoneApi::generateUrl('preview/app/customize.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -281,7 +281,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/settings.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -304,7 +304,7 @@ class PreviewApp
 
         return $this->client
             ->post(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -327,7 +327,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -350,7 +350,7 @@ class PreviewApp
 
         return $this->client
             ->delete(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -373,7 +373,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/form/layout.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -396,7 +396,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/views.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -419,7 +419,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -442,7 +442,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/record/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -465,7 +465,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/field/acl.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -498,7 +498,7 @@ class PreviewApp
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/app/customize.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
 }

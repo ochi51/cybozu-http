@@ -44,6 +44,6 @@ class Comments
 
         return $this->client
             ->get(KintoneApi::generateUrl('record/comments.json', $guestSpaceId), $options)
-            ->json()['comments'];
+            ->getBody()->jsonSerialize()['comments'];
     }
 }

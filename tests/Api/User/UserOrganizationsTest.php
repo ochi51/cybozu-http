@@ -30,9 +30,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -49,9 +49,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -64,9 +64,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -76,7 +76,7 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
     {
         $config = UserTestHelper::getConfig();
         $this->api->userOrganizations()->get($config['login']);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     public function testCsv()
@@ -89,9 +89,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -102,12 +102,12 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         while ($row = $getCsv->getRow()) {
             if ("example-title1" == reset($row)) {
-                $this->assertEquals($row, [
+                self::assertEquals($row, [
                     "test1@example.com","example-org1","example-title1"
                 ]);
             }
             if ("example-title2" == reset($row)) {
-                $this->assertEquals($row, [
+                self::assertEquals($row, [
                     "test2@example.com","example-org2","example-title2"
                 ]);
             }
@@ -124,9 +124,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -139,9 +139,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -154,9 +154,9 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }

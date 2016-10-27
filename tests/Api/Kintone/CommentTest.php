@@ -71,12 +71,12 @@ class CommentTest extends \PHPUnit_Framework_TestCase
 
         $comments = $this->api->comments()->get($this->appId, $recordId, 'desc', 0, 1);
         $comment = reset($comments);
-        $this->assertEquals($comment['id'], $id);
-        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        self::assertEquals($comment['id'], $id);
+        self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
 
         $this->api->comment()->delete($this->appId, $recordId, $id);
         $comments = $this->api->comments()->get($this->appId, $recordId);
-        $this->assertEquals(count($comments), 0);
+        self::assertEquals(count($comments), 0);
     }
 
     public function testGuestComment()
@@ -100,8 +100,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             1,
             $this->guestSpaceId);
         $comment = reset($comments);
-        $this->assertEquals($comment['id'], $id);
-        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        self::assertEquals($comment['id'], $id);
+        self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
 
         $this->api->comment()->delete($this->guestAppId, $recordId, $id, $this->guestSpaceId);
         $comments = $this->api->comments()->get(
@@ -111,7 +111,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             0,
             10,
             $this->guestSpaceId);
-        $this->assertEquals(count($comments), 0);
+        self::assertEquals(count($comments), 0);
     }
 
     protected function tearDown()

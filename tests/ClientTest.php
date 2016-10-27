@@ -3,10 +3,10 @@
 namespace CybozuHttp\Tests;
 
 use CybozuHttp\Client;
-use CybozuHttp\Exception\FailedAuthException;
 use CybozuHttp\Exception\NotExistRequiredException;
-use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -36,46 +36,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->config['logfile'] = __DIR__ . '/_output/connection.log';
     }
 
-    public function testGetConfig()
-    {
-        try {
-            $client = new Client([
-                'domain' => 'cybozu.com',
-                'subdomain' => 'test',
-                'login' => 'test@ochi51.com',
-                'password' => 'password'
-            ]);
-            $config = $client->getConfig();
-            $this->assertEquals($config->get('domain'), 'cybozu.com');
-            $this->assertEquals($config->get('subdomain'), 'test');
-            $this->assertEquals($config->get('login'), 'test@ochi51.com');
-            $this->assertEquals($config->get('password'), 'password');
-        } catch (NotExistRequiredException $e) {
-            $this->fail("ERROR!! NotExistRequiredException");
-        }
-    }
-
-    public function testChangeAuthOptions()
-    {
-        try {
-            $client = new Client([
-                'domain' => 'cybozu.com',
-                'subdomain' => 'test',
-                'login' => 'test@ochi51.com',
-                'password' => 'password'
-            ]);
-            $client->changeAuthOptions([
-                'use_api_token' => true,
-                'token' => 'token'
-            ]);
-            $headers = $client->getDefaultOption('headers');
-            $this->assertEquals($headers['X-Cybozu-API-Token'], 'token');
-            $this->assertFalse(isset($headers['X-Cybozu-Authorization']));
-        } catch (NotExistRequiredException $e) {
-            $this->fail("ERROR!! NotExistRequiredException");
-        }
-    }
-
     public function testConstruct()
     {
         try {
@@ -86,18 +46,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'password' => 'password'
             ]);
         } catch (NotExistRequiredException $e) {
-            $this->fail("ERROR!! NotExistRequiredException");
+            self::fail("ERROR!! NotExistRequiredException");
         }
-        $this->assertTrue(true);
+        self::assertTrue(true);
 
         try {
             new Client([
                 'domain' => 'cybozu.com',
                 'subdomain' => 'test'
             ]);
-            $this->fail('Not throw NotExistRequiredException.');
+            self::fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
@@ -139,18 +99,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = new Client($config);
         try {
             $client->connectionTest();
-        } catch (FailedAuthException $e) {
-            $this->fail("ERROR!! FailedAuthException : " . $e->getMessage());
-        } catch (BadResponseException $e) {
+        } catch (RequestException $e) {
             file_put_contents(
                 __DIR__ . '/_output/connectionTestError' . (int)$useBasic . (int)$useCert . '.html',
                 $e->getResponse()->getBody()
             );
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         } catch (\Exception $e) {
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         }
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     /**
@@ -188,37 +146,36 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = new Client($config);
         try {
             $client->connectionTest();
-        } catch (NotExistRequiredException $e) {
-            $this->assertTrue(true);
-        } catch (FailedAuthException $e) {
+        } catch (ClientException $e) {
             switch ($pattern) {
-                case self::CHANGE_SUB_DOMAIN:
-                    $this->assertTrue(true);
+                case self::CHANGE_BASIC_LOGIN:
+                case self::CHANGE_BASIC_PASSWORD:
+                    self::assertTrue(true);
                     break;
                 default:
-                    $this->fail("ERROR!! FailedAuthException : " . $e->getMessage());
+                    file_put_contents(
+                        __DIR__ . '/_output/connectionTestError.html',
+                        (string)$e->getResponse()->getBody()
+                    );
+                    self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
                     break;
             }
-        } catch (BadResponseException $e) {
-            file_put_contents(
-                __DIR__ . '/_output/connectionTestError.html',
-                (string)$e->getResponse()->getBody()
-            );
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
-        } catch (RequestException $e) {
+        } catch (ServerException $e) {
             switch ($pattern) {
                 case self::CHANGE_LOGIN:
                 case self::CHANGE_PASSWORD:
-                case self::CHANGE_BASIC_LOGIN:
-                case self::CHANGE_BASIC_PASSWORD:
-                    $this->assertTrue(true);
+                    self::assertTrue(true);
                     break;
                 default:
-                    $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                    file_put_contents(
+                        __DIR__ . '/_output/connectionTestError.html',
+                        (string)$e->getResponse()->getBody()
+                    );
+                    self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
                     break;
             }
         } catch (\Exception $e) {
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         }
     }
 }

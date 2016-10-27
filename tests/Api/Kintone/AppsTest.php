@@ -63,16 +63,16 @@ class AppsTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $app = $this->api->apps()->get([$this->appId], [], null, [$this->spaceId])['apps'][0];
-        $this->assertEquals($app['appId'], $this->appId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
-        $this->assertEquals($app['spaceId'], $this->spaceId);
-        $this->assertEquals($app['threadId'], $this->space['defaultThread']);
+        self::assertEquals($app['appId'], $this->appId);
+        self::assertEquals($app['name'], 'cybozu-http test app');
+        self::assertEquals($app['spaceId'], $this->spaceId);
+        self::assertEquals($app['threadId'], $this->space['defaultThread']);
 
         $app = $this->api->apps()->get([$this->guestAppId], [], null, [$this->guestSpaceId], 100, 0, $this->guestSpaceId)['apps'][0];
-        $this->assertEquals($app['appId'], $this->guestAppId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
-        $this->assertEquals($app['spaceId'], $this->guestSpaceId);
-        $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
+        self::assertEquals($app['appId'], $this->guestAppId);
+        self::assertEquals($app['name'], 'cybozu-http test app');
+        self::assertEquals($app['spaceId'], $this->guestSpaceId);
+        self::assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
 
     protected function tearDown()
