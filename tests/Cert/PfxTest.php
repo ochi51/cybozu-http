@@ -15,23 +15,23 @@ class PfxTest extends \PHPUnit_Framework_TestCase
         $dir = __DIR__ . '/../_data/';
         try {
             Pfx::toPem($dir . 'test.pfx', 'fgq7n03e');
-            $this->assertTrue(true);
+            self::assertTrue(true);
         } catch (\Exception $e) {
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         }
 
         try {
             Pfx::toPem($dir . 'not-exist.pfx', 'test');
-            $this->fail("Not throw Failed load cert file exception!");
+            self::fail("Not throw Failed load cert file exception!");
         } catch (\Exception $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
 
         try {
             Pfx::toPem($dir . 'test.pfx', 'test');
-            $this->fail("Not throw Invalid cert password exception!");
+            self::fail("Not throw Invalid cert password exception!");
         } catch (\Exception $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 }

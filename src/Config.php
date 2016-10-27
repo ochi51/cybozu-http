@@ -3,6 +3,8 @@
 namespace CybozuHttp;
 
 use CybozuHttp\Exception\NotExistRequiredException;
+use CybozuHttp\Middleware\FinishMiddleware;
+use GuzzleHttp\HandlerStack;
 
 
 /**
@@ -24,11 +26,7 @@ class Config
         'use_api_token' => false,
         'use_basic' => false,
         'use_client_cert' => false,
-        'base_url' => null,
-        'defaults' => [],
-        'use_cache' => false,
-        'cache_dir' => null,
-        'cache_ttl' => 0,
+        'base_uri' => null,
         'debug' => false
     ];
 
@@ -36,14 +34,13 @@ class Config
      * @var array $required
      */
     private $required = [
+        'handler',
         'domain',
         'subdomain',
         'use_api_token',
         'use_basic',
         'use_client_cert',
-        'base_url',
-        'defaults',
-        'use_cache',
+        'base_uri',
         'debug'
     ];
 
@@ -51,27 +48,22 @@ class Config
     {
         $this->config = $config + $this->default;
 
-        $this->config['base_url'] = $this->getBaseUrl();
+        $this->config['base_uri'] = $this->getBaseUri();
+        $this->config['handler'] = $handler =  HandlerStack::create();
 
-        $this->configureDefaults();
-    }
-
-    /**
-     * configure default options
-     */
-    private function configureDefaults()
-    {
         $this->configureAuth();
         $this->configureBasicAuth();
         $this->configureCert();
+
+        $handler->before('http_errors', new FinishMiddleware(), 'cybozu_http.finish');
     }
 
     private function configureAuth()
     {
         if ($this->get('use_api_token')) {
-            $this->config['defaults']['headers']['X-Cybozu-API-Token'] = $this->get('token');
+            $this->config['headers']['X-Cybozu-API-Token'] = $this->get('token');
         } else {
-            $this->config['defaults']['headers']['X-Cybozu-Authorization'] =
+            $this->config['headers']['X-Cybozu-Authorization'] =
                 base64_encode($this->get('login') . ':' . $this->get('password'));
         }
     }
@@ -79,17 +71,17 @@ class Config
     private function configureBasicAuth()
     {
         if ($this->get('use_basic')) {
-            $this->config['defaults']['auth'] = $this->getBasicAuthOptions();
+            $this->config['auth'] = $this->getBasicAuthOptions();
         }
     }
 
     private function configureCert()
     {
         if ($this->get('use_client_cert')) {
-            $this->config['defaults']['verify'] = true;
-            $this->config['defaults']['cert'] = $this->getCertOptions();
+            $this->config['verify'] = true;
+            $this->config['cert'] = $this->getCertOptions();
         } else {
-            $this->config['defaults']['verify'] = false;
+            $this->config['verify'] = false;
         }
     }
 
@@ -124,9 +116,23 @@ class Config
     /**
      * @return array
      */
-    public function toArray()
+    public function toGuzzleConfig()
     {
-        return $this->config;
+        $config = [
+            'handler' => $this->get('handler'),
+            'base_uri' => $this->get('base_uri'),
+            'headers' => $this->get('headers'),
+            'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'a') : false
+        ];
+        if ($this->get('auth')) {
+            $config['auth'] = $this->get('auth');
+        }
+        $config['verify'] = $this->get('verify');
+        if ($this->get('cert')) {
+            $config['cert'] = $this->get('cert');
+        }
+
+        return $config;
     }
 
     /**
@@ -143,6 +149,14 @@ class Config
     }
 
     /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * @return bool
      */
     public function hasRequired()
@@ -155,8 +169,7 @@ class Config
 
         return $this->hasRequiredOnAuth()
                 && $this->hasRequiredOnBasicAuth()
-                && $this->hasRequiredOnCert()
-                && $this->hasRequiredOnCache();
+                && $this->hasRequiredOnCert();
     }
 
     /**
@@ -188,14 +201,6 @@ class Config
     }
 
     /**
-     * @return bool
-     */
-    private function hasRequiredOnCache()
-    {
-        return $this->hasKeysByUse('use_cache', ['cache_dir', 'cache_ttl']);
-    }
-
-    /**
      * @param string $use
      * @param string[] $keys
      * @return bool
@@ -218,7 +223,7 @@ class Config
     /**
      * @return string
      */
-    public function getBaseUrl()
+    public function getBaseUri()
     {
         $subdomain = $this->get('subdomain');
         $uri = "https://" . $subdomain;

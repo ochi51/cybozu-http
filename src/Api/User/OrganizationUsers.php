@@ -39,6 +39,6 @@ class OrganizationUsers
 
         return $this->client
             ->get(UserApi::generateUrl('organization/users.json'), $options)
-            ->json()['userTitles'];
+            ->getBody()->jsonSerialize()['userTitles'];
     }
 }

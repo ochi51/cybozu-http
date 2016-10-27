@@ -39,12 +39,12 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->put($space['defaultThread'], 'test thread', 'test thread body');
         // kintone does not have the get thread api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->api->thread()->put($guestSpace['defaultThread'], 'test thread', 'test thread body', $this->guestSpaceId);
         // kintone does not have the get thread api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     public function testComment()
@@ -52,12 +52,12 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->comment($this->spaceId, $space['defaultThread'], 'test thread comment');
         // kintone does not have the get thread api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->api->thread()->comment($this->guestSpaceId, $guestSpace['defaultThread'], 'test thread comment', [], [], $this->guestSpaceId);
         // kintone does not have the get thread api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     protected function tearDown()

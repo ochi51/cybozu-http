@@ -36,13 +36,13 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 $flg = true;
             }
         }
-        $this->assertTrue($flg);
+        self::assertTrue($flg);
 
         try {
             $this->api->csv()->get('aaa');
-            $this->fail('Not throw InvalidArgumentException.');
+            self::fail('Not throw InvalidArgumentException.');
         } catch (\InvalidArgumentException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 
@@ -55,9 +55,9 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -69,9 +69,9 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -81,9 +81,9 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->api->csv()->postKey('aaa', 'key');
-            $this->fail('Not throw InvalidArgumentException.');
+            self::fail('Not throw InvalidArgumentException.');
         } catch (\InvalidArgumentException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         }
     }
 }

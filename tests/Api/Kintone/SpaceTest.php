@@ -38,46 +38,46 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $space = $this->api->space()->get($this->spaceId);
-        $this->assertEquals($this->spaceId, $space['id']);
-        $this->assertEquals('cybozu-http test space', $space['name']);
-        $this->assertEquals(true, $space['isPrivate']);
-        $this->assertEquals(KintoneTestHelper::getConfig()['login'], $space['creator']['code']);
-        $this->assertEquals(KintoneTestHelper::getConfig()['login'], $space['modifier']['code']);
-        $this->assertEquals(false, $space['isGuest']);
+        self::assertEquals($this->spaceId, $space['id']);
+        self::assertEquals('cybozu-http test space', $space['name']);
+        self::assertEquals(true, $space['isPrivate']);
+        self::assertEquals(KintoneTestHelper::getConfig()['login'], $space['creator']['code']);
+        self::assertEquals(KintoneTestHelper::getConfig()['login'], $space['modifier']['code']);
+        self::assertEquals(false, $space['isGuest']);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
-        $this->assertEquals($this->guestSpaceId, $guestSpace['id']);
-        $this->assertEquals('cybozu-http test space', $guestSpace['name']);
-        $this->assertEquals(true, $guestSpace['isPrivate']);
-        $this->assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['creator']['code']);
-        $this->assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['modifier']['code']);
-        $this->assertEquals(true, $guestSpace['isGuest']);
+        self::assertEquals($this->guestSpaceId, $guestSpace['id']);
+        self::assertEquals('cybozu-http test space', $guestSpace['name']);
+        self::assertEquals(true, $guestSpace['isPrivate']);
+        self::assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['creator']['code']);
+        self::assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['modifier']['code']);
+        self::assertEquals(true, $guestSpace['isGuest']);
     }
 
     public function testPost()
     {
         // Post space in setup
         $space = $this->api->space()->get($this->spaceId);
-        $this->assertEquals($this->spaceId, $space['id']);
+        self::assertEquals($this->spaceId, $space['id']);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
-        $this->assertEquals($this->guestSpaceId, $guestSpace['id']);
+        self::assertEquals($this->guestSpaceId, $guestSpace['id']);
     }
 
     public function testDelete()
     {
         $id = KintoneTestHelper::createTestSpace();
         $space = $this->api->space()->get($id);
-        $this->assertEquals($id, $space['id']);
+        self::assertEquals($id, $space['id']);
 
         $this->api->space()->delete($id);
         try {
             $this->api->space()->get($id);
-            $this->fail("ERROR!! Not throw exception");
+            self::fail("ERROR!! Not throw exception");
         } catch (RequestException $e) {
-            $this->assertTrue(true);
+            self::assertTrue(true);
         } catch (\Exception $e) {
-            $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
         }
     }
 
@@ -87,15 +87,15 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         if ($space['useMultiThread']) {
             $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
             $space = $this->api->space()->get($this->spaceId);
-            $this->assertEquals('<p>Change body</p>', $space['body']);
+            self::assertEquals('<p>Change body</p>', $space['body']);
         } else {
             try {
                 $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
-                $this->fail("ERROR!! Not throw exception");
+                self::fail("ERROR!! Not throw exception");
             } catch (RequestException $e) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } catch (\Exception $e) {
-                $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
             }
         }
 
@@ -103,15 +103,15 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         if ($guestSpace['useMultiThread']) {
             $this->api->space()->putBody($this->guestSpaceId, 'Change body', $this->guestSpaceId);
             $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
-            $this->assertEquals('Change body', $guestSpace['body']);
+            self::assertEquals('Change body', $guestSpace['body']);
         } else {
             try {
                 $this->api->space()->putBody($this->guestSpaceId, 'Change body', $this->guestSpaceId);
-                $this->fail("ERROR!! Not throw exception");
+                self::fail("ERROR!! Not throw exception");
             } catch (RequestException $e) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } catch (\Exception $e) {
-                $this->fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
             }
         }
     }
@@ -128,9 +128,9 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         ]];
 
         $members = $this->api->space()->getMembers($this->spaceId);
-        $this->assertEquals($members['members'], $testMembers);
+        self::assertEquals($members['members'], $testMembers);
         $members = $this->api->space()->getMembers($this->guestSpaceId, $this->guestSpaceId);
-        $this->assertEquals($members['members'], $testMembers);
+        self::assertEquals($members['members'], $testMembers);
     }
 
     public function testPutMembers()
@@ -154,7 +154,7 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         foreach ($members['members'] as $member) {
             $code = $member['entity']['code'];
             if ($code == KintoneTestHelper::getConfig()['login']) {
-                $this->assertEquals($member, [
+                self::assertEquals($member, [
                     "entity" => [
                         "type" => "USER",
                         "code" => KintoneTestHelper::getConfig()['login']
@@ -164,7 +164,7 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
                 ]);
             }
             if ($code == 'Administrators') {
-                $this->assertEquals($member, [
+                self::assertEquals($member, [
                     "entity" => [
                         "type" => "GROUP",
                         "code" => 'Administrators'
@@ -205,7 +205,7 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
             'test2@example.com'
         ]);
         // kintone does not have the get guest users api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     protected function tearDown()

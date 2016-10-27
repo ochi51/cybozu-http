@@ -34,7 +34,7 @@ class Space
 
         return $this->client
             ->get(KintoneApi::generateUrl('space.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -62,7 +62,7 @@ class Space
 
         return $this->client
             ->post(KintoneApi::generateUrl('template/space.json'), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -79,7 +79,7 @@ class Space
 
         return $this->client
             ->delete(KintoneApi::generateUrl('space.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -100,7 +100,7 @@ class Space
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/body.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -117,7 +117,7 @@ class Space
 
         return $this->client
             ->get(KintoneApi::generateUrl('space/members.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -138,7 +138,7 @@ class Space
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/members.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -158,6 +158,6 @@ class Space
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/guests.json', $id), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

@@ -28,6 +28,6 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         $graph = KintoneTestHelper::getGraph();
         $res = $this->api->graph()->get($graph['appId'], $graph['reportId']);
         file_put_contents(__DIR__ . '/../../_output/graph.html', $res);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }

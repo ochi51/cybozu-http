@@ -34,56 +34,56 @@ class UserApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateUrl()
     {
-        $this->assertEquals('/v1/users.json', UserApi::generateUrl('users.json'));
+        self::assertEquals('/v1/users.json', UserApi::generateUrl('users.json'));
     }
 
     public function testGetClient()
     {
-        $this->assertTrue($this->api->getClient() instanceof Client);
+        self::assertTrue($this->api->getClient() instanceof Client);
     }
 
     public function testCsv()
     {
-        $this->assertTrue($this->api->csv() instanceof Csv);
+        self::assertTrue($this->api->csv() instanceof Csv);
     }
 
     public function testUsers()
     {
-        $this->assertTrue($this->api->users() instanceof Users);
+        self::assertTrue($this->api->users() instanceof Users);
     }
 
     public function testOrganizations()
     {
-        $this->assertTrue($this->api->organizations() instanceof Organizations);
+        self::assertTrue($this->api->organizations() instanceof Organizations);
     }
 
     public function testTitles()
     {
-        $this->assertTrue($this->api->titles() instanceof Titles);
+        self::assertTrue($this->api->titles() instanceof Titles);
     }
 
     public function testGroups()
     {
-        $this->assertTrue($this->api->groups() instanceof Groups);
+        self::assertTrue($this->api->groups() instanceof Groups);
     }
 
     public function testUserOrganizations()
     {
-        $this->assertTrue($this->api->userOrganizations() instanceof UserOrganizations);
+        self::assertTrue($this->api->userOrganizations() instanceof UserOrganizations);
     }
 
     public function testUserGroups()
     {
-        $this->assertTrue($this->api->userGroups() instanceof UserGroups);
+        self::assertTrue($this->api->userGroups() instanceof UserGroups);
     }
 
     public function testUserServices()
     {
-        $this->assertTrue($this->api->userServices() instanceof UserServices);
+        self::assertTrue($this->api->userServices() instanceof UserServices);
     }
 
     public function testOrganizationUsers()
     {
-        $this->assertTrue($this->api->organizationUsers() instanceof OrganizationUsers);
+        self::assertTrue($this->api->organizationUsers() instanceof OrganizationUsers);
     }
 }

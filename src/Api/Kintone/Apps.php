@@ -48,7 +48,7 @@ class Apps
 
         return $this->client
             ->get(KintoneApi::generateUrl('apps.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
 

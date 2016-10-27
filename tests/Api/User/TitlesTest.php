@@ -33,9 +33,9 @@ class TitlesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }
@@ -53,7 +53,7 @@ class TitlesTest extends \PHPUnit_Framework_TestCase
                 $flg2 = true;
             }
         }
-        $this->assertTrue($flg1 and $flg2);
+        self::assertTrue($flg1 and $flg2);
 
         $filename = __DIR__ . '/../../_data/delete-titles.csv';
         $id = $this->api->titles()->postByCsv($filename);
@@ -63,9 +63,9 @@ class TitlesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                $this->assertTrue(true);
+                self::assertTrue(true);
             } else {
-                $this->fail($result['errorCode']);
+                self::fail($result['errorCode']);
             }
             break;
         }

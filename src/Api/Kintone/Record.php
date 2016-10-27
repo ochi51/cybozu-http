@@ -35,7 +35,7 @@ class Record
 
         return $this->client
             ->get(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->json()['record'];
+            ->getBody()->jsonSerialize()['record'];
     }
 
     /**
@@ -53,7 +53,7 @@ class Record
 
         return $this->client
             ->post(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -73,7 +73,7 @@ class Record
 
         return $this->client
             ->put(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -96,7 +96,7 @@ class Record
 
         return $this->client
             ->delete(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -125,6 +125,6 @@ class Record
 
         return $this->client
             ->put(KintoneApi::generateUrl('record/status.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

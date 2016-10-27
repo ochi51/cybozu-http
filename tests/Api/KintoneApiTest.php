@@ -36,63 +36,63 @@ class KintoneApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateUrl()
     {
-        $this->assertEquals('/k/v1/record.json', KintoneApi::generateUrl('record.json'));
-        $this->assertEquals('/k/guest/123/v1/record.json', KintoneApi::generateUrl('record.json', 123));
+        self::assertEquals('/k/v1/record.json', KintoneApi::generateUrl('record.json'));
+        self::assertEquals('/k/guest/123/v1/record.json', KintoneApi::generateUrl('record.json', 123));
     }
 
     public function testGetClient()
     {
-        $this->assertTrue($this->api->getClient() instanceof Client);
+        self::assertTrue($this->api->getClient() instanceof Client);
     }
 
     public function testApp()
     {
-        $this->assertTrue($this->api->app() instanceof App);
+        self::assertTrue($this->api->app() instanceof App);
     }
 
     public function testApps()
     {
-        $this->assertTrue($this->api->apps() instanceof Apps);
+        self::assertTrue($this->api->apps() instanceof Apps);
     }
 
     public function testPreview()
     {
-        $this->assertTrue($this->api->preview() instanceof PreviewApp);
+        self::assertTrue($this->api->preview() instanceof PreviewApp);
     }
 
     public function testRecord()
     {
-        $this->assertTrue($this->api->record() instanceof Record);
+        self::assertTrue($this->api->record() instanceof Record);
     }
 
     public function testRecords()
     {
-        $this->assertTrue($this->api->records() instanceof Records);
+        self::assertTrue($this->api->records() instanceof Records);
     }
 
     public function testFile()
     {
-        $this->assertTrue($this->api->file() instanceof File);
+        self::assertTrue($this->api->file() instanceof File);
     }
 
     public function testGraph()
     {
-        $this->assertTrue($this->api->graph() instanceof Graph);
+        self::assertTrue($this->api->graph() instanceof Graph);
     }
 
     public function testSpace()
     {
-        $this->assertTrue($this->api->space() instanceof Space);
+        self::assertTrue($this->api->space() instanceof Space);
     }
 
     public function testThread()
     {
-        $this->assertTrue($this->api->thread() instanceof Thread);
+        self::assertTrue($this->api->thread() instanceof Thread);
     }
 
     public function testGuests()
     {
-        $this->assertTrue($this->api->guests() instanceof Guests);
+        self::assertTrue($this->api->guests() instanceof Guests);
     }
 
     public function testPostBulkRequest()
@@ -113,6 +113,6 @@ class KintoneApiTest extends \PHPUnit_Framework_TestCase
         ];
 
         $result = $this->api->postBulkRequest($requests);
-        $this->assertArrayNotHasKey('message', $result);
+        self::assertArrayNotHasKey('message', $result);
     }
 }

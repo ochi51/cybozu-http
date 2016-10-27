@@ -44,7 +44,7 @@ class Comment
 
         return $this->client
             ->post(KintoneApi::generateUrl('record/comment.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -67,6 +67,6 @@ class Comment
 
         return $this->client
             ->delete(KintoneApi::generateUrl('record/comment.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

@@ -238,6 +238,6 @@ class KintoneApi
 
         return $this->client
             ->post(KintoneApi::generateUrl('bulkRequest.json', $guestSpaceId), $options)
-            ->json()['results'];
+            ->getBody()->jsonSerialize()['results'];
     }
 }

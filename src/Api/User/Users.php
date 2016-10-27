@@ -49,7 +49,7 @@ class Users
 
         return $this->client
             ->get(UserApi::generateUrl('users.json'), $options)
-            ->json()['users'];
+            ->getBody()->jsonSerialize()['users'];
     }
 
     /**

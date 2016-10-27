@@ -50,13 +50,13 @@ class GuestsTest extends \PHPUnit_Framework_TestCase
 
         $this->api->guests()->post($guests);
         // kintone does not have the get guest users api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
 
         $this->api->guests()->delete([
             'test1@example.com',
             'test2@example.com'
         ]);
         // kintone does not have the get guest users api.
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }

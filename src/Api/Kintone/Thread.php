@@ -42,7 +42,7 @@ class Thread
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/thread.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 
     /**
@@ -71,6 +71,6 @@ class Thread
 
         return $this->client
             ->post(KintoneApi::generateUrl('space/thread/comment.json', $guestSpaceId), $options)
-            ->json();
+            ->getBody()->jsonSerialize();
     }
 }

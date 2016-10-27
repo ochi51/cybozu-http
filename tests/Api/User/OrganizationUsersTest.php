@@ -26,6 +26,6 @@ class OrganizationUsersTest extends \PHPUnit_Framework_TestCase
     {
         $config = UserTestHelper::getConfig();
         $this->api->organizationUsers()->get($config['login']);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }
