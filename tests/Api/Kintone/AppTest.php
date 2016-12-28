@@ -223,6 +223,78 @@ class AppTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($customize['scope'], 'ALL');
     }
 
+    public function testGetStatus()
+    {
+        $states = [
+            'statusName1' => [
+                'name' => 'statusName1',
+                'index' => '0',
+                'assignee' => [
+                    'type' => 'ONE',
+                    'entities' => [
+                        [
+                            'entity' => [
+                                'type' => 'FIELD_ENTITY',
+                                'code' => '作成者'
+                            ],
+                            'includeSubs' => false
+                        ]
+                    ]
+                ]
+            ],
+            'statusName2' => [
+                'name' => 'statusName2',
+                'index' => '1',
+                'assignee' => [
+                    'type' => 'ONE',
+                    'entities' => [
+                        [
+                            'entity' => [
+                                'type' => 'USER',
+                                'code' => KintoneTestHelper::getConfig()['login']
+                            ],
+                            'includeSubs' => false
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $actions = [
+            [
+                'name' => 'actionName1',
+                'from' => 'statusName1',
+                'to' => 'statusName2',
+                'filterCond' => ''
+            ]
+        ];
+
+        $this->api->preview()->putStatus($this->appId, $states, $actions, true);
+        $this->api->preview()->deploy($this->appId);
+        while (1) {
+            if ('PROCESSING' != $this->api->preview()->getDeployStatus($this->appId)['status']) {
+                break;
+            }
+        }
+
+        $response = $this->api->app()->getStatus($this->appId);
+        self::assertEquals($response['enable'], true);
+        self::assertEquals($response['states'], $states);
+        self::assertEquals($response['actions'], $actions);
+
+        $this->api->preview()->putStatus($this->guestAppId, $states, $actions, true, $this->guestSpaceId);
+        $this->api->preview()->deploy($this->guestAppId, $this->guestSpaceId);
+        while (1) {
+            if ('PROCESSING' != $this->api->preview()->getDeployStatus($this->guestAppId, $this->guestSpaceId)['status']) {
+                break;
+            }
+        }
+
+        $response = $this->api->app()->getStatus($this->guestAppId, 'ja', $this->guestSpaceId);
+        self::assertEquals($response['enable'], true);
+        self::assertEquals($response['states'], $states);
+        self::assertEquals($response['actions'], $actions);
+    }
+
     protected function tearDown()
     {
         $this->api->space()->delete($this->spaceId);

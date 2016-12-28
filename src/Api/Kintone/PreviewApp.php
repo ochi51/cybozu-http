@@ -256,6 +256,24 @@ class PreviewApp
     }
 
     /**
+     * Get app status list
+     * https://cybozudev.zendesk.com/hc/ja/articles/216972946
+     *
+     * @param integer $id
+     * @param string  $lang
+     * @param integer $guestSpaceId
+     * @return array
+     */
+    public function getStatus($id, $lang = 'ja', $guestSpaceId = null)
+    {
+        $options = ['json' => ['app' => $id, 'lang' => $lang]];
+
+        return $this->client
+            ->get(KintoneApi::generateUrl('preview/app/status.json', $guestSpaceId), $options)
+            ->getBody()->jsonSerialize();
+    }
+
+    /**
      * Put preview app settings
      * https://cybozudev.zendesk.com/hc/ja/articles/204730520
      *
@@ -501,4 +519,30 @@ class PreviewApp
             ->getBody()->jsonSerialize();
     }
 
+    /**
+     * Put app status and action
+     * https://cybozudev.zendesk.com/hc/ja/articles/217905503
+     *
+     * @param integer $id
+     * @param array   $states
+     * @param array   $actions
+     * @param boolean $enable
+     * @param integer $guestSpaceId
+     * @return array
+     */
+    public function putStatus($id, array $states, array $actions, $enable = true, $guestSpaceId = null)
+    {
+        $options = [
+            'json' => [
+                'app' => $id,
+                'enable' => $enable,
+                'states' => $states,
+                'actions' => $actions
+            ]
+        ];
+
+        return $this->client
+            ->put(KintoneApi::generateUrl('preview/app/status.json', $guestSpaceId), $options)
+            ->getBody()->jsonSerialize();
+    }
 }
