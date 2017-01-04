@@ -196,4 +196,22 @@ class App
             ->get(KintoneApi::generateUrl('app/customize.json', $guestSpaceId), $options)
             ->getBody()->jsonSerialize();
     }
+
+    /**
+     * Get app status list
+     * https://cybozudev.zendesk.com/hc/ja/articles/216972946
+     *
+     * @param integer $id
+     * @param string  $lang
+     * @param integer $guestSpaceId
+     * @return array
+     */
+    public function getStatus($id, $lang = 'ja', $guestSpaceId = null)
+    {
+        $options = ['json' => ['app' => $id, 'lang' => $lang]];
+
+        return $this->client
+            ->get(KintoneApi::generateUrl('app/status.json', $guestSpaceId), $options)
+            ->getBody()->jsonSerialize();
+    }
 }
