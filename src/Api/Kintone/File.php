@@ -51,7 +51,10 @@ class File
             [
                 'name' => 'file',
                 'filename' => basename($filename),
-                'contents' => fopen($filename, 'r')
+                'contents' => fopen($filename, 'r'),
+                'headers' => [
+                    'Content-Type' => mime_content_type($filename)
+                ]
             ]
         ]];
 
