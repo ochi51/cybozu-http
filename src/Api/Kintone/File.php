@@ -50,7 +50,7 @@ class File
         $options = ['multipart' =>  [
             [
                 'name' => 'file',
-                'filename' => basename($filename),
+                'filename' => basename(mb_convert_encoding($filename, 'UTF-8', 'auto')),
                 'contents' => fopen($filename, 'r'),
                 'headers' => [
                     'Content-Type' => mime_content_type($filename)
