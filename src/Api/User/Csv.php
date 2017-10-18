@@ -100,7 +100,10 @@ class Csv
             [
                 'name' => 'file',
                 'filename' => basename(mb_convert_encoding($filename, 'UTF-8', 'auto')),
-                'contents' => fopen($filename, 'r')
+                'contents' => fopen($filename, 'r'),
+                'headers' => [
+                    'Content-Type' => mime_content_type($filename)
+                ]
             ]
         ]];
 
