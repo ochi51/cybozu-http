@@ -30,6 +30,7 @@ class UserServices
      * https://cybozudev.zendesk.com/hc/ja/articles/202363070
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getByCsv()
     {
@@ -42,6 +43,7 @@ class UserServices
      *
      * @param $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postByCsv($filename)
     {

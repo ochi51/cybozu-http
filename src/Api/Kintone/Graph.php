@@ -29,12 +29,13 @@ class Graph
      * @param array $options
      * @return string
      */
-    public function get($appId, $id, $guestSpaceId = null, $isIframe = false, $isShowTitle = false, $options = [])
+    public function get($appId, $id, $guestSpaceId = null, $isIframe = false, $isShowTitle = false, array $options = [])
     {
         $url =  $guestSpaceId ? KintoneApi::GUEST_SPACE_PREFIX . $guestSpaceId . '/' : '/k/';
         $url .= $appId . '/report';
-        if ($isIframe)
+        if ($isIframe) {
             $url .= '/portlet';
+        }
 
         $options = [
             'query' => [

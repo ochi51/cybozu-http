@@ -20,6 +20,8 @@ class FinishMiddleware
      * @param callable $handler
      *
      * @return \Closure
+     * @throws RequestException
+     * @throws \InvalidArgumentException
      */
     public function __invoke(callable $handler)
     {
@@ -35,10 +37,11 @@ class FinishMiddleware
     /**
      * @param RequestInterface $request
      * @return \Closure
+     * @throws \InvalidArgumentException
      */
     private function onFulfilled(RequestInterface $request)
     {
-        return function (ResponseInterface $response) use ($request) {
+        return function (ResponseInterface $response) {
             return $response->withBody(new JsonStream($response->getBody()));
         };
     }
@@ -46,13 +49,14 @@ class FinishMiddleware
     /**
      * @param RequestInterface $request
      * @return \Closure
+     * @throws RequestException
      */
     private function onRejected(RequestInterface $request)
     {
         return function ($reason) use ($request) {
             if ($reason instanceof RequestException) {
                 $response = $reason->getResponse();
-                if ($response && $response->getStatusCode() >= 300) {
+                if ($response !== null && $response->getStatusCode() >= 300) {
                     self::jsonError($request, $response);
                     self::domError($request, $response);
                 }
@@ -63,6 +67,7 @@ class FinishMiddleware
     /**
      * @param RequestInterface $request
      * @param ResponseInterface $response
+     * @throws RequestException
      */
     private static function domError(RequestInterface $request, ResponseInterface $response)
     {
@@ -92,6 +97,7 @@ class FinishMiddleware
     /**
      * @param RequestInterface $request
      * @param ResponseInterface $response
+     * @throws RequestException
      */
     private static function jsonError(RequestInterface $request, ResponseInterface $response)
     {

@@ -50,8 +50,8 @@ class File
         $options = ['multipart' =>  [
             [
                 'name' => 'file',
-                'filename' => basename(mb_convert_encoding($filename, 'UTF-8', 'auto')),
-                'contents' => fopen($filename, 'r'),
+                'filename' => self::getFilename($filename),
+                'contents' => fopen($filename, 'rb'),
                 'headers' => [
                     'Content-Type' => mime_content_type($filename)
                 ]
@@ -60,6 +60,21 @@ class File
 
         return $this->client
             ->post(KintoneApi::generateUrl('file.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()["fileKey"];
+            ->getBody()->jsonSerialize()['fileKey'];
+    }
+
+    /**
+     * Returns locale independent base name of the given path.
+     *
+     * @param string $name The new file name
+     * @return string containing
+     */
+    public static function getFilename($name)
+    {
+        $originalName = str_replace('\\', '/', $name);
+        $pos = strrpos($originalName, '/');
+        $originalName = false === $pos ? $originalName : substr($originalName, $pos + 1);
+
+        return $originalName;
     }
 }

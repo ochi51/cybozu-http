@@ -31,7 +31,7 @@ class Comment
      * @param integer $guestSpaceId
      * @return array
      */
-    public function post($appId, $record, $comment, $mentions = [], $guestSpaceId = null)
+    public function post($appId, $record, $comment, array $mentions = [], $guestSpaceId = null)
     {
         $options = ['json' => [
             'app' => $appId,

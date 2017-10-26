@@ -37,12 +37,7 @@ class Apps
      */
     public function get(array $ids = [], array $codes = [], $name = null, array $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null)
     {
-        $options = ['json' => [
-            'ids' => $ids,
-            'codes' => $codes,
-            'name' => $name,
-            'spaceIds' => $spaceIds,
-        ]];
+        $options = ['json' => compact('ids', 'codes', 'name', 'spaceIds')];
         $options['json']['limit'] = $limit;
         $options['json']['offset'] = $offset;
 

@@ -30,6 +30,7 @@ class Groups
      * https://cybozudev.zendesk.com/hc/ja/articles/202363060
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getByCsv()
     {
@@ -42,6 +43,7 @@ class Groups
      *
      * @param $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postByCsv($filename)
     {

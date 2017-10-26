@@ -57,7 +57,7 @@ class Thread
      * @param int $guestSpaceId
      * @return array
      */
-    public function comment($spaceId, $threadId, $comment, $mentions = [], $files = [], $guestSpaceId = null)
+    public function comment($spaceId, $threadId, $comment, array $mentions = [], array $files = [], $guestSpaceId = null)
     {
         $options = ['json' => [
             'space'  => $spaceId,

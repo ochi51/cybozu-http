@@ -30,6 +30,7 @@ class Titles
      * https://cybozudev.zendesk.com/hc/ja/articles/202124764
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getByCsv()
     {
@@ -42,6 +43,7 @@ class Titles
      *
      * @param $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postByCsv($filename)
     {

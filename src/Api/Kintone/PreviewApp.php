@@ -49,10 +49,7 @@ class PreviewApp
      */
     public function deployApps(array $apps, $guestSpaceId = null, $revert = false)
     {
-        $options = ['json' => [
-            'apps' => $apps,
-            'revert' => $revert
-        ]];
+        $options = ['json' => compact('apps', 'revert')];
 
         return $this->client
             ->post(KintoneApi::generateUrl('preview/app/deploy.json', $guestSpaceId), $options)
@@ -452,11 +449,7 @@ class PreviewApp
      */
     public function putRecordAcl($id, array $rights, $guestSpaceId = null, $revision = -1)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'rights' => $rights,
-            'revision' => $revision
-        ]];
+        $options = ['json' => compact('id', 'rights', 'revision')];
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/record/acl.json', $guestSpaceId), $options)
@@ -475,11 +468,7 @@ class PreviewApp
      */
     public function putFieldAcl($id, array $rights, $guestSpaceId = null, $revision = -1)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'rights' => $rights,
-            'revision' => $revision
-        ]];
+        $options = ['json' => compact('id', 'rights', 'revision')];
 
         return $this->client
             ->put(KintoneApi::generateUrl('preview/field/acl.json', $guestSpaceId), $options)
@@ -503,10 +492,7 @@ class PreviewApp
     {
         $options = ['json' => [
             'app' => $id,
-            'desktop' => [
-                'js' => $js,
-                'css' => $css,
-            ],
+            'desktop' => compact('js', 'css'),
             'mobile' => [
                 'js' => $mobileJs
             ],

@@ -18,7 +18,7 @@ use CybozuHttp\Client;
  */
 class UserApi
 {
-    const API_PREFIX = "/v1/";
+    const API_PREFIX = '/v1/';
 
     /**
      * @var Client

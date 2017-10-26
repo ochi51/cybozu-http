@@ -51,14 +51,7 @@ class Space
      */
     public function post($id, $name, array $members, $isPrivate = false, $isGuest = false, $fixedMember = false)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'name' => $name,
-            'members' => $members,
-            'isPrivate' => $isPrivate,
-            'isGuest' => $isGuest,
-            'fixedMember' => $fixedMember,
-        ]];
+        $options = ['json' => compact('id', 'name', 'members', 'isPrivate', 'isGuest', 'fixedMember')];
 
         return $this->client
             ->post(KintoneApi::generateUrl('template/space.json'), $options)
@@ -93,10 +86,7 @@ class Space
      */
     public function putBody($id, $body, $guestSpaceId = null)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'body' => $body
-        ]];
+        $options = ['json' => compact('id', 'body')];
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/body.json', $guestSpaceId), $options)
@@ -131,10 +121,7 @@ class Space
      */
     public function putMembers($id, array $members, $guestSpaceId = null)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'members' => $members
-        ]];
+        $options = ['json' => compact('id', 'members')];
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/members.json', $guestSpaceId), $options)
@@ -151,10 +138,7 @@ class Space
      */
     public function putGuests($id, array $guests)
     {
-        $options = ['json' => [
-            'id' => $id,
-            'guests' => $guests
-        ]];
+        $options = ['json' => compact('id', 'guests')];
 
         return $this->client
             ->put(KintoneApi::generateUrl('space/guests.json', $id), $options)

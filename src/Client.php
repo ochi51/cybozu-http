@@ -14,12 +14,13 @@ class Client extends GuzzleClient
     /**
      * Client constructor.
      * @param array $config
+     * @throws NotExistRequiredException
      */
     public function __construct($config = [])
     {
         $config = new Config($config);
         if (!$config->hasRequired()) {
-            throw new NotExistRequiredException();
+            throw new NotExistRequiredException('Parameters is invalid.');
         }
 
         parent::__construct($config->toGuzzleConfig());

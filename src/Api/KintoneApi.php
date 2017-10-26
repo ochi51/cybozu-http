@@ -21,8 +21,8 @@ use CybozuHttp\Api\Kintone\Guests;
  */
 class KintoneApi
 {
-    const API_PREFIX = "/k/v1/";
-    const GUEST_SPACE_PREFIX = "/k/guest/";
+    const API_PREFIX = '/k/v1/';
+    const GUEST_SPACE_PREFIX = '/k/guest/';
 
     /**
      * @var Client
@@ -113,8 +113,8 @@ class KintoneApi
      */
     public static function generateUrl($api, $guestSpaceId = null)
     {
-        if (!empty($guestSpaceId)) {
-            return self::GUEST_SPACE_PREFIX . $guestSpaceId . "/v1/" . $api;
+        if ($guestSpaceId && is_numeric($guestSpaceId)) {
+            return self::GUEST_SPACE_PREFIX . $guestSpaceId .'/v1/'. $api;
         }
 
         return self::API_PREFIX . $api;
@@ -237,7 +237,7 @@ class KintoneApi
         $options = ['json' => ['requests' => $requests]];
 
         return $this->client
-            ->post(KintoneApi::generateUrl('bulkRequest.json', $guestSpaceId), $options)
+            ->post(self::generateUrl('bulkRequest.json', $guestSpaceId), $options)
             ->getBody()->jsonSerialize()['results'];
     }
 }

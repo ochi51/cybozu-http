@@ -6,7 +6,6 @@ use CybozuHttp\Exception\NotExistRequiredException;
 use CybozuHttp\Middleware\FinishMiddleware;
 use GuzzleHttp\HandlerStack;
 
-
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
@@ -16,13 +15,13 @@ class Config
     /**
      * @var array $config
      */
-    private $config = [];
+    private $config;
 
     /**
      * @var array $default
      */
     private $default = [
-        'domain' => "cybozu.com",
+        'domain' => 'cybozu.com',
         'use_api_token' => false,
         'use_basic' => false,
         'use_client_cert' => false,
@@ -87,6 +86,7 @@ class Config
 
     /**
      * @return array
+     * @throws NotExistRequiredException
      */
     private function getBasicAuthOptions()
     {
@@ -96,11 +96,12 @@ class Config
                 $this->get('basic_password')
             ];
         }
-        throw new NotExistRequiredException("kintone.empty_basic_password");
+        throw new NotExistRequiredException('kintone.empty_basic_password');
     }
 
     /**
      * @return array
+     * @throws NotExistRequiredException
      */
     private function getCertOptions()
     {
@@ -110,7 +111,7 @@ class Config
                 $this->get('cert_password')
             ];
         }
-        throw new NotExistRequiredException("kintone.empty_cert");
+        throw new NotExistRequiredException('kintone.empty_cert');
     }
 
     /**
@@ -122,7 +123,7 @@ class Config
             'handler' => $this->get('handler'),
             'base_uri' => $this->get('base_uri'),
             'headers' => $this->get('headers'),
-            'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'a') : false
+            'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'ab') : false
         ];
         if ($this->get('auth')) {
             $config['auth'] = $this->get('auth');
@@ -212,7 +213,7 @@ class Config
         }
 
         foreach ($keys as $key) {
-            if (is_null($this->get($key)) || $this->get($key) === false) {
+            if (!$this->get($key)) {
                 return false;
             }
         }
@@ -226,14 +227,14 @@ class Config
     public function getBaseUri()
     {
         $subdomain = $this->get('subdomain');
-        $uri = "https://" . $subdomain;
+        $uri = 'https://'. $subdomain;
 
         if (strpos($subdomain, '.') === false) {
             if ($this->get('use_client_cert')) {
-                $uri .= ".s";
+                $uri .= '.s';
             }
 
-            $uri .= "." . $this->get('domain');
+            $uri .= '.'. $this->get('domain');
         }
 
         return $uri;

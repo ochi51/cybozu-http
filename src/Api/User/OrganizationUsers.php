@@ -27,6 +27,8 @@ class OrganizationUsers
      * https://cybozudev.zendesk.com/hc/ja/articles/202124774#step2
      *
      * @param string $code
+     * @param int $offset
+     * @param int $limit
      * @return array
      */
     public function get($code, $offset = 0, $limit = self::MAX_GET_USERS)

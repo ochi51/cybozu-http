@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Api\User;
 
+use CybozuHttp\Api\Kintone\File;
 use CybozuHttp\Client;
 use CybozuHttp\Api\UserApi;
 
@@ -10,6 +11,16 @@ use CybozuHttp\Api\UserApi;
  */
 class Csv
 {
+    private static $type = [
+        'user',
+        'organization',
+        'title',
+        'group',
+        'userOrganizations',
+        'userGroups',
+        'userServices'
+    ];
+
     /**
      * @var Client
      */
@@ -25,18 +36,11 @@ class Csv
      *
      * @param string $type
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function get($type)
     {
-        if (!in_array($type, [
-            'user',
-            'organization',
-            'title',
-            'group',
-            'userOrganizations',
-            'userGroups',
-            'userServices'])
-        ) {
+        if (!in_array($type, self::$type, true)) {
             throw new \InvalidArgumentException('Invalid type parameter');
         }
 
@@ -44,7 +48,7 @@ class Csv
             ->get(UserApi::generateUrl("csv/{$type}.json"))
             ->getBody();
 
-        return substr($content, 0, strlen($content)-3);
+        return substr($content, 0, -3);
     }
 
     /**
@@ -53,6 +57,7 @@ class Csv
      * @param string $type
      * @param string $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function post($type, $filename)
     {
@@ -65,18 +70,11 @@ class Csv
      * @param string $type
      * @param string $fileKey
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postKey($type, $fileKey)
     {
-        if (!in_array($type, [
-            'user',
-            'organization',
-            'title',
-            'group',
-            'userOrganizations',
-            'userGroups',
-            'userServices'])
-        ) {
+        if (!in_array($type, self::$type, true)) {
             throw new \InvalidArgumentException('Invalid type parameter');
         }
 
@@ -99,8 +97,8 @@ class Csv
         $options = ['multipart' =>  [
             [
                 'name' => 'file',
-                'filename' => basename(mb_convert_encoding($filename, 'UTF-8', 'auto')),
-                'contents' => fopen($filename, 'r'),
+                'filename' => File::getFilename($filename),
+                'contents' => fopen($filename, 'rb'),
                 'headers' => [
                     'Content-Type' => mime_content_type($filename)
                 ]
@@ -109,7 +107,7 @@ class Csv
 
         return $this->client
             ->post(UserApi::generateUrl('file.json'), $options)
-            ->getBody()->jsonSerialize()["fileKey"];
+            ->getBody()->jsonSerialize()['fileKey'];
     }
 
     /**

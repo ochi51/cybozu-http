@@ -40,10 +40,7 @@ class Users
      */
     public function get(array $ids = [], array $codes = [], $offset = 0, $limit = self::MAX_GET_USERS)
     {
-        $options = ['json' => [
-            'ids' => (!empty($ids) ? $ids : []),
-            'codes' => (!empty($codes) ? $codes : [])
-        ]];
+        $options = ['json' => compact('ids', 'codes')];
         $options['json']['size'] = $limit;
         $options['json']['offset'] = $offset;
 
@@ -57,6 +54,7 @@ class Users
      * https://cybozudev.zendesk.com/hc/ja/articles/202363040#step1
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getByCsv()
     {
@@ -69,6 +67,7 @@ class Users
      *
      * @param $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postByCsv($filename)
     {

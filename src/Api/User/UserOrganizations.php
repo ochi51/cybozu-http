@@ -47,6 +47,7 @@ class UserOrganizations
      * https://cybozudev.zendesk.com/hc/ja/articles/202124774#step1
      *
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getByCsv()
     {
@@ -59,6 +60,7 @@ class UserOrganizations
      *
      * @param $filename
      * @return int
+     * @throws \InvalidArgumentException
      */
     public function postByCsv($filename)
     {
