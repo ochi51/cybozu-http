@@ -57,6 +57,10 @@ class File
                 ]
             ]
         ]];
+        $baseUri = $this->client->getConfig('base_uri');
+        if (strpos($baseUri->getHost(), 'cybozu.com') > 0) { // Japanese kintone
+            setlocale(LC_ALL, 'ja_JP.UTF-8');
+        }
 
         return $this->client
             ->post(KintoneApi::generateUrl('file.json', $guestSpaceId), $options)
