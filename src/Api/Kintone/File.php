@@ -53,9 +53,7 @@ class File
                 'name' => 'file',
                 'filename' => self::getFilename($filename),
                 'contents' => fopen($filename, 'rb'),
-                'headers' => [
-                    'Content-Type' => mime_content_type($filename)
-                ]
+                'headers' => ['Content-Type' => mime_content_type($filename)]
             ]
         ]];
         $baseUri = $this->client->getConfig('base_uri');
