@@ -2,7 +2,9 @@
 
 namespace CybozuHttp\Api\Kintone;
 
-use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\ResponseInterface;
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
 
@@ -48,6 +50,79 @@ class Records
         return $this->client
             ->get(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
             ->getBody()->jsonSerialize();
+    }
+
+    /**
+     * Get all records
+     *
+     * @param integer $appId
+     * @param string $query
+     * @param integer $guestSpaceId
+     * @param array|null $fields
+     * @return array
+     */
+    public function all($appId, $query = '', $guestSpaceId = null, array $fields = null)
+    {
+        $result = [];
+        $result[0] = $this->get($appId, $query . ' limit ' . self::MAX_GET_RECORDS, $guestSpaceId, true, $fields);
+        $totalCount = $result[0]['totalCount'];
+        if ($totalCount <= self::MAX_GET_RECORDS) {
+            return $result[0]['records'];
+        }
+
+        $concurrency = $this->client->getConfig('concurrency');
+        $requests = $this->createGetRequestsCallback($appId, $query, $guestSpaceId, $fields, $totalCount);
+        $pool = new Pool($this->client, $requests(), [
+            'concurrency' => $concurrency ?: 1,
+            'fulfilled' => function (ResponseInterface $response, $index) use (&$result) {
+                $result[$index+1] = array_merge($response->getBody()->jsonSerialize());
+            }
+        ]);
+        $pool->promise()->wait();
+
+        ksort($result);
+        $allRecords = [];
+        foreach ($result as $r) {
+            /** @var array $records */
+            $records = $r['records'];
+            foreach ($records as $record) {
+                $allRecords[] = $record;
+            }
+        }
+
+        return $allRecords;
+    }
+
+    /**
+     * @param integer $appId
+     * @param string $query
+     * @param integer $guestSpaceId
+     * @param array|null $fields
+     * @param integer $totalCount
+     * @return \Closure
+     */
+    private function createGetRequestsCallback($appId, $query, $guestSpaceId, $fields, $totalCount)
+    {
+        $headers = $this->client->getConfig('headers');
+        $headers['Content-Type'] = 'application/json';
+        return function () use ($appId, $query, $guestSpaceId, $fields, $totalCount, $headers) {
+            $num = ceil($totalCount / self::MAX_GET_RECORDS);
+            for ($i = 1; $i < $num; $i++) {
+                $body = [
+                    'app' => $appId,
+                    'query' => $query . ' limit ' . self::MAX_GET_RECORDS . ' offset ' . $i * self::MAX_GET_RECORDS,
+                ];
+                if ($fields) {
+                    $body['fields'] = $fields;
+                }
+                yield new Request(
+                    'GET',
+                    KintoneApi::generateUrl('records.json', $guestSpaceId),
+                    $headers,
+                    \GuzzleHttp\json_encode($body)
+                );
+            }
+        };
     }
 
     /**
