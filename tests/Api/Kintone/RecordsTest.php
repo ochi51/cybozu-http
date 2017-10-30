@@ -63,7 +63,7 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         $resp = $this->api->records()->get($this->appId, '', null, true, $fields);
         $record = $resp['records'][0];
         foreach ($postRecord as $code => $field) {
-            if ($code == 'table') {
+            if ($code === 'table') {
                 continue;
             }
             self::assertEquals($field['value'], $record[$code]['value']);
@@ -96,7 +96,7 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             ->get($this->guestAppId, '', $this->guestSpaceId, true, $fields);
         $record = $resp['records'][0];
         foreach ($postRecord as $code => $field) {
-            if ($code == 'table') {
+            if ($code === 'table') {
                 continue;
             }
             self::assertEquals($field['value'], $record[$code]['value']);
@@ -119,6 +119,30 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         $record = $resp['records'][0];
         self::assertEquals(4, $resp['totalCount']);
         self::assertNotEquals('change single_text value', $record['single_text']['value']);
+    }
+
+    public function testAll()
+    {
+        $postRecord = KintoneTestHelper::getRecord();
+        $fields = array_keys($postRecord);
+
+        $this->api->records()->post(
+            $this->appId,
+            array_fill(0, 5, $postRecord)
+        );
+
+        $allRecords = $this->api->records()->all($this->appId);
+        self::assertCount(5, $allRecords);
+
+        $record100 = array_fill(0, 100, $postRecord);
+        $this->api->records()->post($this->appId, $record100);
+        $this->api->records()->post($this->appId, $record100);
+        $this->api->records()->post($this->appId, $record100);
+        $this->api->records()->post($this->appId, $record100);
+        $this->api->records()->post($this->appId, $record100);
+
+        $allRecords = $this->api->records()->all($this->appId, '', null, $fields);
+        self::assertCount(505, $allRecords);
     }
 
     public function testStatus()

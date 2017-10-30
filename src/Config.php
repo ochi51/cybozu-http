@@ -20,19 +20,20 @@ class Config
     /**
      * @var array $default
      */
-    private $default = [
+    private static $default = [
         'domain' => 'cybozu.com',
         'use_api_token' => false,
         'use_basic' => false,
         'use_client_cert' => false,
         'base_uri' => null,
+        'concurrency' => 1,
         'debug' => false
     ];
 
     /**
      * @var array $required
      */
-    private $required = [
+    private static $required = [
         'handler',
         'domain',
         'subdomain',
@@ -45,7 +46,7 @@ class Config
 
     public function __construct(array $config)
     {
-        $this->config = $config + $this->default;
+        $this->config = array_merge(self::$default, $config);
 
         $this->config['base_uri'] = $this->getBaseUri();
         $this->config['handler'] = $handler =  HandlerStack::create();
@@ -123,7 +124,8 @@ class Config
             'handler' => $this->get('handler'),
             'base_uri' => $this->get('base_uri'),
             'headers' => $this->get('headers'),
-            'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'ab') : false
+            'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'ab') : false,
+            'concurrency' => $this->get('concurrency')
         ];
         if ($this->get('auth')) {
             $config['auth'] = $this->get('auth');
@@ -162,7 +164,7 @@ class Config
      */
     public function hasRequired()
     {
-        foreach ($this->required as $r) {
+        foreach (self::$required as $r) {
             if (!array_key_exists($r, $this->config)) {
                 return false;
             }
