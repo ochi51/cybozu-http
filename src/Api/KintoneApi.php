@@ -15,6 +15,7 @@ use CybozuHttp\Api\Kintone\Graph;
 use CybozuHttp\Api\Kintone\Space;
 use CybozuHttp\Api\Kintone\Thread;
 use CybozuHttp\Api\Kintone\Guests;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -236,8 +237,11 @@ class KintoneApi
     {
         $options = ['json' => ['requests' => $requests]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(self::generateUrl('bulkRequest.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['results'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['results'];
     }
 }

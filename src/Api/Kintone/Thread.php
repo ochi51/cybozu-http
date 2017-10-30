@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -40,9 +41,12 @@ class Thread
             $options['json']['body'] = $body;
         }
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('space/thread.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -69,8 +73,11 @@ class Thread
             ],
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('space/thread/comment.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -31,9 +32,12 @@ class Guests
     {
         $options = ['json' => ['guests' => $guests]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('guests.json'), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -47,9 +51,12 @@ class Guests
     {
         $options = ['json' => ['guests' => $guests]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('guests.json'), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
 }

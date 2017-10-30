@@ -96,7 +96,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $forms = $this->api->app()->getForm($this->appId);
         $f = function ($forms, $code) {
             foreach ($forms as $form) {
-                if ($form['code'] == $code)
+                if ($form['code'] === $code)
                     return true;
             }
             return false;
@@ -108,7 +108,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $forms = $this->api->app()->getForm($this->guestAppId, $this->guestSpaceId);
         $f = function ($forms, $code) {
             foreach ($forms as $form) {
-                if ($form['code'] == $code)
+                if ($form['code'] === $code)
                     return true;
             }
             return false;

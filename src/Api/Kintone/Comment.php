@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -42,9 +43,12 @@ class Comment
             ]
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('record/comment.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -65,8 +69,11 @@ class Comment
             'comment' => $id
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('record/comment.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

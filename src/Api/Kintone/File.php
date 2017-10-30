@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 
 /**
@@ -52,9 +53,7 @@ class File
                 'name' => 'file',
                 'filename' => self::getFilename($filename),
                 'contents' => fopen($filename, 'rb'),
-                'headers' => [
-                    'Content-Type' => mime_content_type($filename)
-                ]
+                'headers' => ['Content-Type' => mime_content_type($filename)]
             ]
         ]];
         $baseUri = $this->client->getConfig('base_uri');
@@ -62,9 +61,12 @@ class File
             setlocale(LC_ALL, 'ja_JP.UTF-8');
         }
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('file.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['fileKey'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['fileKey'];
     }
 
     /**

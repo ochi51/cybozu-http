@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -42,8 +43,11 @@ class Comments
             'limit' => $limit
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('record/comments.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['comments'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['comments'];
     }
 }

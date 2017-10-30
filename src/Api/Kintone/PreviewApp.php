@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -51,9 +52,12 @@ class PreviewApp
     {
         $options = ['json' => compact('apps', 'revert')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('preview/app/deploy.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -81,9 +85,12 @@ class PreviewApp
     {
         $options = ['json' => ['apps' => $ids]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/deploy.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['apps'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['apps'];
     }
 
     /**
@@ -104,9 +111,12 @@ class PreviewApp
             $options['json']['thread'] = $threadId;
         }
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('preview/app.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -122,9 +132,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/settings.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -140,9 +153,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -158,9 +174,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/form/layout.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -176,9 +195,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/views.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -194,9 +216,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -212,9 +237,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/record/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -230,9 +258,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/field/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -247,9 +278,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/customize.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -265,9 +299,12 @@ class PreviewApp
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('preview/app/status.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -294,9 +331,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/settings.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -317,9 +357,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -340,9 +383,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -363,9 +409,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('preview/app/form/fields.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -386,9 +435,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/form/layout.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -409,9 +461,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/views.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -432,9 +487,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -451,9 +509,12 @@ class PreviewApp
     {
         $options = ['json' => compact('id', 'rights', 'revision')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/record/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -470,9 +531,12 @@ class PreviewApp
     {
         $options = ['json' => compact('id', 'rights', 'revision')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/field/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -500,9 +564,12 @@ class PreviewApp
             'revision' => $revision
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/customize.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -527,8 +594,11 @@ class PreviewApp
             ]
         ];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('preview/app/status.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

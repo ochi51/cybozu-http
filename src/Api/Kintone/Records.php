@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Api\Kintone;
 
+use CybozuHttp\Middleware\JsonStream;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
@@ -46,10 +47,12 @@ class Records
         if ($fields) {
             $options['json']['fields'] = $fields;
         }
-
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -75,22 +78,14 @@ class Records
         $pool = new Pool($this->client, $requests(), [
             'concurrency' => $concurrency ?: 1,
             'fulfilled' => function (ResponseInterface $response, $index) use (&$result) {
-                $result[$index+1] = array_merge($response->getBody()->jsonSerialize());
+                /** @var JsonStream $stream */
+                $stream = $response->getBody();
+                $result[$index+1] = array_merge($stream->jsonSerialize());
             }
         ]);
         $pool->promise()->wait();
 
-        ksort($result);
-        $allRecords = [];
-        foreach ($result as $r) {
-            /** @var array $records */
-            $records = $r['records'];
-            foreach ($records as $record) {
-                $allRecords[] = $record;
-            }
-        }
-
-        return $allRecords;
+        return $this->convertResponseToRecords($result);
     }
 
     /**
@@ -126,6 +121,25 @@ class Records
     }
 
     /**
+     * @param array $result
+     * @return array
+     */
+    private function convertResponseToRecords(array  $result)
+    {
+        ksort($result);
+        $allRecords = [];
+        foreach ($result as $r) {
+            /** @var array $records */
+            $records = $r['records'];
+            foreach ($records as $record) {
+                $allRecords[] = $record;
+            }
+        }
+
+        return $allRecords;
+    }
+
+    /**
      * Post records
      * https://cybozudev.zendesk.com/hc/ja/articles/202166160#step2
      *
@@ -138,9 +152,12 @@ class Records
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -156,9 +173,12 @@ class Records
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -178,9 +198,12 @@ class Records
             $options['json']['revisions'] = $revisions;
         }
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -196,8 +219,11 @@ class Records
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('records/status.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

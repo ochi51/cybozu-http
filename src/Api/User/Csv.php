@@ -5,6 +5,7 @@ namespace CybozuHttp\Api\User;
 use CybozuHttp\Api\Kintone\File;
 use CybozuHttp\Client;
 use CybozuHttp\Api\UserApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -80,9 +81,12 @@ class Csv
 
         $options = ['json' => ['fileKey' => $fileKey]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(UserApi::generateUrl("csv/{$type}.json"), $options)
-            ->getBody()->jsonSerialize()['id'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['id'];
     }
 
     /**
@@ -105,9 +109,12 @@ class Csv
             ]
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(UserApi::generateUrl('file.json'), $options)
-            ->getBody()->jsonSerialize()['fileKey'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['fileKey'];
     }
 
     /**
@@ -121,8 +128,11 @@ class Csv
     {
         $options = ['query' => ['id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(UserApi::generateUrl('csv/result.json'), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }
