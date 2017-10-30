@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -32,9 +33,12 @@ class App
     {
         $options = ['json' => ['id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -50,9 +54,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/settings.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -67,9 +74,12 @@ class App
     {
         $options = ['json' => ['app' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('form.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['properties'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['properties'];
     }
 
     /**
@@ -85,9 +95,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/form/fields.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -103,9 +116,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/form/layout.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -121,9 +137,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/views.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -139,9 +158,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -157,9 +179,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('record/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -175,9 +200,12 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('field/acl.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -192,9 +220,12 @@ class App
     {
         $options = ['json' => ['app' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/customize.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -210,8 +241,11 @@ class App
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('app/status.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

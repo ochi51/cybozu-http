@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\User;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\UserApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -39,8 +40,11 @@ class OrganizationUsers
             'size' => $limit
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(UserApi::generateUrl('organization/users.json'), $options)
-            ->getBody()->jsonSerialize()['userTitles'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['userTitles'];
     }
 }

@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -33,9 +34,12 @@ class Record
     {
         $options = ['json' => ['app' => $appId, 'id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize()['record'];
+            ->getBody();
+
+        return $stream->jsonSerialize()['record'];
     }
 
     /**
@@ -51,9 +55,12 @@ class Record
     {
         $options = ['json' => ['app' => $appId, 'record' => $record]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -71,9 +78,12 @@ class Record
     {
         $options = ['json' => ['app' => $appId, 'id' => $id, 'revision' => $revision, 'record' => $record]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('record.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -94,9 +104,12 @@ class Record
             'revisions' => [$revision]
         ]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('records.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -123,8 +136,11 @@ class Record
             $options['json']['assignee'] = $assignee;
         }
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('record/status.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }

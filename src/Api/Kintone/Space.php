@@ -4,6 +4,7 @@ namespace CybozuHttp\Api\Kintone;
 
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
+use CybozuHttp\Middleware\JsonStream;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
@@ -32,9 +33,12 @@ class Space
     {
         $options = ['json' => ['id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('space.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -53,9 +57,12 @@ class Space
     {
         $options = ['json' => compact('id', 'name', 'members', 'isPrivate', 'isGuest', 'fixedMember')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->post(KintoneApi::generateUrl('template/space.json'), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -70,9 +77,12 @@ class Space
     {
         $options = ['json' => ['id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->delete(KintoneApi::generateUrl('space.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -88,9 +98,12 @@ class Space
     {
         $options = ['json' => compact('id', 'body')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('space/body.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -105,9 +118,12 @@ class Space
     {
         $options = ['json' => ['id' => $id]];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->get(KintoneApi::generateUrl('space/members.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -123,9 +139,12 @@ class Space
     {
         $options = ['json' => compact('id', 'members')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('space/members.json', $guestSpaceId), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 
     /**
@@ -140,8 +159,11 @@ class Space
     {
         $options = ['json' => compact('id', 'guests')];
 
-        return $this->client
+        /** @var JsonStream $stream */
+        $stream = $this->client
             ->put(KintoneApi::generateUrl('space/guests.json', $id), $options)
-            ->getBody()->jsonSerialize();
+            ->getBody();
+
+        return $stream->jsonSerialize();
     }
 }
