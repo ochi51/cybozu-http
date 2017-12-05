@@ -81,14 +81,7 @@ class File
      */
     public function post($filename, $guestSpaceId = null)
     {
-        $options = ['multipart' =>  [
-            [
-                'name' => 'file',
-                'filename' => self::getFilename($filename),
-                'contents' => fopen($filename, 'rb'),
-                'headers' => ['Content-Type' => mime_content_type($filename)]
-            ]
-        ]];
+        $options = ['multipart' =>  [self::createMultipart($filename)]];
         $this->changeLocale();
 
         /** @var JsonStream $stream */
@@ -115,12 +108,7 @@ class File
         $url = KintoneApi::generateUrl('file.json', $guestSpaceId);
         $requests = function () use ($fileNames, $url, $headers) {
             foreach ($fileNames as $filename) {
-                $body = new MultipartStream([[
-                    'name' => 'file',
-                    'filename' => self::getFilename($filename),
-                    'contents' => fopen($filename, 'rb'),
-                    'headers' => ['Content-Type' => mime_content_type($filename)]
-                ]]);
+                $body = new MultipartStream([self::createMultipart($filename)]);
                 yield new Request('POST', $url, $headers, $body);
             }
         };
@@ -159,5 +147,19 @@ class File
         if (strpos($baseUri->getHost(), 'cybozu.com') > 0) { // Japanese kintone
             setlocale(LC_ALL, 'ja_JP.UTF-8');
         }
+    }
+
+    /**
+     * @param string $filename
+     * @return array
+     */
+    private static function createMultipart($filename)
+    {
+        return [
+            'name' => 'file',
+            'filename' => self::getFilename($filename),
+            'contents' => fopen($filename, 'rb'),
+            'headers' => ['Content-Type' => mime_content_type($filename)]
+        ];
     }
 }
