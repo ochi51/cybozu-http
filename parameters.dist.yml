@@ -9,6 +9,7 @@ parameters:
     use_client_cert: false
     cert_file: change_me
     cert_password: change_me
+    concurrency: 10
 space:
     templateId: 2
 graph:
