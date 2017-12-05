@@ -115,5 +115,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->api->space()->delete($this->spaceId);
+        $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);
     }
 }
