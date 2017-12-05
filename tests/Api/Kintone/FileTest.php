@@ -90,6 +90,28 @@ class FileTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(file_get_contents($filename), $content);
     }
 
+    public function testMultiFile()
+    {
+        $filename = __DIR__ . '/../../_data/sample.js';
+        $fileNames = array_fill(0, 10, $filename);
+        $keys = $this->api->file()->multiPost($fileNames);
+        $files = [];
+        foreach ($keys as $key) {
+            $files[] = ['type' => 'FILE', 'file' => ['fileKey' => $key]];
+        }
+        $this->api->preview()->putCustomize($this->appId, $files);
+        $js = $this->api->preview()->getCustomize($this->appId)['desktop']['js'];
+        $fileKeys = [];
+        foreach ($js as $file) {
+            $fileKeys[] = $file['file']['fileKey'];
+        }
+        $results = $this->api->file()->multiGet($fileKeys);
+        $content = file_get_contents($filename);
+        foreach ($results as $body) {
+            self::assertEquals($content, $body);
+        }
+    }
+
     protected function tearDown()
     {
         $this->api->space()->delete($this->spaceId);
