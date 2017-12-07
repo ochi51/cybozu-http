@@ -45,7 +45,7 @@ class File
     /**
      * @param array $fileKeys
      * @param int|null $guestSpaceId
-     * @return array
+     * @return array [contents, contents, ...] The order of $fileKeys
      */
     public function multiGet(array $fileKeys, $guestSpaceId = null)
     {
@@ -95,7 +95,7 @@ class File
     /**
      * @param array $fileNames
      * @param int|null $guestSpaceId
-     * @return array
+     * @return array [fileKey, fileKey, ...] The order of $fileNames
      * @throws \InvalidArgumentException
      */
     public function multiPost(array $fileNames, $guestSpaceId = null)
