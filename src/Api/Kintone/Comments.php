@@ -127,9 +127,88 @@ class Comments
             if (!isset($result[$recordId])) {
                 $result[$recordId] = [];
             }
+            /** @var array $comments */
             $comments = $body['comments'];
             foreach ($comments as $comment) {
                 $result[$recordId][] = $comment;
+            }
+        };
+    }
+
+    /**
+     * @param int $appId
+     * @param array $comments [recordId => [['text' => 'comment message', 'mentions' => []], ...], ...]
+     * @param int|null $guestSpaceId
+     * @return array
+     */
+    public function postByRecords($appId, $comments, $guestSpaceId = null)
+    {
+        $result = [];
+        $concurrency = $this->client->getConfig('concurrency');
+
+        while (count($comments) > 0) {
+            $requests = $this->createPostRequestsCallback($appId, $comments, $guestSpaceId);
+            $pool = new Pool($this->client, $requests(), [
+                'concurrency' => $concurrency ?: 1,
+                'fulfilled' => $this->createPostFinishedAtCallback($result, $comments)
+            ]);
+            $pool->promise()->wait();
+        }
+        ksort($result);
+
+        return $result;
+    }
+
+    /**
+     * @param int $appId
+     * @param array $comments
+     * @param int|null $guestSpaceId
+     * @return \Closure
+     */
+    private function createPostRequestsCallback($appId, array $comments, $guestSpaceId = null)
+    {
+        $headers = $this->client->getConfig('headers');
+        $headers['Content-Type'] = 'application/json';
+        $url = KintoneApi::generateUrl('record/comment.json', $guestSpaceId);
+
+        return function () use ($appId, $comments, $url, $headers) {
+            foreach ($comments as $recordId => $values) {
+                $comment = reset($values);
+                if (!isset($comment['text'])) {
+                    continue;
+                }
+                $body = \GuzzleHttp\json_encode([
+                    'app' => $appId,
+                    'record' => $recordId,
+                    'comment' => $comment
+                ]);
+                yield new Request('POST', $url, $headers, $body);
+            }
+        };
+    }
+
+    /**
+     * @param array $result
+     * @param array $comments
+     * @return \Closure
+     */
+    private function createPostFinishedAtCallback(array &$result, array &$comments)
+    {
+        $recordIds = array_keys($comments);
+        return function (ResponseInterface $response, $index) use (&$result, &$comments, $recordIds) {
+            /** @var JsonStream $stream */
+            $stream = $response->getBody();
+            $commentId = $stream->jsonSerialize()['id'];
+            $recordId = $recordIds[$index];
+            if (!isset($result[$recordId])) {
+                $result[$recordId] = [];
+            }
+            $result[$recordId][] = $commentId;
+            $keys = array_keys($comments[$recordId]);
+            $firstKey = reset($keys);
+            unset($comments[$recordId][$firstKey]);
+            if (count($comments[$recordId]) === 0) {
+                unset($comments[$recordId]);
             }
         };
     }

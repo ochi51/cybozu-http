@@ -43,25 +43,23 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     public function testComments()
     {
         $recordIds = [];
-        $commentIds = [];
+        $comments = [];
         for ($i = 0; $i <= 10; $i++) {
             $id = $this->api->record()->post($this->appId, KintoneTestHelper::getRecord())['id'];
             $recordIds[] = $id;
-
+            $comments[$id] = [];
+            for ($j = 0; $j <= 10; $j++) {
+                $comments[$id][] = ['text' => 'test comment' . $j];
+            }
         }
-        for ($j = 0; $j <= 10; $j++) {
-            $commentIds[] = $this->api->comment()->post($this->appId, $recordIds[0], 'test comment' . $j)['id'];
-        }
-        for ($j = 11; $j <= 21; $j++) {
-            $commentIds[] = $this->api->comment()->post($this->appId, $recordIds[1], 'test comment' . $j)['id'];
-        }
+        $this->api->comments()->postByRecords($this->appId, $comments);
 
         $result = $this->api->comments()->allByRecords($this->appId, $recordIds);
-        $n = $m = 0;
-        foreach ($result as $recordId => $comments) {
+        $n = 0;
+        foreach ($result as $recordId => $commentsResult) {
             self::assertEquals($recordId, $recordIds[$n]);
-            foreach ($comments as $comment) {
-                self::assertEquals($comment['id'], $commentIds[$m]);
+            $m = 0;
+            foreach ($commentsResult as $comment) {
                 self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment' . $m);
                 $m++;
             }
