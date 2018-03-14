@@ -43,6 +43,25 @@ class File
     }
 
     /**
+     * Get file stream response
+     * https://cybozudev.zendesk.com/hc/ja/articles/202166180#step1
+     *
+     * @param string $fileKey
+     * @param int $guestSpaceId
+     * @return ResponseInterface
+     */
+    public function getStreamResponse($fileKey, $guestSpaceId = null)
+    {
+        $options = [
+            'json' => ['fileKey' => $fileKey],
+            'stream' => true
+        ];
+        $response = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
+
+        return $response;
+    }
+
+    /**
      * @param array $fileKeys
      * @param int|null $guestSpaceId
      * @return array [contents, contents, ...] The order of $fileKeys
