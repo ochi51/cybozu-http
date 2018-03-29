@@ -45,7 +45,7 @@ class FinishMiddleware
             if (self::isJsonResponse($response)) {
                 return $response->withBody(new JsonStream($response->getBody()));
             }
-            return false;
+            return $response;
         };
     }
 
@@ -57,15 +57,19 @@ class FinishMiddleware
     private function onRejected(RequestInterface $request)
     {
         return function ($reason) use ($request) {
-            if ($reason instanceof RequestException) {
-                $response = $reason->getResponse();
-                if ($response !== null && $response->getStatusCode() >= 300) {
-                    if (self::isJsonResponse($response)) {
-                        self::jsonError($request, $response);
-                    }
-                    self::domError($request, $response);
-                }
+            if (!($reason instanceof RequestException)) {
+                return $reason;
             }
+            $response = $reason->getResponse();
+            if ($response === null || $response->getStatusCode() < 300) {
+                return $reason;
+            }
+            if (self::isJsonResponse($response)) {
+                self::jsonError($request, $response);
+            }
+            self::domError($request, $response);
+
+            return $reason;
         };
     }
 
@@ -78,7 +82,7 @@ class FinishMiddleware
         $contentType = $response->getHeader('Content-Type');
         $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
 
-        return is_string($contentType) && $contentType === 'application/json';
+        return is_string($contentType) && strpos($contentType, 'application/json') === 0;
     }
 
 
@@ -122,12 +126,8 @@ class FinishMiddleware
         try {
             $body = (string)$response->getBody();
             $json = \GuzzleHttp\json_decode($body, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException(
-                    'Error trying to decode response: ' .
-                    json_last_error_msg()
-                );
-            }
+        } catch (\InvalidArgumentException $e) {
+            return;
         } catch (\RuntimeException $e) {
             return;
         }

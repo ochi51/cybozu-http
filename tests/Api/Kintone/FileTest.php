@@ -103,7 +103,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $response = $this->api->file()->getStreamResponse($fileKey);
-        self::assertEquals(file_get_contents($filename), (string)$response->getBody());
+        self::assertEquals(file_get_contents($filename), $response->getBody()->read(1024));
     }
 
     public function testMultiFile()
