@@ -42,7 +42,10 @@ class FinishMiddleware
     private function onFulfilled(RequestInterface $request)
     {
         return function (ResponseInterface $response) {
-            return $response->withBody(new JsonStream($response->getBody()));
+            if (self::isJsonResponse($response)) {
+                return $response->withBody(new JsonStream($response->getBody()));
+            }
+            return false;
         };
     }
 
@@ -57,12 +60,27 @@ class FinishMiddleware
             if ($reason instanceof RequestException) {
                 $response = $reason->getResponse();
                 if ($response !== null && $response->getStatusCode() >= 300) {
-                    self::jsonError($request, $response);
+                    if (self::isJsonResponse($response)) {
+                        self::jsonError($request, $response);
+                    }
                     self::domError($request, $response);
                 }
             }
         };
     }
+
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    private static function isJsonResponse(ResponseInterface $response)
+    {
+        $contentType = $response->getHeader('Content-Type');
+        $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
+
+        return is_string($contentType) && $contentType === 'application/json';
+    }
+
 
     /**
      * @param RequestInterface $request
@@ -103,7 +121,7 @@ class FinishMiddleware
     {
         try {
             $body = (string)$response->getBody();
-            $json = json_decode($body, true);
+            $json = \GuzzleHttp\json_decode($body, true);
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \RuntimeException(
                     'Error trying to decode response: ' .
