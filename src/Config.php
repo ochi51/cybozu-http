@@ -27,6 +27,7 @@ class Config
         'use_client_cert' => false,
         'base_uri' => null,
         'concurrency' => 1,
+        'response_middleware' => true,
         'debug' => false
     ];
 
@@ -55,7 +56,9 @@ class Config
         $this->configureBasicAuth();
         $this->configureCert();
 
-        $handler->before('http_errors', new FinishMiddleware(), 'cybozu_http.finish');
+        if ($this->config['response_middleware']) {
+            $handler->before('http_errors', new FinishMiddleware(), 'cybozu_http.finish');
+        }
     }
 
     private function configureAuth()

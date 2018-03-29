@@ -42,7 +42,10 @@ class FinishMiddleware
     private function onFulfilled(RequestInterface $request)
     {
         return function (ResponseInterface $response) {
-            return $response->withBody(new JsonStream($response->getBody()));
+            if (self::isJsonResponse($response)) {
+                return $response->withBody(new JsonStream($response->getBody()));
+            }
+            return $response;
         };
     }
 
@@ -54,15 +57,34 @@ class FinishMiddleware
     private function onRejected(RequestInterface $request)
     {
         return function ($reason) use ($request) {
-            if ($reason instanceof RequestException) {
-                $response = $reason->getResponse();
-                if ($response !== null && $response->getStatusCode() >= 300) {
-                    self::jsonError($request, $response);
-                    self::domError($request, $response);
-                }
+            if (!($reason instanceof RequestException)) {
+                return $reason;
             }
+            $response = $reason->getResponse();
+            if ($response === null || $response->getStatusCode() < 300) {
+                return $reason;
+            }
+            if (self::isJsonResponse($response)) {
+                self::jsonError($request, $response);
+            }
+            self::domError($request, $response);
+
+            return $reason;
         };
     }
+
+    /**
+     * @param ResponseInterface $response
+     * @return bool
+     */
+    private static function isJsonResponse(ResponseInterface $response)
+    {
+        $contentType = $response->getHeader('Content-Type');
+        $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
+
+        return is_string($contentType) && strpos($contentType, 'application/json') === 0;
+    }
+
 
     /**
      * @param RequestInterface $request
@@ -103,13 +125,9 @@ class FinishMiddleware
     {
         try {
             $body = (string)$response->getBody();
-            $json = json_decode($body, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException(
-                    'Error trying to decode response: ' .
-                    json_last_error_msg()
-                );
-            }
+            $json = \GuzzleHttp\json_decode($body, true);
+        } catch (\InvalidArgumentException $e) {
+            return;
         } catch (\RuntimeException $e) {
             return;
         }
