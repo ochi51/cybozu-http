@@ -94,13 +94,14 @@ class File
      * Post file
      * https://cybozudev.zendesk.com/hc/ja/articles/201941824#step1
      *
-     * @param string $filename
-     * @param int $guestSpaceId
+     * @param string $path
+     * @param int|null $guestSpaceId
+     * @param string|null $filename
      * @return string
      */
-    public function post($filename, $guestSpaceId = null)
+    public function post($path, $guestSpaceId = null, $filename = null)
     {
-        $options = ['multipart' =>  [self::createMultipart($filename)]];
+        $options = ['multipart' =>  [self::createMultipart($path, $filename)]];
         $this->changeLocale();
 
         /** @var JsonStream $stream */
@@ -169,16 +170,17 @@ class File
     }
 
     /**
-     * @param string $filename
+     * @param string $path
+     * @param string|null $filename
      * @return array
      */
-    private static function createMultipart($filename)
+    private static function createMultipart($path, $filename = null)
     {
         return [
             'name' => 'file',
-            'filename' => self::getFilename($filename),
-            'contents' => fopen($filename, 'rb'),
-            'headers' => ['Content-Type' => mime_content_type($filename)]
+            'filename' => self::getFilename($filename ?: $path),
+            'contents' => fopen($path, 'rb'),
+            'headers' => ['Content-Type' => mime_content_type($path)]
         ];
     }
 }

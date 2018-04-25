@@ -77,7 +77,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $content = $this->api->file()->get($fileKey);
         self::assertEquals(file_get_contents($filename), $content);
 
-        $key = $this->api->file()->post($filename, $this->guestSpaceId);
+        $key = $this->api->file()->post($filename, $this->guestSpaceId, 'sample.js');
 
         $this->api->preview()->putCustomize($this->guestAppId, [[
             'type' => 'FILE',
