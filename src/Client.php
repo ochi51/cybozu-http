@@ -2,6 +2,7 @@
 
 namespace CybozuHttp;
 
+use CybozuHttp\Exception\RedirectResponseException;
 use GuzzleHttp\Client as GuzzleClient;
 use CybozuHttp\Exception\NotExistRequiredException;
 
@@ -28,9 +29,14 @@ class Client extends GuzzleClient
 
     /**
      * @param string $prefix
+     * @throws RedirectResponseException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function connectionTest($prefix = '/')
     {
-        $this->request('GET', $prefix, ['allow_redirects' => false]);
+        $response = $this->request('GET', $prefix, ['allow_redirects' => false]);
+        if ($response->getStatusCode() === 302) {
+            throw new RedirectResponseException('', $response);
+        }
     }
 }

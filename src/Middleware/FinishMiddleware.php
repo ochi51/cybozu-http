@@ -66,8 +66,9 @@ class FinishMiddleware
             }
             if (self::isJsonResponse($response)) {
                 self::jsonError($request, $response);
+            } else {
+                self::domError($request, $response);
             }
-            self::domError($request, $response);
 
             return $reason;
         };
@@ -93,7 +94,7 @@ class FinishMiddleware
      */
     private static function domError(RequestInterface $request, ResponseInterface $response)
     {
-        $body = (string)$response->getBody();
+        $body = (string)$response->getBody()->getContents();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;

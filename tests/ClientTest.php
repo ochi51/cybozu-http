@@ -4,6 +4,7 @@ namespace CybozuHttp\Tests;
 
 use CybozuHttp\Client;
 use CybozuHttp\Exception\NotExistRequiredException;
+use CybozuHttp\Exception\RedirectResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
@@ -46,7 +47,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'password' => 'password'
             ]);
         } catch (NotExistRequiredException $e) {
-            self::fail("ERROR!! NotExistRequiredException");
+            self::fail('ERROR!! NotExistRequiredException');
         }
         self::assertTrue(true);
 
@@ -61,6 +62,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testConnectionTest()
     {
         $config = $this->config;
@@ -90,7 +94,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      * @param array $config
      * @param bool $useBasic
      * @param bool $useCert
-     * @throws NotExistRequiredException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function successConnection(array $config, $useBasic = true, $useCert = true)
     {
@@ -104,9 +108,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 __DIR__ . '/_output/connectionTestError' . (int)$useBasic . (int)$useCert . '.html',
                 $e->getResponse()->getBody()
             );
-            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         } catch (\Exception $e) {
-            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
         self::assertTrue(true);
     }
@@ -114,7 +118,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $config
      * @param integer $pattern
-     * @throws NotExistRequiredException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function errorConnection(array $config, $pattern = self::NO_CHANGE)
     {
@@ -157,7 +161,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                         __DIR__ . '/_output/connectionTestError.html',
                         (string)$e->getResponse()->getBody()
                     );
-                    self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                    self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
                     break;
             }
         } catch (ServerException $e) {
@@ -171,11 +175,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                         __DIR__ . '/_output/connectionTestError.html',
                         (string)$e->getResponse()->getBody()
                     );
-                    self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                    self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
                     break;
             }
+        } catch (RedirectResponseException $e) {
+            if ($pattern === self::CHANGE_SUB_DOMAIN) {
+                self::assertTrue(true);
+            } else {
+                file_put_contents(
+                    __DIR__.'/_output/connectionTestError.html',
+                    (string)$e->getResponse()->getBody()
+                );
+                self::fail('ERROR!! '.get_class($e).' : '.$e->getMessage());
+            }
         } catch (\Exception $e) {
-            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
     }
 }

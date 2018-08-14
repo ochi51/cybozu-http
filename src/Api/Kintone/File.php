@@ -9,6 +9,7 @@ use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 
 /**
@@ -101,7 +102,7 @@ class File
      */
     public function post($path, $guestSpaceId = null, $filename = null)
     {
-        $options = ['multipart' =>  [self::createMultipart($path, $filename)]];
+        $options = ['multipart' => [self::createMultipart($path, $filename)]];
         $this->changeLocale();
 
         /** @var JsonStream $stream */
