@@ -289,28 +289,28 @@ class KintoneTestHelper
                 'code' => null,
                 'type' => 'CREATOR'
             ],
-            "includeSubs" => false,
-            "appEditable" => true,
-            "recordViewable" => true,
-            "recordAddable" => true,
-            "recordEditable" => true,
-            "recordDeletable" => true,
-            "recordImportable" => false,
-            "recordExportable" => false
+            'includeSubs' => false,
+            'appEditable' => true,
+            'recordViewable' => true,
+            'recordAddable' => true,
+            'recordEditable' => true,
+            'recordDeletable' => true,
+            'recordImportable' => false,
+            'recordExportable' => false
         ],
         [
             'entity' => [
-                "type" => 'GROUP',
-                "code" => 'Administrators'
+                'type' => 'GROUP',
+                'code' => 'Administrators'
             ],
-            "includeSubs" => false,
-            "appEditable" => true,
-            "recordViewable" => true,
-            "recordAddable" => true,
-            "recordEditable" => false,
-            "recordDeletable" => false,
-            "recordImportable" => false,
-            "recordExportable" => false
+            'includeSubs' => false,
+            'appEditable' => true,
+            'recordViewable' => true,
+            'recordAddable' => true,
+            'recordEditable' => false,
+            'recordDeletable' => false,
+            'recordImportable' => false,
+            'recordExportable' => false
         ]
     ];
 
@@ -321,13 +321,13 @@ class KintoneTestHelper
         'filterCond' => '',
         'entities' => [[
             'entity' => [
-                "type" => 'GROUP',
-                "code" => 'Administrators'
+                'type' => 'GROUP',
+                'code' => 'Administrators'
             ],
-            "viewable" => true,
-            "editable" => false,
-            "deletable" => false,
-            "includeSubs" => false
+            'viewable' => true,
+            'editable' => false,
+            'deletable' => false,
+            'includeSubs' => false
         ]]
     ]];
 
@@ -336,25 +336,25 @@ class KintoneTestHelper
      */
     private static $fieldAcl = [
         [
-            "code" => "number",
-            "entities" => [[
+            'code' => 'number',
+            'entities' => [[
                 'entity' => [
-                    "type" => 'GROUP',
-                    "code" => 'Administrators'
+                    'type' => 'GROUP',
+                    'code' => 'Administrators'
                 ],
-                "accessibility" => "READ",
-                "includeSubs" => false
+                'accessibility' => 'READ',
+                'includeSubs' => false
             ]]
         ],
         [
-        "code" => "date",
-        "entities" => [[
+        'code' => 'date',
+        'entities' => [[
             'entity' => [
-                "type" => 'GROUP',
-                "code" => 'Administrators'
+                'type' => 'GROUP',
+                'code' => 'Administrators'
             ],
-            "accessibility" => "WRITE",
-            "includeSubs" => false
+            'accessibility' => 'WRITE',
+            'includeSubs' => false
         ]]
     ]
     ];
@@ -447,7 +447,7 @@ class KintoneTestHelper
         $config = $yml['parameters'];
         $config['debug'] = true;
         $config['logfile'] = __DIR__ . '/../_output/connection.log';
-        if ($config['use_basic'] and $config['use_client_cert']) {
+        if ($config['use_basic'] && $config['use_client_cert']) {
             $config['use_client_cert'] = false;
         }
         self::$config = $config;
@@ -472,11 +472,11 @@ class KintoneTestHelper
     {
         $api = self::getKintoneApi();
         $members = [[
-            "entity" => [
-                "type" => "USER",
-                "code" => self::$config['login']
+            'entity' => [
+                'type' => 'USER',
+                'code' => self::$config['login']
             ],
-            "isAdmin" => true
+            'isAdmin' => true
         ]];
         $resp = $api->space()->post(
             self::$spaceTemplateId,
@@ -513,7 +513,7 @@ class KintoneTestHelper
         $api->preview()->putViews($id, self::$views, $guestSpaceId);
         $api->preview()->deploy($id, $guestSpaceId);
         while (1) {
-            if ('PROCESSING' != $api->preview()->getDeployStatus($id, $guestSpaceId)['status']) {
+            if ('PROCESSING' !== $api->preview()->getDeployStatus($id, $guestSpaceId)['status']) {
                 break;
             }
         }

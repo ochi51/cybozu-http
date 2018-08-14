@@ -73,11 +73,11 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         $this->api->space()->delete($id);
         try {
             $this->api->space()->get($id);
-            self::fail("ERROR!! Not throw exception");
+            self::fail('ERROR!! Not throw exception');
         } catch (RequestException $e) {
             self::assertTrue(true);
         } catch (\Exception $e) {
-            self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+            self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
     }
 
@@ -91,11 +91,11 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         } else {
             try {
                 $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
-                self::fail("ERROR!! Not throw exception");
+                self::fail('ERROR!! Not throw exception');
             } catch (RequestException $e) {
                 self::assertTrue(true);
             } catch (\Exception $e) {
-                self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
             }
         }
 
@@ -107,11 +107,11 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
         } else {
             try {
                 $this->api->space()->putBody($this->guestSpaceId, 'Change body', $this->guestSpaceId);
-                self::fail("ERROR!! Not throw exception");
+                self::fail('ERROR!! Not throw exception');
             } catch (RequestException $e) {
                 self::assertTrue(true);
             } catch (\Exception $e) {
-                self::fail("ERROR!! " . get_class($e) . " : " . $e->getMessage());
+                self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
             }
         }
     }
@@ -119,12 +119,12 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
     public function testGetMembers()
     {
         $testMembers = [[
-            "entity" => [
-                "type" => "USER",
-                "code" => KintoneTestHelper::getConfig()['login']
+            'entity' => [
+                'type' => 'USER',
+                'code' => KintoneTestHelper::getConfig()['login']
             ],
-            "isAdmin" => true,
-            "isImplicit" => false
+            'isAdmin' => true,
+            'isImplicit' => false
         ]];
 
         $members = $this->api->space()->getMembers($this->spaceId);
@@ -136,40 +136,40 @@ class SpaceTest extends \PHPUnit_Framework_TestCase
     public function testPutMembers()
     {
         $putMembers = [[
-            "entity" => [
-                "type" => "USER",
-                "code" => KintoneTestHelper::getConfig()['login']
+            'entity' => [
+                'type' => 'USER',
+                'code' => KintoneTestHelper::getConfig()['login']
             ],
-            "isAdmin" => true
+            'isAdmin' => true
         ],[
-            "entity" => [
-                "type" => "GROUP",
-                "code" => 'Administrators'
+            'entity' => [
+                'type' => 'GROUP',
+                'code' => 'Administrators'
             ],
-            "isAdmin" => false
+            'isAdmin' => false
         ]];
 
         $this->api->space()->putMembers($this->spaceId, $putMembers);
         $members = $this->api->space()->getMembers($this->spaceId);
         foreach ($members['members'] as $member) {
             $code = $member['entity']['code'];
-            if ($code == KintoneTestHelper::getConfig()['login']) {
+            if ($code === KintoneTestHelper::getConfig()['login']) {
                 self::assertEquals($member, [
-                    "entity" => [
-                        "type" => "USER",
-                        "code" => KintoneTestHelper::getConfig()['login']
+                    'entity' => [
+                        'type' => 'USER',
+                        'code' => KintoneTestHelper::getConfig()['login']
                     ],
-                    "isAdmin" => true,
-                    "isImplicit" => false
+                    'isAdmin' => true,
+                    'isImplicit' => false
                 ]);
             }
-            if ($code == 'Administrators') {
+            if ($code === 'Administrators') {
                 self::assertEquals($member, [
-                    "entity" => [
-                        "type" => "GROUP",
-                        "code" => 'Administrators'
+                    'entity' => [
+                        'type' => 'GROUP',
+                        'code' => 'Administrators'
                     ],
-                    "isAdmin" => false
+                    'isAdmin' => false
                 ]);
             }
         }

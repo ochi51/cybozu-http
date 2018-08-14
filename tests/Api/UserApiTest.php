@@ -39,51 +39,51 @@ class UserApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClient()
     {
-        self::assertTrue($this->api->getClient() instanceof Client);
+        self::assertInstanceOf(Client::class, $this->api->getClient());
     }
 
     public function testCsv()
     {
-        self::assertTrue($this->api->csv() instanceof Csv);
+        self::assertInstanceOf(Csv::class, $this->api->csv());
     }
 
     public function testUsers()
     {
-        self::assertTrue($this->api->users() instanceof Users);
+        self::assertInstanceOf(Users::class, $this->api->users());
     }
 
     public function testOrganizations()
     {
-        self::assertTrue($this->api->organizations() instanceof Organizations);
+        self::assertInstanceOf(Organizations::class, $this->api->organizations());
     }
 
     public function testTitles()
     {
-        self::assertTrue($this->api->titles() instanceof Titles);
+        self::assertInstanceOf(Titles::class, $this->api->titles());
     }
 
     public function testGroups()
     {
-        self::assertTrue($this->api->groups() instanceof Groups);
+        self::assertInstanceOf(Groups::class, $this->api->groups());
     }
 
     public function testUserOrganizations()
     {
-        self::assertTrue($this->api->userOrganizations() instanceof UserOrganizations);
+        self::assertInstanceOf(UserOrganizations::class, $this->api->userOrganizations());
     }
 
     public function testUserGroups()
     {
-        self::assertTrue($this->api->userGroups() instanceof UserGroups);
+        self::assertInstanceOf(UserGroups::class, $this->api->userGroups());
     }
 
     public function testUserServices()
     {
-        self::assertTrue($this->api->userServices() instanceof UserServices);
+        self::assertInstanceOf(UserServices::class, $this->api->userServices());
     }
 
     public function testOrganizationUsers()
     {
-        self::assertTrue($this->api->organizationUsers() instanceof OrganizationUsers);
+        self::assertInstanceOf(OrganizationUsers::class, $this->api->organizationUsers());
     }
 }

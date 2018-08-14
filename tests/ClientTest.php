@@ -71,7 +71,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->successConnection($config, $config['use_basic'], $config['use_client_cert']);
 
-        if ($config['use_basic'] and $config['use_client_cert']) {
+        if ($config['use_basic'] && $config['use_client_cert']) {
             $config['use_basic'] = true;
             $config['use_client_cert'] = false;
             $this->successConnection($config, true, false);

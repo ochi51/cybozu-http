@@ -7,7 +7,9 @@ use CybozuHttp\Exception\NotExistRequiredException;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @throws \ReflectionException
+     */
     public function testConfigureAuth()
     {
         $config = new Config([
@@ -21,8 +23,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('configureAuth');
         $method->setAccessible(true);
         $method->invoke($config);
-        self::assertArrayHasKey('X-Cybozu-Authorization', $config->get('headers'));
-        self::assertArrayNotHasKey('X-Cybozu-API-Token', $config->get('headers'));
+        self::assertArrayHasKey('X-Cybozu-Authorization', (array)$config->get('headers'));
+        self::assertArrayNotHasKey('X-Cybozu-API-Token', (array)$config->get('headers'));
 
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -34,10 +36,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $method = $reflection->getMethod('configureAuth');
         $method->setAccessible(true);
         $method->invoke($config);
-        self::assertArrayNotHasKey('X-Cybozu-Authorization', $config->get('headers'));
-        self::assertArrayHasKey('X-Cybozu-API-Token', $config->get('headers'));
+        self::assertArrayNotHasKey('X-Cybozu-Authorization', (array)$config->get('headers'));
+        self::assertArrayHasKey('X-Cybozu-API-Token', (array)$config->get('headers'));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testGetBasicAuthOptions()
     {
         $config = new Config([
@@ -71,6 +76,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testCertOptions()
     {
         $config = new Config([
@@ -126,7 +134,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         self::assertTrue((bool)$array['handler']);
         self::assertEquals('https://test.s.cybozu.com', $array['base_uri']);
         self::assertEquals([
-            'X-Cybozu-Authorization' => base64_encode("test@ochi51.com:password")
+            'X-Cybozu-Authorization' => base64_encode('test@ochi51.com:password')
         ], $array['headers']);
         self::assertEquals(['basic', 'password'], $array['auth']);
         self::assertTrue($array['verify']);
@@ -225,14 +233,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseUrl()
     {
-        self::assertEquals("https://test.cybozu.com", (new Config([
+        self::assertEquals('https://test.cybozu.com', (new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',
             'password' => 'password'
         ]))->getBaseUri());
 
-        self::assertEquals("https://test.s.cybozu.com", (new Config([
+        self::assertEquals('https://test.s.cybozu.com', (new Config([
             'domain' => 'cybozu.com',
             'subdomain' => 'test',
             'login' => 'test@ochi51.com',

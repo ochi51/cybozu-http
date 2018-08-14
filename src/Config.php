@@ -45,6 +45,10 @@ class Config
         'debug'
     ];
 
+    /**
+     * Config constructor.
+     * @param array $config
+     */
     public function __construct(array $config)
     {
         $this->config = array_merge(self::$default, $config);
@@ -60,6 +64,7 @@ class Config
             $handler->before('http_errors', new FinishMiddleware(), 'cybozu_http.finish');
         }
     }
+
 
     private function configureAuth()
     {

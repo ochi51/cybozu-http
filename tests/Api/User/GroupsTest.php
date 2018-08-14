@@ -46,10 +46,10 @@ class GroupsTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         $flg1 = $flg2 = false;
         while ($row = $getCsv->getRow()) {
-            if ("example-group1" == reset($row)) {
+            if ('example-group1' === reset($row)) {
                 $flg1 = true;
             }
-            if ("example-group2" == reset($row)) {
+            if ('example-group2' === reset($row)) {
                 $flg2 = true;
             }
         }

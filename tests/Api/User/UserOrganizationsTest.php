@@ -101,14 +101,14 @@ class UserOrganizationsTest extends \PHPUnit_Framework_TestCase
         file_put_contents($path, $content);
         $getCsv = new Reader($path, 'r+', false);
         while ($row = $getCsv->getRow()) {
-            if ("example-title1" == reset($row)) {
+            if ('example-title1' === reset($row)) {
                 self::assertEquals($row, [
-                    "test1@example.com","example-org1","example-title1"
+                    'test1@example.com','example-org1','example-title1'
                 ]);
             }
-            if ("example-title2" == reset($row)) {
+            if ('example-title2' === reset($row)) {
                 self::assertEquals($row, [
-                    "test2@example.com","example-org2","example-title2"
+                    'test2@example.com','example-org2','example-title2'
                 ]);
             }
         }

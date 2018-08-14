@@ -17,14 +17,14 @@ class Client extends GuzzleClient
      * @param array $config
      * @throws NotExistRequiredException
      */
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
-        $config = new Config($config);
-        if (!$config->hasRequired()) {
+        $cybozuConfig = new Config($config);
+        if (!$cybozuConfig->hasRequired()) {
             throw new NotExistRequiredException('Parameters is invalid.');
         }
 
-        parent::__construct($config->toGuzzleConfig());
+        parent::__construct($cybozuConfig->toGuzzleConfig());
     }
 
     /**

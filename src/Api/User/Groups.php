@@ -2,26 +2,22 @@
 
 namespace CybozuHttp\Api\User;
 
-use CybozuHttp\Client;
-
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
 class Groups
 {
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
      * @var Csv
      */
     private $csv;
 
-    public function __construct(Client $client, Csv $csv)
+    /**
+     * Groups constructor.
+     * @param Csv $csv
+     */
+    public function __construct(Csv $csv)
     {
-        $this->client = $client;
         $this->csv = $csv;
     }
 

@@ -67,7 +67,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
         $id = $this->api->record()->post($this->appId, $postRecord)['id'];
         $record = $this->api->record()->get($this->appId, $id);
         foreach ($postRecord as $code => $field) {
-            if ($code == 'table') {
+            if ($code === 'table') {
                 continue;
             }
             self::assertEquals($field['value'], $record[$code]['value']);
@@ -87,7 +87,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
             ->post($this->guestAppId, $postRecord, $this->guestSpaceId)['id'];
         $record = $this->api->record()->get($this->guestAppId, $id, $this->guestSpaceId);
         foreach ($postRecord as $code => $field) {
-            if ($code == 'table') {
+            if ($code === 'table') {
                 continue;
             }
             self::assertEquals($field['value'], $record[$code]['value']);

@@ -32,7 +32,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         $flg = false;
         while ($row = $getCsv->getRow()) {
-            if (UserTestHelper::getConfig()['login'] == reset($row)) {
+            if (UserTestHelper::getConfig()['login'] === reset($row)) {
                 $flg = true;
             }
         }
