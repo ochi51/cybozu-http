@@ -75,12 +75,12 @@ class UserApi
         $this->client = $client;
         $this->csv = new Csv($client);
         $this->users = new Users($client, $this->csv);
-        $this->organizations = new Organizations($client, $this->csv);
-        $this->titles = new Titles($client, $this->csv);
-        $this->groups = new Groups($client, $this->csv);
+        $this->organizations = new Organizations($this->csv);
+        $this->titles = new Titles($this->csv);
+        $this->groups = new Groups($this->csv);
         $this->userOrganizations = new UserOrganizations($client, $this->csv);
-        $this->userGroups = new UserGroups($client, $this->csv);
-        $this->userServices = new UserServices($client, $this->csv);
+        $this->userGroups = new UserGroups($this->csv);
+        $this->userServices = new UserServices($this->csv);
         $this->organizationUsers = new OrganizationUsers($client);
     }
 

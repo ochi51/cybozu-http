@@ -3,7 +3,6 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
-use CybozuHttp\Api\Kintone\File;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -75,7 +74,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey);
-        self::assertEquals(file_get_contents($filename), $content);
+        self::assertStringEqualsFile($filename, $content);
 
         $key = $this->api->file()->post($filename, $this->guestSpaceId, 'sample.js');
 
@@ -87,7 +86,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->guestAppId, $this->guestSpaceId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey, $this->guestSpaceId);
-        self::assertEquals(file_get_contents($filename), $content);
+        self::assertStringEqualsFile($filename, $content);
     }
 
     public function testFileStream()
@@ -103,7 +102,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $response = $this->api->file()->getStreamResponse($fileKey);
-        self::assertEquals(file_get_contents($filename), $response->getBody()->read(1024));
+        self::assertStringEqualsFile($filename, $response->getBody()->read(1024));
     }
 
     public function testMultiFile()

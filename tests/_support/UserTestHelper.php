@@ -31,7 +31,7 @@ class UserTestHelper
         $config = $yml['parameters'];
         $config['debug'] = true;
         $config['logfile'] = __DIR__ . '/../_output/connection.log';
-        if ($config['use_basic'] and $config['use_client_cert']) {
+        if ($config['use_basic'] && $config['use_client_cert']) {
             $config['use_client_cert'] = false;
         }
         self::$config = $config;

@@ -42,57 +42,57 @@ class KintoneApiTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClient()
     {
-        self::assertTrue($this->api->getClient() instanceof Client);
+        self::assertInstanceOf(Client::class, $this->api->getClient());
     }
 
     public function testApp()
     {
-        self::assertTrue($this->api->app() instanceof App);
+        self::assertInstanceOf(App::class, $this->api->app());
     }
 
     public function testApps()
     {
-        self::assertTrue($this->api->apps() instanceof Apps);
+        self::assertInstanceOf(Apps::class, $this->api->apps());
     }
 
     public function testPreview()
     {
-        self::assertTrue($this->api->preview() instanceof PreviewApp);
+        self::assertInstanceOf(PreviewApp::class, $this->api->preview());
     }
 
     public function testRecord()
     {
-        self::assertTrue($this->api->record() instanceof Record);
+        self::assertInstanceOf(Record::class, $this->api->record());
     }
 
     public function testRecords()
     {
-        self::assertTrue($this->api->records() instanceof Records);
+        self::assertInstanceOf(Records::class, $this->api->records());
     }
 
     public function testFile()
     {
-        self::assertTrue($this->api->file() instanceof File);
+        self::assertInstanceOf(File::class, $this->api->file());
     }
 
     public function testGraph()
     {
-        self::assertTrue($this->api->graph() instanceof Graph);
+        self::assertInstanceOf(Graph::class, $this->api->graph());
     }
 
     public function testSpace()
     {
-        self::assertTrue($this->api->space() instanceof Space);
+        self::assertInstanceOf(Space::class, $this->api->space());
     }
 
     public function testThread()
     {
-        self::assertTrue($this->api->thread() instanceof Thread);
+        self::assertInstanceOf(Thread::class, $this->api->thread());
     }
 
     public function testGuests()
     {
-        self::assertTrue($this->api->guests() instanceof Guests);
+        self::assertInstanceOf(Guests::class, $this->api->guests());
     }
 
     public function testPostBulkRequest()
@@ -103,11 +103,11 @@ class KintoneApiTest extends \PHPUnit_Framework_TestCase
         $recordId = KintoneTestHelper::postTestRecord($appId);
         $requests = [
             [
-                "method" => "DELETE",
-                "api" => KintoneApi::generateUrl('records.json'),
-                "payload" => [
-                    "app" => $appId,
-                    "ids" => [$recordId]
+                'method' => 'DELETE',
+                'api' => KintoneApi::generateUrl('records.json'),
+                'payload' => [
+                    'app' => $appId,
+                    'ids' => [$recordId]
                 ]
             ]
         ];

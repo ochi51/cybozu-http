@@ -101,7 +101,7 @@ class File
      */
     public function post($path, $guestSpaceId = null, $filename = null)
     {
-        $options = ['multipart' =>  [self::createMultipart($path, $filename)]];
+        $options = ['multipart' => [self::createMultipart($path, $filename)]];
         $this->changeLocale();
 
         /** @var JsonStream $stream */

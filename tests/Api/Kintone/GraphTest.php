@@ -3,7 +3,6 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
-use CybozuHttp\Api\Kintone\Graph;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;

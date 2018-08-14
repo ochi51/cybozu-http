@@ -80,7 +80,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $this->api->preview()->deploy($appId);
 
         while (1) {
-            if ('PROCESSING' != $this->api->preview()->getDeployStatus($appId)['status']) {
+            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($appId)['status']) {
                 break;
             }
         }
@@ -110,7 +110,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $this->api->preview()->deploy($appId, $this->guestSpaceId);
 
         while (1) {
-            if ('PROCESSING' != $this->api->preview()->getDeployStatus($appId, $this->guestSpaceId)['status']) {
+            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($appId, $this->guestSpaceId)['status']) {
                 break;
             }
         }
@@ -227,7 +227,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         }
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
-                if ($k == 'id') {
+                if ($k === 'id') {
                     continue;
                 }
                 self::assertEquals($v, $views[$key][$k]);
@@ -241,7 +241,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         }
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
-                if ($k == 'id') {
+                if ($k === 'id') {
                     continue;
                 }
                 self::assertEquals($v, $views[$key][$k]);
@@ -257,7 +257,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $acl = $this->api->preview()->getAcl($this->appId)['rights'];
         foreach ($putAcl as $pv) {
             foreach ($acl as $v) {
-                if ($pv['entity'] == $v['entity']) {
+                if ($pv['entity'] === $v['entity']) {
                     self::assertEquals($pv, $v);
                 }
             }
@@ -267,7 +267,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $acl = $this->api->preview()->getAcl($this->guestAppId, $this->guestSpaceId)['rights'];
         foreach ($putAcl as $pv) {
             foreach ($acl as $v) {
-                if ($pv['entity'] == $v['entity']) {
+                if ($pv['entity'] === $v['entity']) {
                     self::assertEquals($pv, $v);
                 }
             }
@@ -282,7 +282,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $acl = $this->api->preview()->getRecordAcl($this->appId)['rights'];
         foreach ($putAcl[0]['entities'] as $pv) {
             foreach ($acl[0]['entities'] as $v) {
-                if ($pv['entity'] == $v['entity']) {
+                if ($pv['entity'] === $v['entity']) {
                     self::assertEquals($pv, $v);
                 }
             }
@@ -292,7 +292,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $acl = $this->api->preview()->getRecordAcl($this->guestAppId, $this->guestSpaceId)['rights'];
         foreach ($putAcl[0]['entities'] as $pv) {
             foreach ($acl[0]['entities'] as $v) {
-                if ($pv['entity'] == $v['entity']) {
+                if ($pv['entity'] === $v['entity']) {
                     self::assertEquals($pv, $v);
                 }
             }
@@ -312,7 +312,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl as $k => $tmp) {
             foreach ($putAcl[$k]['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
-                    if ($pv['entity'] == $v['entity']) {
+                    if ($pv['entity'] === $v['entity']) {
                         self::assertEquals($pv, $v);
                     }
                 }
@@ -324,7 +324,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl as $k => $tmp) {
             foreach ($putAcl[$k]['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
-                    if ($pv['entity'] == $v['entity']) {
+                    if ($pv['entity'] === $v['entity']) {
                         self::assertEquals($pv, $v);
                     }
                 }

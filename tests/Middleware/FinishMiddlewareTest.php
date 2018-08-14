@@ -10,6 +10,5 @@ class FinishMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function testCall()
     {
-        $middleware = new FinishMiddlewareTest();
     }
 }

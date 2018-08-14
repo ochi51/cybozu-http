@@ -96,8 +96,9 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $forms = $this->api->app()->getForm($this->appId);
         $f = function ($forms, $code) {
             foreach ($forms as $form) {
-                if ($form['code'] === $code)
+                if ($form['code'] === $code) {
                     return true;
+                }
             }
             return false;
         };
@@ -108,8 +109,9 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $forms = $this->api->app()->getForm($this->guestAppId, $this->guestSpaceId);
         $f = function ($forms, $code) {
             foreach ($forms as $form) {
-                if ($form['code'] === $code)
+                if ($form['code'] === $code) {
                     return true;
+                }
             }
             return false;
         };
@@ -151,7 +153,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $views = $this->api->app()->getViews($this->appId)['views'];
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
-                if ($k == 'id') {
+                if ($k === 'id') {
                     continue;
                 }
                 self::assertEquals($v, $views[$key][$k]);
@@ -161,7 +163,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $views = $this->api->app()->getViews($this->guestAppId, $this->guestSpaceId)['views'];
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
-                if ($k == 'id') {
+                if ($k === 'id') {
                     continue;
                 }
                 self::assertEquals($v, $views[$key][$k]);
@@ -271,7 +273,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->api->preview()->putStatus($this->appId, $states, $actions, true);
         $this->api->preview()->deploy($this->appId);
         while (1) {
-            if ('PROCESSING' != $this->api->preview()->getDeployStatus($this->appId)['status']) {
+            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($this->appId)['status']) {
                 break;
             }
         }
@@ -284,7 +286,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->api->preview()->putStatus($this->guestAppId, $states, $actions, true, $this->guestSpaceId);
         $this->api->preview()->deploy($this->guestAppId, $this->guestSpaceId);
         while (1) {
-            if ('PROCESSING' != $this->api->preview()->getDeployStatus($this->guestAppId, $this->guestSpaceId)['status']) {
+            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($this->guestAppId, $this->guestSpaceId)['status']) {
                 break;
             }
         }

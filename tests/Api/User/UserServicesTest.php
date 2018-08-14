@@ -60,14 +60,14 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
         file_put_contents($path, $content);
         $getCsv = new Reader($path, 'r+', false);
         while ($row = $getCsv->getRow()) {
-            if ("example-title1" == reset($row)) {
+            if ('example-title1' === reset($row)) {
                 self::assertEquals($row, [
-                    "test1@example.com","ki","ga","sa","of"
+                    'test1@example.com','ki','ga','sa','of'
                 ]);
             }
-            if ("example-title2" == reset($row)) {
+            if ('example-title2' === reset($row)) {
                 self::assertEquals($row, [
-                    "test2@example.com","ki","sa"
+                    'test2@example.com','ki','sa'
                 ]);
             }
         }

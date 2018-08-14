@@ -52,10 +52,10 @@ class UsersTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         $flg1 = $flg2 = false;
         while ($row = $getCsv->getRow()) {
-            if ("test1@example.com" == reset($row)) {
+            if ('test1@example.com' === reset($row)) {
                 $flg1 = true;
             }
-            if ("test2@example.com" == reset($row)) {
+            if ('test2@example.com' === reset($row)) {
                 $flg2 = true;
             }
         }
