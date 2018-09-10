@@ -67,11 +67,11 @@ Quick start
 ------------
 
 ```{.php}
-    $api = new \CybozuHttp\Api\KintoneApi(\CybozuHttp\Client::factory([
-        'domain' => 'cybozu.com'
-        'subdomain' => 'your-subdomain'
-        'login' => 'your-login-name'
-        'password' => 'your-password'
+    $api = new \CybozuHttp\Api\KintoneApi(new \CybozuHttp\Client([
+        'domain' => 'cybozu.com',
+        'subdomain' => 'your-subdomain',
+        'login' => 'your-login-name',
+        'password' => 'your-password',
     ]));
     
     // get record that kintone app id is 100 and record id is 1.
