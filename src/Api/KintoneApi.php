@@ -15,6 +15,9 @@ use CybozuHttp\Api\Kintone\Graph;
 use CybozuHttp\Api\Kintone\Space;
 use CybozuHttp\Api\Kintone\Thread;
 use CybozuHttp\Api\Kintone\Guests;
+use CybozuHttp\Api\Kintone\Form;
+use CybozuHttp\Api\Kintone\Fields;
+use CybozuHttp\Api\Kintone\Layout;
 use CybozuHttp\Middleware\JsonStream;
 
 /**
@@ -90,6 +93,21 @@ class KintoneApi
      */
     private $guests;
 
+    /**
+     * @var Form
+     */
+    private $form;
+
+    /**
+     * @var Fields
+     */
+    private $fields;
+
+    /**
+     * @var Layout
+     */
+    private $layout;
+
     public function __construct(Client $client)
     {
         $this->client = $client;
@@ -105,6 +123,9 @@ class KintoneApi
         $this->space = new Space($client);
         $this->thread = new Thread($client);
         $this->guests = new Guests($client);
+        $this->form = new Form($client);
+        $this->fields = new Fields($client);
+        $this->layout = new Layout($client);
     }
 
     /**
@@ -223,6 +244,30 @@ class KintoneApi
     public function guests()
     {
         return $this->guests;
+    }
+
+    /**
+     * @return Form
+     */
+    public function form()
+    {
+        return $this->form;
+    }
+
+    /**
+     * @return Fields
+     */
+    public function fields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @return Layout
+     */
+    public function layout()
+    {
+        return $this->layout;
     }
 
     /**
