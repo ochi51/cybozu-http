@@ -152,11 +152,7 @@ class Config
      */
     public function get($key)
     {
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
-        }
-
-        return false;
+        return $this->config[$key] ?? false;
     }
 
     /**
