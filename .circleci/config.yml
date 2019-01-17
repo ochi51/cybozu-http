@@ -19,4 +19,9 @@ jobs:
           key: composer-v1-{{ checksum "composer.json" }}
           paths:
             - vendor
-      - run: ./bin/phpunit
+      - run: rm -f tests/_data/test.pem
+      - run: touch tests/_data/test.pem
+      - run: echo $CYBOZU_CERT_FILE_CONTENT > tests/_data/test.pem
+      - run: php ./bin/phpunit --coverage-text --coverage-clover=coverage.clover
+      - run: wget https://scrutinizer-ci.com/ocular.phar
+      - run: php ocular.phar code-coverage:upload --format=php-clover coverage.clover
