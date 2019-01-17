@@ -22,8 +22,8 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class KintoneApi
 {
-    const API_PREFIX = '/k/v1/';
-    const GUEST_SPACE_PREFIX = '/k/guest/';
+    public const API_PREFIX = '/k/v1/';
+    public const GUEST_SPACE_PREFIX = '/k/guest/';
 
     /**
      * @var Client

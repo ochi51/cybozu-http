@@ -14,8 +14,8 @@ use CybozuHttp\Api\KintoneApi;
  */
 class Records
 {
-    const MAX_GET_RECORDS = 500;
-    const MAX_POST_RECORDS = 100;
+    public const MAX_GET_RECORDS = 500;
+    public const MAX_POST_RECORDS = 100;
 
     /**
      * @var Client

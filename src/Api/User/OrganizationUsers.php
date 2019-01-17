@@ -11,7 +11,7 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class OrganizationUsers
 {
-    const MAX_GET_USERS = 100;
+    public const MAX_GET_USERS = 100;
 
     /**
      * @var Client

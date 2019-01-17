@@ -11,7 +11,7 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class Apps
 {
-    const MAX_GET_APPS = 100;
+    public const MAX_GET_APPS = 100;
 
     /**
      * @var Client
