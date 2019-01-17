@@ -45,7 +45,7 @@ class Csv
         }
 
         $content = (string)$this->client
-            ->get(UserApi::generateUrl("csv/{$type}.json"))
+            ->get(UserApi::generateUrl("csv/{$type}.csv"))
             ->getBody();
 
         return substr($content, 0, -3);
