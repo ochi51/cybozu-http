@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
 use EasyCSV\Reader;
@@ -11,7 +12,7 @@ use CybozuHttp\Api\UserApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class UsersTest extends \PHPUnit_Framework_TestCase
+class UsersTest extends TestCase
 {
     /**
      * @var UserApi
@@ -27,7 +28,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
     {
         $config = UserTestHelper::getConfig();
         $users = $this->api->users()->get([], [$config['login']]);
-        self::assertEquals($users[0]['code'], $config['login']);
+        $this->assertEquals($users[0]['code'], $config['login']);
     }
 
     public function testCsv()
@@ -40,7 +41,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -59,7 +60,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
                 $flg2 = true;
             }
         }
-        self::assertTrue($flg1 and $flg2);
+        $this->assertTrue($flg1 and $flg2);
 
         $filename = __DIR__ . '/../../_data/delete-users.csv';
         $id = $this->api->users()->postByCsv($filename);
@@ -69,7 +70,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }

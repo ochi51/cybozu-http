@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class PreviewAppTest extends \PHPUnit_Framework_TestCase
+class PreviewAppTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -86,10 +87,10 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         }
 
         $app = $this->api->app()->get($appId);
-        self::assertEquals($app['name'], 'test deploy app');
-        self::assertEquals($app['description'], 'test deploy app description');
-        self::assertEquals($app['spaceId'], $this->spaceId);
-        self::assertEquals($app['threadId'], $this->space['defaultThread']);
+        $this->assertEquals($app['name'], 'test deploy app');
+        $this->assertEquals($app['description'], 'test deploy app description');
+        $this->assertEquals($app['spaceId'], $this->spaceId);
+        $this->assertEquals($app['threadId'], $this->space['defaultThread']);
 
 
         $this->guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
@@ -116,10 +117,10 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         }
 
         $app = $this->api->app()->get($appId, $this->guestSpaceId);
-        self::assertEquals($app['name'], 'test deploy app');
-        self::assertEquals($app['description'], 'test deploy app description');
-        self::assertEquals($app['spaceId'], $this->guestSpaceId);
-        self::assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
+        $this->assertEquals($app['name'], 'test deploy app');
+        $this->assertEquals($app['description'], 'test deploy app description');
+        $this->assertEquals($app['spaceId'], $this->guestSpaceId);
+        $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
 
     public function testSettings()
@@ -132,10 +133,10 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             'WHITE'
         );
         $settings = $this->api->preview()->getSettings($this->appId);
-        self::assertEquals('test app', $settings['name']);
-        self::assertEquals('test app description', $settings['description']);
-        self::assertEquals(['type' => 'PRESET', 'key' => 'APP72'], $settings['icon']);
-        self::assertEquals('WHITE', $settings['theme']);
+        $this->assertEquals('test app', $settings['name']);
+        $this->assertEquals('test app description', $settings['description']);
+        $this->assertEquals(['type' => 'PRESET', 'key' => 'APP72'], $settings['icon']);
+        $this->assertEquals('WHITE', $settings['theme']);
 
         $this->api->preview()->putSettings(
             $this->guestAppId,
@@ -146,10 +147,10 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             $this->guestSpaceId
         );
         $settings = $this->api->preview()->getSettings($this->guestAppId, $this->guestSpaceId);
-        self::assertEquals('test guest space app', $settings['name']);
-        self::assertEquals('test guest space app description', $settings['description']);
-        self::assertEquals(['type' => 'PRESET', 'key' => 'APP60'], $settings['icon']);
-        self::assertEquals('WHITE', $settings['theme']);
+        $this->assertEquals('test guest space app', $settings['name']);
+        $this->assertEquals('test guest space app description', $settings['description']);
+        $this->assertEquals(['type' => 'PRESET', 'key' => 'APP60'], $settings['icon']);
+        $this->assertEquals('WHITE', $settings['theme']);
     }
 
     public function testFields()
@@ -159,7 +160,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $this->api->preview()->postFields($this->appId, $putFields);
         $fields = $this->api->preview()->getFields($this->appId)['properties'];
         foreach ($putFields as $code => $field) {
-            self::assertEquals($fields[$code], $field);
+            $this->assertEquals($fields[$code], $field);
         }
 
         $this->api->preview()->putFields($this->appId, [
@@ -169,16 +170,16 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $fields = $this->api->preview()->getFields($this->appId)['properties'];
-        self::assertEquals($fields['single_text']['label'], 'Single text change');
+        $this->assertEquals($fields['single_text']['label'], 'Single text change');
 
         $this->api->preview()->deleteFields($this->appId, ['single_text']);
         $fields = $this->api->preview()->getFields($this->appId)['properties'];
-        self::assertArrayNotHasKey('single_text', $fields);
+        $this->assertArrayNotHasKey('single_text', $fields);
 
         $this->api->preview()->postFields($this->guestAppId, $putFields, $this->guestSpaceId);
         $fields = $this->api->preview()->getFields($this->guestAppId, $this->guestSpaceId)['properties'];
         foreach ($putFields as $code => $field) {
-            self::assertEquals($fields[$code], $field);
+            $this->assertEquals($fields[$code], $field);
         }
 
         $this->api->preview()->putFields($this->guestAppId, [
@@ -188,11 +189,11 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             ]
         ], $this->guestSpaceId);
         $fields = $this->api->preview()->getFields($this->guestAppId, $this->guestSpaceId)['properties'];
-        self::assertEquals($fields['single_text']['label'], 'Single text change');
+        $this->assertEquals($fields['single_text']['label'], 'Single text change');
 
         $this->api->preview()->deleteFields($this->guestAppId, ['single_text'], $this->guestSpaceId);
         $fields = $this->api->preview()->getFields($this->guestAppId, $this->guestSpaceId)['properties'];
-        self::assertArrayNotHasKey('single_text', $fields);
+        $this->assertArrayNotHasKey('single_text', $fields);
     }
 
     public function testLayout()
@@ -205,11 +206,11 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
 
         $this->api->preview()->putLayout($this->appId, $putLayout);
         $layout = $this->api->preview()->getLayout($this->appId)['layout'];
-        self::assertEquals($layout, $putLayout);
+        $this->assertEquals($layout, $putLayout);
 
         $this->api->preview()->putLayout($this->guestAppId, $putLayout, $this->guestSpaceId);
         $layout = $this->api->preview()->getLayout($this->guestAppId, $this->guestSpaceId)['layout'];
-        self::assertEquals($layout, $putLayout);
+        $this->assertEquals($layout, $putLayout);
     }
 
     public function testViews()
@@ -223,28 +224,28 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         $resp = $this->api->preview()->putViews($this->appId, $putViews)['views'];
         $views = $this->api->preview()->getViews($this->appId)['views'];
         foreach ($views as $key => $view) {
-            self::assertEquals($view['id'], $resp[$key]['id']);
+            $this->assertEquals($view['id'], $resp[$key]['id']);
         }
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
                 if ($k === 'id') {
                     continue;
                 }
-                self::assertEquals($v, $views[$key][$k]);
+                $this->assertEquals($v, $views[$key][$k]);
             }
         }
 
         $resp = $this->api->preview()->putViews($this->guestAppId, $putViews, $this->guestSpaceId)['views'];
         $views = $this->api->preview()->getViews($this->guestAppId, $this->guestSpaceId)['views'];
         foreach ($views as $key => $view) {
-            self::assertEquals($view['id'], $resp[$key]['id']);
+            $this->assertEquals($view['id'], $resp[$key]['id']);
         }
         foreach ($putViews as $key => $view) {
             foreach ($view as $k => $v) {
                 if ($k === 'id') {
                     continue;
                 }
-                self::assertEquals($v, $views[$key][$k]);
+                $this->assertEquals($v, $views[$key][$k]);
             }
         }
     }
@@ -258,7 +259,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl as $pv) {
             foreach ($acl as $v) {
                 if ($pv['entity'] === $v['entity']) {
-                    self::assertEquals($pv, $v);
+                    $this->assertEquals($pv, $v);
                 }
             }
         }
@@ -268,7 +269,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl as $pv) {
             foreach ($acl as $v) {
                 if ($pv['entity'] === $v['entity']) {
-                    self::assertEquals($pv, $v);
+                    $this->assertEquals($pv, $v);
                 }
             }
         }
@@ -283,7 +284,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl[0]['entities'] as $pv) {
             foreach ($acl[0]['entities'] as $v) {
                 if ($pv['entity'] === $v['entity']) {
-                    self::assertEquals($pv, $v);
+                    $this->assertEquals($pv, $v);
                 }
             }
         }
@@ -293,7 +294,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
         foreach ($putAcl[0]['entities'] as $pv) {
             foreach ($acl[0]['entities'] as $v) {
                 if ($pv['entity'] === $v['entity']) {
-                    self::assertEquals($pv, $v);
+                    $this->assertEquals($pv, $v);
                 }
             }
         }
@@ -313,7 +314,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             foreach ($putAcl[$k]['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
                     if ($pv['entity'] === $v['entity']) {
-                        self::assertEquals($pv, $v);
+                        $this->assertEquals($pv, $v);
                     }
                 }
             }
@@ -325,7 +326,7 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             foreach ($putAcl[$k]['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
                     if ($pv['entity'] === $v['entity']) {
-                        self::assertEquals($pv, $v);
+                        $this->assertEquals($pv, $v);
                     }
                 }
             }
@@ -345,15 +346,15 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             'url' => 'https://www.example.com/example-mobile.js'
         ]]);
         $customize = $this->api->preview()->getCustomize($this->appId);
-        self::assertEquals($customize['desktop']['js'][0], [
+        $this->assertEquals($customize['desktop']['js'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example.js'
         ]);
-        self::assertEquals($customize['desktop']['css'][0], [
+        $this->assertEquals($customize['desktop']['css'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example.css'
         ]);
-        self::assertEquals($customize['mobile']['js'][0], [
+        $this->assertEquals($customize['mobile']['js'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example-mobile.js'
         ]);
@@ -369,19 +370,19 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             'url' => 'https://www.example.com/example-mobile.js'
         ]], $this->guestSpaceId, 'ADMIN');
         $customize = $this->api->preview()->getCustomize($this->guestAppId, $this->guestSpaceId);
-        self::assertEquals($customize['desktop']['js'][0], [
+        $this->assertEquals($customize['desktop']['js'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example.js'
         ]);
-        self::assertEquals($customize['desktop']['css'][0], [
+        $this->assertEquals($customize['desktop']['css'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example.css'
         ]);
-        self::assertEquals($customize['mobile']['js'][0], [
+        $this->assertEquals($customize['mobile']['js'][0], [
             'type' => 'URL',
             'url' => 'https://www.example.com/example-mobile.js'
         ]);
-        self::assertEquals($customize['scope'], 'ADMIN');
+        $this->assertEquals($customize['scope'], 'ADMIN');
     }
 
     public function testStatus()
@@ -429,17 +430,17 @@ class PreviewAppTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->api->preview()->putStatus($this->appId, $states, $actions, true);
+        $this->api->preview()->putStatus($this->appId, $states, $actions);
         $response = $this->api->preview()->getStatus($this->appId);
-        self::assertEquals($response['enable'], true);
-        self::assertEquals($response['states'], $states);
-        self::assertEquals($response['actions'], $actions);
+        $this->assertEquals($response['enable'], true);
+        $this->assertEquals($response['states'], $states);
+        $this->assertEquals($response['actions'], $actions);
 
         $this->api->preview()->putStatus($this->guestAppId, $states, $actions, true, $this->guestSpaceId);
         $response = $this->api->preview()->getStatus($this->guestAppId, 'ja', $this->guestSpaceId);
-        self::assertEquals($response['enable'], true);
-        self::assertEquals($response['states'], $states);
-        self::assertEquals($response['actions'], $actions);
+        $this->assertEquals($response['enable'], true);
+        $this->assertEquals($response['states'], $states);
+        $this->assertEquals($response['actions'], $actions);
     }
 
     protected function tearDown()

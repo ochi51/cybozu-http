@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
 use EasyCSV\Reader;
@@ -11,7 +12,7 @@ use CybozuHttp\Api\UserApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class UserServicesTest extends \PHPUnit_Framework_TestCase
+class UserServicesTest extends TestCase
 {
     /**
      * @var UserApi
@@ -30,7 +31,7 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -48,7 +49,7 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -61,12 +62,12 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
         $getCsv = new Reader($path, 'r+', false);
         while ($row = $getCsv->getRow()) {
             if ('example-title1' === reset($row)) {
-                self::assertEquals($row, [
+                $this->assertEquals($row, [
                     'test1@example.com','ki','ga','sa','of'
                 ]);
             }
             if ('example-title2' === reset($row)) {
-                self::assertEquals($row, [
+                $this->assertEquals($row, [
                     'test2@example.com','ki','sa'
                 ]);
             }
@@ -83,7 +84,7 @@ class UserServicesTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
