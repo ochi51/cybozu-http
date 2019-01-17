@@ -21,6 +21,7 @@ class UserApiTest extends TestCase
     protected function setup()
     {
         $this->api = UserTestHelper::getUserApi();
+        $this->assertTrue((bool)$this->api->getClient());
     }
 
     public function testGenerateUrl(): void

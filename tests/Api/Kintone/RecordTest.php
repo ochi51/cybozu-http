@@ -5,8 +5,6 @@ namespace CybozuHttp\Tests\Api\Kintone;
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
-
-use GuzzleHttp\Exception\RequestException;
 use CybozuHttp\Api\KintoneApi;
 
 /**
@@ -108,9 +106,8 @@ class RecordTest extends TestCase
     {
         // kintone does not have the get process api.
         $id = KintoneTestHelper::postTestRecord($this->appId);
-        try {
-            $this->api->record()->putStatus($this->appId, $id, 'sample', 'test@example.com');
-        } catch (RequestException $e) {}
+        $this->api->record()->putStatus($this->appId, $id, 'sample', KintoneTestHelper::getConfig()['login']);
+        $this->assertTrue(true);
     }
 
     protected function tearDown()

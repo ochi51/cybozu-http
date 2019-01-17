@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api;
 
 require_once __DIR__ . '/../_support/KintoneTestHelper.php';
+
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 use CybozuHttp\Api\KintoneApi;
@@ -21,6 +22,7 @@ class KintoneApiTest extends TestCase
     protected function setup()
     {
         $this->api = KintoneTestHelper::getKintoneApi();
+        $this->assertTrue((bool)$this->api->getClient());
     }
 
     public function testGenerateUrl(): void

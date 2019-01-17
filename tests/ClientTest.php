@@ -127,7 +127,7 @@ class ClientTest extends TestCase
             case self::NO_CHANGE:
                 break;
             case self::CHANGE_SUB_DOMAIN:
-                $config['subdomain'] = 'change_me';
+                $config['subdomain'] = 'un-exist-subdomain';
                 break;
             case self::CHANGE_LOGIN:
                 $config['login'] = 'change_me';
@@ -151,6 +151,7 @@ class ClientTest extends TestCase
         $client = new Client($config);
         try {
             $client->connectionTest();
+            $this->assertTrue(false);
         } catch (ClientException $e) {
             switch ($pattern) {
                 case self::CHANGE_BASIC_LOGIN:
@@ -181,6 +182,8 @@ class ClientTest extends TestCase
             }
         } catch (RedirectResponseException $e) {
             if ($pattern === self::CHANGE_SUB_DOMAIN) {
+                $string = $e->getResponse()->getBody();
+                $this->assertNotEquals($string, strip_tags($string));
                 $this->assertTrue(true);
             } else {
                 file_put_contents(

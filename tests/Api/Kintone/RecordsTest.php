@@ -5,8 +5,6 @@ namespace CybozuHttp\Tests\Api\Kintone;
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
-
-use GuzzleHttp\Exception\RequestException;
 use CybozuHttp\Api\KintoneApi;
 
 /**
@@ -114,7 +112,7 @@ class RecordsTest extends TestCase
             ->get($this->guestAppId, $ids[0], $this->guestSpaceId);
         $this->assertEquals('change single_text value', $record['single_text']['value']);
 
-        $this->api->records()->delete($this->guestAppId, [1], $this->guestSpaceId);
+        $this->api->records()->delete($this->guestAppId, [1], $this->guestSpaceId, [2]);
         $resp = $this->api->records()
             ->get($this->guestAppId, '', $this->guestSpaceId);
         $record = $resp['records'][0];
@@ -150,14 +148,14 @@ class RecordsTest extends TestCase
     {
         // kintone does not have the get process api. so can not test.
         $id = KintoneTestHelper::postTestRecord($this->appId);
-        try {
-            $this->api->records()->putStatus($this->appId, [
-                [
-                    'id' => $id,
-                    'action' => 'sample'
-                ]
-            ]);
-        } catch (RequestException $e) {}
+        $this->api->records()->putStatus($this->appId, [
+            [
+                'id' => $id,
+                'action' => 'sample',
+                'assignee' => KintoneTestHelper::getConfig()['login']
+            ]
+        ]);
+        $this->assertTrue(true);
     }
 
     protected function tearDown()

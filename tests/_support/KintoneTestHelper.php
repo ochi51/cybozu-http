@@ -365,6 +365,61 @@ class KintoneTestHelper
     /**
      * @var array
      */
+    private static $states = [
+        'test1' => [
+            'name' => 'test1',
+            'index' => 0,
+            'assignee' => [
+                'type' => 'ONE',
+                'entities' => []
+            ]
+        ],
+        'test2' => [
+            'name' => 'test2',
+            'index' => 1,
+            'assignee' => [
+                'type' => 'ONE',
+                'entities' => [
+                    [
+                        'entity' => [
+                            'type' => 'USER',
+                            'code' => ''
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'test3' => [
+            'name' => 'test3',
+            'index' => 2,
+            'assignee' => [
+                'type' => 'ONE',
+                'entities' => []
+            ]
+        ]
+    ];
+
+    /**
+     * @var array
+     */
+    private static $actions = [
+        [
+            'name' => 'sample',
+            'from' => 'test1',
+            'to' => 'test2',
+            'filterCond' => ''
+        ],
+        [
+            'name' => 'end',
+            'from' => 'test2',
+            'to' => 'test3',
+            'filterCond' => ''
+        ]
+    ];
+
+    /**
+     * @var array
+     */
     private static $record = [
         'single_text' => ['value' => 'single_text value'],
         'number' => ['value' => '10'],
@@ -469,6 +524,22 @@ class KintoneTestHelper
     /**
      * @return array
      */
+    public static function getStates(): array
+    {
+        return self::$states;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getActions(): array
+    {
+        return self::$actions;
+    }
+
+    /**
+     * @return array
+     */
     public static function getRecord(): array
     {
         return self::$record;
@@ -554,6 +625,8 @@ class KintoneTestHelper
         $api->preview()->postFields($id, self::$fields, $guestSpaceId);
         $api->preview()->putLayout($id, self::$layout, $guestSpaceId);
         $api->preview()->putViews($id, self::$views, $guestSpaceId);
+        self::$states['test2']['assignee']['entities'][0]['entity']['code'] = self::$config['login'];
+        $api->preview()->putStatus($id, self::$states, self::$actions, true, $guestSpaceId);
         $api->preview()->deploy($id, $guestSpaceId);
         while (1) {
             if ('PROCESSING' !== $api->preview()->getDeployStatus($id, $guestSpaceId)['status']) {

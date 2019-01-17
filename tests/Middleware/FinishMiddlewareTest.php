@@ -1,6 +1,6 @@
 <?php
 
-namespace CybozuHttp\tests\Middleware;
+namespace CybozuHttp\Middleware;
 
 use PHPUnit\Framework\TestCase;
 

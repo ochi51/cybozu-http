@@ -228,73 +228,18 @@ class AppTest extends TestCase
 
     public function testGetStatus(): void
     {
-        $states = [
-            'statusName1' => [
-                'name' => 'statusName1',
-                'index' => '0',
-                'assignee' => [
-                    'type' => 'ONE',
-                    'entities' => [
-                        [
-                            'entity' => [
-                                'type' => 'FIELD_ENTITY',
-                                'code' => '作成者'
-                            ],
-                            'includeSubs' => false
-                        ]
-                    ]
-                ]
-            ],
-            'statusName2' => [
-                'name' => 'statusName2',
-                'index' => '1',
-                'assignee' => [
-                    'type' => 'ONE',
-                    'entities' => [
-                        [
-                            'entity' => [
-                                'type' => 'USER',
-                                'code' => KintoneTestHelper::getConfig()['login']
-                            ],
-                            'includeSubs' => false
-                        ]
-                    ]
-                ]
-            ]
-        ];
-        $actions = [
-            [
-                'name' => 'actionName1',
-                'from' => 'statusName1',
-                'to' => 'statusName2',
-                'filterCond' => ''
-            ]
-        ];
-
-        $this->api->preview()->putStatus($this->appId, $states, $actions);
-        $this->api->preview()->deploy($this->appId);
-        while (1) {
-            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($this->appId)['status']) {
-                break;
-            }
-        }
-
+        $states = KintoneTestHelper::getStates();
+        $actions = KintoneTestHelper::getActions();
         $response = $this->api->app()->getStatus($this->appId);
         $this->assertEquals($response['enable'], true);
-        $this->assertEquals($response['states'], $states);
+        $this->assertEquals($response['states']['test1']['name'], $states['test1']['name']);
+        $this->assertEquals($response['states']['test2']['name'], $states['test2']['name']);
         $this->assertEquals($response['actions'], $actions);
-
-        $this->api->preview()->putStatus($this->guestAppId, $states, $actions, true, $this->guestSpaceId);
-        $this->api->preview()->deploy($this->guestAppId, $this->guestSpaceId);
-        while (1) {
-            if ('PROCESSING' !== $this->api->preview()->getDeployStatus($this->guestAppId, $this->guestSpaceId)['status']) {
-                break;
-            }
-        }
 
         $response = $this->api->app()->getStatus($this->guestAppId, 'ja', $this->guestSpaceId);
         $this->assertEquals($response['enable'], true);
-        $this->assertEquals($response['states'], $states);
+        $this->assertEquals($response['states']['test1']['name'], $states['test1']['name']);
+        $this->assertEquals($response['states']['test2']['name'], $states['test2']['name']);
         $this->assertEquals($response['actions'], $actions);
     }
 
