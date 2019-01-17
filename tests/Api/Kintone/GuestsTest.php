@@ -24,7 +24,7 @@ class GuestsTest extends TestCase
         $this->api = KintoneTestHelper::getKintoneApi();
     }
 
-    public function testPostAndDelete()
+    public function testPostAndDelete(): void
     {
         $guests = [[
             'code' => 'test1@example.com',

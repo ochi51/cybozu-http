@@ -19,7 +19,7 @@ class CommentsTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class CommentsTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
@@ -41,7 +41,7 @@ class CommentsTest extends TestCase
         $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $this->space['defaultThread']);
     }
 
-    public function testComments()
+    public function testComments(): void
     {
         $recordIds = [];
         $comments = [];

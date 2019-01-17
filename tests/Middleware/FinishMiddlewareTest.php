@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class FinishMiddlewareTest extends TestCase
 {
 
-    public function testCall()
+    public function testCall(): void
     {
     }
 }

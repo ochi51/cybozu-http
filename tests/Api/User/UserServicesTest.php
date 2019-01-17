@@ -39,7 +39,7 @@ class UserServicesTest extends TestCase
         }
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/user-services.csv';
         $id = $this->api->userServices()->postByCsv($filename);

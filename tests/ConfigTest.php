@@ -11,7 +11,7 @@ class ConfigTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function testConfigureAuth()
+    public function testConfigureAuth(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -44,7 +44,7 @@ class ConfigTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function testGetBasicAuthOptions()
+    public function testGetBasicAuthOptions(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function testCertOptions()
+    public function testCertOptions(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -115,7 +115,7 @@ class ConfigTest extends TestCase
         }
     }
 
-    public function testToGuzzleConfig()
+    public function testToGuzzleConfig(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -143,7 +143,7 @@ class ConfigTest extends TestCase
         $this->assertFalse($array['debug']);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -159,7 +159,7 @@ class ConfigTest extends TestCase
         $this->assertFalse($config->get('not_exist_parameter'));
     }
 
-    public function testGetConfig()
+    public function testGetConfig(): void
     {
         $config = new Config([
             'domain' => 'cybozu.com',
@@ -191,7 +191,7 @@ class ConfigTest extends TestCase
         $this->assertArrayHasKey('base_uri', $c);
     }
 
-    public function testHasRequired()
+    public function testHasRequired(): void
     {
         $config = new Config([
             'subdomain' => 'test',
@@ -232,7 +232,7 @@ class ConfigTest extends TestCase
         $this->assertFalse($config->hasRequired());
     }
 
-    public function testGetBaseUrl()
+    public function testGetBaseUrl(): void
     {
         $this->assertEquals('https://test.cybozu.com', (new Config([
             'domain' => 'cybozu.com',

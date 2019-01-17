@@ -24,7 +24,7 @@ class TitlesTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/titles.csv';
         $id = $this->api->titles()->postByCsv($filename);

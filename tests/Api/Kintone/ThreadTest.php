@@ -19,12 +19,12 @@ class ThreadTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -35,7 +35,7 @@ class ThreadTest extends TestCase
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->put($space['defaultThread'], 'test thread', 'test thread body');
@@ -48,7 +48,7 @@ class ThreadTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->comment($this->spaceId, $space['defaultThread'], 'test thread comment');

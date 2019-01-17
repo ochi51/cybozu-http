@@ -73,14 +73,14 @@ class UserOrganizationsTest extends TestCase
         }
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = UserTestHelper::getConfig();
         $this->api->userOrganizations()->get($config['login']);
         $this->assertTrue(true);
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/user-orgs.csv';
         $id = $this->api->userOrganizations()->postByCsv($filename);

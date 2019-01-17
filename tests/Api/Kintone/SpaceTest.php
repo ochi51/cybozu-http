@@ -20,12 +20,12 @@ class SpaceTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -36,7 +36,7 @@ class SpaceTest extends TestCase
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         $this->assertEquals($this->spaceId, $space['id']);
@@ -55,7 +55,7 @@ class SpaceTest extends TestCase
         $this->assertEquals(true, $guestSpace['isGuest']);
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         // Post space in setup
         $space = $this->api->space()->get($this->spaceId);
@@ -65,7 +65,7 @@ class SpaceTest extends TestCase
         $this->assertEquals($this->guestSpaceId, $guestSpace['id']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $id = KintoneTestHelper::createTestSpace();
         $space = $this->api->space()->get($id);
@@ -82,7 +82,7 @@ class SpaceTest extends TestCase
         }
     }
 
-    public function testPutBody()
+    public function testPutBody(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         if ($space['useMultiThread']) {
@@ -117,7 +117,7 @@ class SpaceTest extends TestCase
         }
     }
 
-    public function testGetMembers()
+    public function testGetMembers(): void
     {
         $testMembers = [[
             'entity' => [
@@ -134,7 +134,7 @@ class SpaceTest extends TestCase
         $this->assertEquals($members['members'], $testMembers);
     }
 
-    public function testPutMembers()
+    public function testPutMembers(): void
     {
         $putMembers = [[
             'entity' => [
@@ -176,7 +176,7 @@ class SpaceTest extends TestCase
         }
     }
 
-    public function testPutGuest()
+    public function testPutGuest(): void
     {
         $guests = [[
             'code' => 'test1@example.com',

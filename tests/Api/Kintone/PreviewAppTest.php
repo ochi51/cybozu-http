@@ -19,7 +19,7 @@ class PreviewAppTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class PreviewAppTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +39,12 @@ class PreviewAppTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -62,7 +62,7 @@ class PreviewAppTest extends TestCase
             ->post('test app', $this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId)['app'];
     }
 
-    public function testDeploy()
+    public function testDeploy(): void
     {
         $this->space = $this->api->space()->get($this->spaceId);
         $appId = $this->api->preview()
@@ -123,7 +123,7 @@ class PreviewAppTest extends TestCase
         $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
 
-    public function testSettings()
+    public function testSettings(): void
     {
         $this->api->preview()->putSettings(
             $this->appId,
@@ -153,7 +153,7 @@ class PreviewAppTest extends TestCase
         $this->assertEquals('WHITE', $settings['theme']);
     }
 
-    public function testFields()
+    public function testFields(): void
     {
         $putFields = KintoneTestHelper::getFields();
 
@@ -196,7 +196,7 @@ class PreviewAppTest extends TestCase
         $this->assertArrayNotHasKey('single_text', $fields);
     }
 
-    public function testLayout()
+    public function testLayout(): void
     {
         $putFields = KintoneTestHelper::getFields();
         $this->api->preview()->postFields($this->appId, $putFields);
@@ -213,7 +213,7 @@ class PreviewAppTest extends TestCase
         $this->assertEquals($layout, $putLayout);
     }
 
-    public function testViews()
+    public function testViews(): void
     {
         $putFields = KintoneTestHelper::getFields();
         $this->api->preview()->postFields($this->appId, $putFields);
@@ -250,7 +250,7 @@ class PreviewAppTest extends TestCase
         }
     }
 
-    public function testAcl()
+    public function testAcl(): void
     {
         $putAcl = KintoneTestHelper::getAppAcl();
 
@@ -275,7 +275,7 @@ class PreviewAppTest extends TestCase
         }
     }
 
-    public function testRecordAcl()
+    public function testRecordAcl(): void
     {
         $putAcl = KintoneTestHelper::getRecordAcl();
 
@@ -300,7 +300,7 @@ class PreviewAppTest extends TestCase
         }
     }
 
-    public function testFieldAcl()
+    public function testFieldAcl(): void
     {
         $putFields = KintoneTestHelper::getFields();
         $this->api->preview()->postFields($this->appId, $putFields);
@@ -333,7 +333,7 @@ class PreviewAppTest extends TestCase
         }
     }
 
-    public function testCustomize()
+    public function testCustomize(): void
     {
         $this->api->preview()->putCustomize($this->appId, [[
             'type' => 'URL',
@@ -385,7 +385,7 @@ class PreviewAppTest extends TestCase
         $this->assertEquals($customize['scope'], 'ADMIN');
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         $states = [
             'statusName1' => [

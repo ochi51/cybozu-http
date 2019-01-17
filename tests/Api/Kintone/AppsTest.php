@@ -19,7 +19,7 @@ class AppsTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class AppsTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +39,12 @@ class AppsTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -60,7 +60,7 @@ class AppsTest extends TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $app = $this->api->apps()->get([$this->appId], [], null, [$this->spaceId])['apps'][0];
         $this->assertEquals($app['appId'], $this->appId);

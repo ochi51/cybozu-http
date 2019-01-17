@@ -38,7 +38,7 @@ class ClientTest extends TestCase
         $this->config['logfile'] = __DIR__ . '/_output/connection.log';
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         try {
             new Client([
@@ -66,7 +66,7 @@ class ClientTest extends TestCase
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function testConnectionTest()
+    public function testConnectionTest(): void
     {
         $config = $this->config;
 
@@ -97,7 +97,7 @@ class ClientTest extends TestCase
      * @param bool $useCert
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function successConnection(array $config, $useBasic = true, $useCert = true)
+    private function successConnection(array $config, $useBasic = true, $useCert = true): void
     {
         $config['use_basic'] = $useBasic;
         $config['use_client_cert'] = $useCert;
@@ -121,7 +121,7 @@ class ClientTest extends TestCase
      * @param integer $pattern
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function errorConnection(array $config, $pattern = self::NO_CHANGE)
+    private function errorConnection(array $config, $pattern = self::NO_CHANGE): void
     {
         switch ($pattern) {
             case self::NO_CHANGE:

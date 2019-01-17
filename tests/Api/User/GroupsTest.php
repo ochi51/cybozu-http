@@ -24,7 +24,7 @@ class GroupsTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/groups.csv';
         $id = $this->api->groups()->postByCsv($filename);

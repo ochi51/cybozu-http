@@ -11,7 +11,7 @@ use CybozuHttp\Cert\Pfx;
 class PfxTest extends TestCase
 {
 
-    public function testToPem()
+    public function testToPem(): void
     {
         $dir = __DIR__ . '/../_data/';
         try {

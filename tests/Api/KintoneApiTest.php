@@ -23,14 +23,13 @@ class KintoneApiTest extends TestCase
         $this->api = KintoneTestHelper::getKintoneApi();
     }
 
-    public function testGenerateUrl()
+    public function testGenerateUrl(): void
     {
         $this->assertEquals('/k/v1/record.json', KintoneApi::generateUrl('record.json'));
         $this->assertEquals('/k/guest/123/v1/record.json', KintoneApi::generateUrl('record.json', 123));
     }
 
-
-    public function testPostBulkRequest()
+    public function testPostBulkRequest(): void
     {
         $spaceId = KintoneTestHelper::createTestSpace();
         $space = $this->api->space()->get($spaceId);

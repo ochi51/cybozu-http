@@ -19,7 +19,7 @@ class CommentTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class CommentTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +39,12 @@ class CommentTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -64,7 +64,7 @@ class CommentTest extends TestCase
         $this->api->record()->post($this->guestAppId, $postRecord, $this->guestSpaceId);
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $recordId = $this->api->record()->post($this->appId, KintoneTestHelper::getRecord())['id'];
 
@@ -80,7 +80,7 @@ class CommentTest extends TestCase
         $this->assertEquals(count($comments), 0);
     }
 
-    public function testGuestComment()
+    public function testGuestComment(): void
     {
         $recordId = $this->api->record()->post(
             $this->guestAppId,

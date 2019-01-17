@@ -54,7 +54,7 @@ class UserGroupsTest extends TestCase
         }
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/user-groups.csv';
         $id = $this->api->userGroups()->postByCsv($filename);

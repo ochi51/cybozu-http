@@ -23,7 +23,7 @@ class UserApiTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGenerateUrl()
+    public function testGenerateUrl(): void
     {
         $this->assertEquals('/v1/users.json', UserApi::generateUrl('users.json'));
     }

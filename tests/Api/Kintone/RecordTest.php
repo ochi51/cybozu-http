@@ -20,7 +20,7 @@ class RecordTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -30,7 +30,7 @@ class RecordTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -40,12 +40,12 @@ class RecordTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -61,7 +61,7 @@ class RecordTest extends TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testRecord()
+    public function testRecord(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
 
@@ -104,7 +104,7 @@ class RecordTest extends TestCase
         $this->assertEquals(0, $count);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         // kintone does not have the get process api.
         $id = KintoneTestHelper::postTestRecord($this->appId);

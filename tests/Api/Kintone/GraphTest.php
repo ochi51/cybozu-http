@@ -23,7 +23,7 @@ class GraphTest extends TestCase
         $this->api = KintoneTestHelper::getKintoneApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $graph = KintoneTestHelper::getGraph();
         $res = $this->api->graph()->get($graph['appId'], $graph['reportId']);

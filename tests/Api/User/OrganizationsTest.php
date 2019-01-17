@@ -24,7 +24,7 @@ class OrganizationsTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $content = $this->api->organizations()->getByCsv();
         $path = __DIR__ . '/../../_output/export-organizations.csv';

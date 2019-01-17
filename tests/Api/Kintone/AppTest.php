@@ -19,7 +19,7 @@ class AppTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class AppTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +39,12 @@ class AppTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -60,7 +60,7 @@ class AppTest extends TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $app = $this->api->app()->get($this->appId);
         $this->assertEquals($app['appId'], $this->appId);
@@ -75,7 +75,7 @@ class AppTest extends TestCase
         $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
 
-    public function testGetSetting()
+    public function testGetSetting(): void
     {
         $settings = $this->api->app()->getSettings($this->appId);
         $this->assertEquals('cybozu-http test app', $settings['name']);
@@ -90,7 +90,7 @@ class AppTest extends TestCase
         $this->assertEquals('WHITE', $settings['theme']);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $putFields = KintoneTestHelper::getFields();
 
@@ -121,7 +121,7 @@ class AppTest extends TestCase
         }
     }
 
-    public function testGetFields()
+    public function testGetFields(): void
     {
         $putFields = KintoneTestHelper::getFields();
 
@@ -136,7 +136,7 @@ class AppTest extends TestCase
         }
     }
 
-    public function testGetLayout()
+    public function testGetLayout(): void
     {
         $putLayout = KintoneTestHelper::getLayout();
 
@@ -147,7 +147,7 @@ class AppTest extends TestCase
         $this->assertEquals($layout, $putLayout);
     }
 
-    public function testGetViews()
+    public function testGetViews(): void
     {
         $putViews = KintoneTestHelper::getViews();
 
@@ -172,7 +172,7 @@ class AppTest extends TestCase
         }
     }
 
-    public function testGetAcl()
+    public function testGetAcl(): void
     {
         $acl = $this->api->app()->getAcl($this->appId)['rights'];
         $this->assertEquals($acl[0]['entity'], [
@@ -195,7 +195,7 @@ class AppTest extends TestCase
         ]);
     }
 
-    public function testGetRecordAcl()
+    public function testGetRecordAcl(): void
     {
         $acl = $this->api->app()->getRecordAcl($this->appId)['rights'];
         $this->assertEquals($acl, []);
@@ -204,7 +204,7 @@ class AppTest extends TestCase
         $this->assertEquals($acl, []);
     }
 
-    public function testGetFieldAcl()
+    public function testGetFieldAcl(): void
     {
         $acl = $this->api->app()->getFieldAcl($this->appId)['rights'];
         $this->assertEquals($acl, []);
@@ -213,7 +213,7 @@ class AppTest extends TestCase
         $this->assertEquals($acl, []);
     }
 
-    public function testGetCustomize()
+    public function testGetCustomize(): void
     {
         $customize = $this->api->app()->getCustomize($this->appId);
         $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
@@ -226,7 +226,7 @@ class AppTest extends TestCase
         $this->assertEquals($customize['scope'], 'ALL');
     }
 
-    public function testGetStatus()
+    public function testGetStatus(): void
     {
         $states = [
             'statusName1' => [
@@ -271,7 +271,7 @@ class AppTest extends TestCase
             ]
         ];
 
-        $this->api->preview()->putStatus($this->appId, $states, $actions, true);
+        $this->api->preview()->putStatus($this->appId, $states, $actions);
         $this->api->preview()->deploy($this->appId);
         while (1) {
             if ('PROCESSING' !== $this->api->preview()->getDeployStatus($this->appId)['status']) {

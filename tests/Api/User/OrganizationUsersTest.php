@@ -23,7 +23,7 @@ class OrganizationUsersTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = UserTestHelper::getConfig();
         $this->api->organizationUsers()->get($config['login']);

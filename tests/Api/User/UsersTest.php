@@ -24,14 +24,14 @@ class UsersTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = UserTestHelper::getConfig();
         $users = $this->api->users()->get([], [$config['login']]);
         $this->assertEquals($users[0]['code'], $config['login']);
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $filename = __DIR__ . '/../../_data/users.csv';
         $id = $this->api->users()->postByCsv($filename);

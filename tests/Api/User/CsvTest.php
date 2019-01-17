@@ -24,7 +24,7 @@ class CsvTest extends TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $content = $this->api->csv()->get('user');
 
@@ -47,7 +47,7 @@ class CsvTest extends TestCase
         }
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $id = $this->api->csv()->post('user', __DIR__ . '/../../_data/users.csv');
         while (1) {
@@ -78,7 +78,7 @@ class CsvTest extends TestCase
         }
     }
 
-    public function testPostKey()
+    public function testPostKey(): void
     {
         try {
             $this->api->csv()->postKey('aaa', 'key');

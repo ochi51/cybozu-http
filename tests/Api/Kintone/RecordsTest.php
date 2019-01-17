@@ -20,22 +20,22 @@ class RecordsTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -51,7 +51,7 @@ class RecordsTest extends TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testRecords()
+    public function testRecords(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
         $fields = array_keys($postRecord);
@@ -122,7 +122,7 @@ class RecordsTest extends TestCase
         $this->assertNotEquals('change single_text value', $record['single_text']['value']);
     }
 
-    public function testAll()
+    public function testAll(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
         $fields = array_keys($postRecord);
@@ -146,7 +146,7 @@ class RecordsTest extends TestCase
         $this->assertCount(505, $allRecords);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         // kintone does not have the get process api. so can not test.
         $id = KintoneTestHelper::postTestRecord($this->appId);

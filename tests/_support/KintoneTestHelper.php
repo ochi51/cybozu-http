@@ -25,6 +25,9 @@ class KintoneTestHelper
      */
     private static $spaceTemplateId;
 
+    /**
+     * @var array
+     */
     private static $graph;
 
     /**
@@ -391,57 +394,90 @@ class KintoneTestHelper
         ]
     ];
 
-    public static function getConfig()
+    /**
+     * @return array
+     */
+    public static function getConfig(): array
     {
         return self::$config;
     }
 
-    public static function getSpaceTemplateId()
+    /**
+     * @return int
+     */
+    public static function getSpaceTemplateId(): int
     {
         return self::$spaceTemplateId;
     }
 
-    public static function getGraph()
+    /**
+     * @return array
+     */
+    public static function getGraph(): array
     {
         return self::$graph;
     }
 
-    public static function getFields()
+    /**
+     * @return array
+     */
+    public static function getFields(): array
     {
         return self::$fields;
     }
 
-    public static function getLayout()
+    /**
+     * @return array
+     */
+    public static function getLayout(): array
     {
         return self::$layout;
     }
 
-    public static function getViews()
+    /**
+     * @return array
+     */
+    public static function getViews(): array
     {
         return self::$views;
     }
 
-    public static function getAppAcl()
+    /**
+     * @return array
+     */
+    public static function getAppAcl(): array
     {
         return self::$appAcl;
     }
 
-    public static function getRecordAcl()
+    /**
+     * @return array
+     */
+    public static function getRecordAcl(): array
     {
         return self::$recordAcl;
     }
 
-    public static function getFieldAcl()
+    /**
+     * @return array
+     */
+    public static function getFieldAcl(): array
     {
         return self::$fieldAcl;
     }
 
-    public static function getRecord()
+    /**
+     * @return array
+     */
+    public static function getRecord(): array
     {
         return self::$record;
     }
 
-    public static function createKintoneApi()
+    /**
+     * @return KintoneApi
+     */
+    public static function createKintoneApi(): KintoneApi
     {
         $yml = Yaml::parse(file_get_contents(__DIR__ . '/../../parameters.yml'));
         $config = $yml['parameters'];
@@ -459,7 +495,10 @@ class KintoneTestHelper
         return self::$api;
     }
 
-    public static function getKintoneApi()
+    /**
+     * @return KintoneApi
+     */
+    public static function getKintoneApi(): KintoneApi
     {
         if (self::$api) {
             return self::$api;
@@ -468,7 +507,11 @@ class KintoneTestHelper
         return self::createKintoneApi();
     }
 
-    public static function createTestSpace($isGuest = false)
+    /**
+     * @param bool $isGuest
+     * @return int
+     */
+    public static function createTestSpace($isGuest = false): int
     {
         $api = self::getKintoneApi();
         $members = [[
@@ -486,20 +529,20 @@ class KintoneTestHelper
             $isGuest
         );
 
-        return $resp['id'];
+        return (int)$resp['id'];
     }
 
     /**
-     * @param integer $spaceId
-     * @param integer $threadId
-     * @param integer $guestSpaceId
-     * @return integer
+     * @param int $spaceId
+     * @param int $threadId
+     * @param int $guestSpaceId
+     * @return int
      */
-    public static function createTestApp($spaceId, $threadId, $guestSpaceId = null)
+    public static function createTestApp($spaceId, $threadId, $guestSpaceId = null): int
     {
         $api = self::getKintoneApi();
         $resp = $api->preview()->post('cybozu-http test app', $spaceId, $threadId, $guestSpaceId);
-        $id = $resp['app'];
+        $id = (int)$resp['app'];
 
         $api->preview()->putSettings($id,
             'cybozu-http test app',
@@ -522,11 +565,11 @@ class KintoneTestHelper
     }
 
     /**
-     * @param integer $appId
-     * @param integer $guestSpaceId
-     * @return integer
+     * @param int $appId
+     * @param int $guestSpaceId
+     * @return int
      */
-    public static function postTestRecord($appId, $guestSpaceId = null)
+    public static function postTestRecord($appId, $guestSpaceId = null): int
     {
         $api = self::getKintoneApi();
         return $api->record()->post($appId, self::$record, $guestSpaceId)['id'];

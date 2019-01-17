@@ -19,7 +19,7 @@ class FileTest extends TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +29,7 @@ class FileTest extends TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +39,12 @@ class FileTest extends TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -62,7 +62,7 @@ class FileTest extends TestCase
             ->post('test app', $this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId)['app'];
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $key = $this->api->file()->post($filename);
@@ -90,7 +90,7 @@ class FileTest extends TestCase
         $this->assertStringEqualsFile($filename, $content);
     }
 
-    public function testFileStream()
+    public function testFileStream(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $key = $this->api->file()->post($filename);
@@ -106,7 +106,7 @@ class FileTest extends TestCase
         $this->assertStringEqualsFile($filename, $response->getBody()->read(1024));
     }
 
-    public function testMultiFile()
+    public function testMultiFile(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $fileNames = array_fill(0, 10, $filename);
