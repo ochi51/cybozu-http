@@ -31,7 +31,7 @@ class Thread
      * @param integer $guestSpaceId
      * @return array
      */
-    public function put($id, $name = null, $body = null, $guestSpaceId = null)
+    public function put($id, $name = null, $body = null, $guestSpaceId = null): array
     {
         $options = ['json' => ['id' => $id]];
         if ($name !== null) {
@@ -61,7 +61,7 @@ class Thread
      * @param int $guestSpaceId
      * @return array
      */
-    public function comment($spaceId, $threadId, $comment, array $mentions = [], array $files = [], $guestSpaceId = null)
+    public function comment($spaceId, $threadId, $comment, array $mentions = [], array $files = [], $guestSpaceId = null): array
     {
         $options = ['json' => [
             'space'  => $spaceId,

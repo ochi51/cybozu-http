@@ -32,7 +32,7 @@ class Client extends GuzzleClient
      * @throws RedirectResponseException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function connectionTest($prefix = '/')
+    public function connectionTest($prefix = '/'): void
     {
         $response = $this->request('GET', $prefix, ['allow_redirects' => false]);
         if ($response->getStatusCode() === 302) {

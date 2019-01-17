@@ -112,7 +112,7 @@ class KintoneApi
      * @param integer|null $guestSpaceId
      * @return string
      */
-    public static function generateUrl($api, $guestSpaceId = null)
+    public static function generateUrl($api, $guestSpaceId = null): string
     {
         if ($guestSpaceId && is_numeric($guestSpaceId)) {
             return self::GUEST_SPACE_PREFIX . $guestSpaceId .'/v1/'. $api;
@@ -124,7 +124,7 @@ class KintoneApi
     /**
      * @return Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -132,7 +132,7 @@ class KintoneApi
     /**
      * @return App
      */
-    public function app()
+    public function app(): App
     {
         return $this->app;
     }
@@ -140,7 +140,7 @@ class KintoneApi
     /**
      * @return Apps
      */
-    public function apps()
+    public function apps(): Apps
     {
         return $this->apps;
     }
@@ -148,7 +148,7 @@ class KintoneApi
     /**
      * @return PreviewApp
      */
-    public function preview()
+    public function preview(): PreviewApp
     {
         return $this->preview;
     }
@@ -156,7 +156,7 @@ class KintoneApi
     /**
      * @return Record
      */
-    public function record()
+    public function record(): Record
     {
         return $this->record;
     }
@@ -164,7 +164,7 @@ class KintoneApi
     /**
      * @return Records
      */
-    public function records()
+    public function records(): Records
     {
         return $this->records;
     }
@@ -172,7 +172,7 @@ class KintoneApi
     /**
      * @return File
      */
-    public function file()
+    public function file(): File
     {
         return $this->file;
     }
@@ -180,7 +180,7 @@ class KintoneApi
     /**
      * @return Comment
      */
-    public function comment()
+    public function comment(): Comment
     {
         return $this->comment;
     }
@@ -188,7 +188,7 @@ class KintoneApi
     /**
      * @return Comments
      */
-    public function comments()
+    public function comments(): Comments
     {
         return $this->comments;
     }
@@ -196,7 +196,7 @@ class KintoneApi
     /**
      * @return Graph
      */
-    public function graph()
+    public function graph(): Graph
     {
         return $this->graph;
     }
@@ -204,7 +204,7 @@ class KintoneApi
     /**
      * @return Space
      */
-    public function space()
+    public function space(): Space
     {
         return $this->space;
     }
@@ -212,7 +212,7 @@ class KintoneApi
     /**
      * @return Thread
      */
-    public function thread()
+    public function thread(): Thread
     {
         return $this->thread;
     }
@@ -220,7 +220,7 @@ class KintoneApi
     /**
      * @return Guests
      */
-    public function guests()
+    public function guests(): Guests
     {
         return $this->guests;
     }
@@ -233,7 +233,7 @@ class KintoneApi
      * @param integer $guestSpaceId
      * @return array
      */
-    public function postBulkRequest(array $requests, $guestSpaceId = null)
+    public function postBulkRequest(array $requests, $guestSpaceId = null): array
     {
         $options = ['json' => ['requests' => $requests]];
 

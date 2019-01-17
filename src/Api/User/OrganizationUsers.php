@@ -32,7 +32,7 @@ class OrganizationUsers
      * @param int $limit
      * @return array
      */
-    public function get($code, $offset = 0, $limit = self::MAX_GET_USERS)
+    public function get($code, $offset = 0, $limit = self::MAX_GET_USERS): array
     {
         $options = ['json' => [
             'code' => $code,

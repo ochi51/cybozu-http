@@ -39,7 +39,7 @@ class FinishMiddleware
      * @return \Closure
      * @throws \InvalidArgumentException
      */
-    private function onFulfilled(RequestInterface $request)
+    private function onFulfilled(RequestInterface $request): callable
     {
         return function (ResponseInterface $response) {
             if (self::isJsonResponse($response)) {
@@ -54,7 +54,7 @@ class FinishMiddleware
      * @return \Closure
      * @throws RequestException
      */
-    private function onRejected(RequestInterface $request)
+    private function onRejected(RequestInterface $request): callable
     {
         return function ($reason) use ($request) {
             if (!($reason instanceof RequestException)) {
@@ -78,7 +78,7 @@ class FinishMiddleware
      * @param ResponseInterface $response
      * @return bool
      */
-    private static function isJsonResponse(ResponseInterface $response)
+    private static function isJsonResponse(ResponseInterface $response): bool
     {
         $contentType = $response->getHeader('Content-Type');
         $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
@@ -92,7 +92,7 @@ class FinishMiddleware
      * @param ResponseInterface $response
      * @throws RequestException
      */
-    private static function domError(RequestInterface $request, ResponseInterface $response)
+    private static function domError(RequestInterface $request, ResponseInterface $response): void
     {
         $body = (string)$response->getBody()->getContents();
         $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -122,7 +122,7 @@ class FinishMiddleware
      * @param ResponseInterface $response
      * @throws RequestException
      */
-    private static function jsonError(RequestInterface $request, ResponseInterface $response)
+    private static function jsonError(RequestInterface $request, ResponseInterface $response): void
     {
         try {
             $body = (string)$response->getBody();
@@ -145,7 +145,7 @@ class FinishMiddleware
      * @param array $errors
      * @return string
      */
-    private static function addErrorMessages(array $errors)
+    private static function addErrorMessages(array $errors): string
     {
         $message = ' (';
         foreach ($errors as $k => $err) {
@@ -169,7 +169,7 @@ class FinishMiddleware
      * @param ResponseInterface|null $response
      * @return RequestException
      */
-    private static function createException($message, RequestInterface $request, ResponseInterface $response)
+    private static function createException($message, RequestInterface $request, ResponseInterface $response): RequestException
     {
         $level = (int) floor($response->getStatusCode() / 100);
         $className = RequestException::class;

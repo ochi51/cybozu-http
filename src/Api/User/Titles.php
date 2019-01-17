@@ -28,7 +28,7 @@ class Titles
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getByCsv()
+    public function getByCsv(): string
     {
         return $this->csv->get('title');
     }
@@ -41,7 +41,7 @@ class Titles
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postByCsv($filename)
+    public function postByCsv($filename): int
     {
         return $this->csv->post('title', $filename);
     }

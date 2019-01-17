@@ -28,7 +28,7 @@ class Guests
      * @param array $guests
      * @return array
      */
-    public function post(array $guests)
+    public function post(array $guests): array
     {
         $options = ['json' => ['guests' => $guests]];
 
@@ -47,7 +47,7 @@ class Guests
      * @param array $guests
      * @return array
      */
-    public function delete(array $guests)
+    public function delete(array $guests): array
     {
         $options = ['json' => ['guests' => $guests]];
 

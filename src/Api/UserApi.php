@@ -88,7 +88,7 @@ class UserApi
      * @param string $api
      * @return string
      */
-    public static function generateUrl($api)
+    public static function generateUrl($api): string
     {
         return self::API_PREFIX . $api;
     }
@@ -96,7 +96,7 @@ class UserApi
     /**
      * @return Client
      */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
@@ -104,7 +104,7 @@ class UserApi
     /**
      * @return Csv
      */
-    public function csv()
+    public function csv(): Csv
     {
         return $this->csv;
     }
@@ -112,7 +112,7 @@ class UserApi
     /**
      * @return Users
      */
-    public function users()
+    public function users(): Users
     {
         return $this->users;
     }
@@ -120,7 +120,7 @@ class UserApi
     /**
      * @return Organizations
      */
-    public function organizations()
+    public function organizations(): Organizations
     {
         return $this->organizations;
     }
@@ -128,7 +128,7 @@ class UserApi
     /**
      * @return Titles
      */
-    public function titles()
+    public function titles(): Titles
     {
         return $this->titles;
     }
@@ -136,7 +136,7 @@ class UserApi
     /**
      * @return Groups
      */
-    public function groups()
+    public function groups(): Groups
     {
         return $this->groups;
     }
@@ -144,7 +144,7 @@ class UserApi
     /**
      * @return UserOrganizations
      */
-    public function userOrganizations()
+    public function userOrganizations(): UserOrganizations
     {
         return $this->userOrganizations;
     }
@@ -152,7 +152,7 @@ class UserApi
     /**
      * @return UserGroups
      */
-    public function userGroups()
+    public function userGroups(): UserGroups
     {
         return $this->userGroups;
     }
@@ -160,7 +160,7 @@ class UserApi
     /**
      * @return UserServices
      */
-    public function userServices()
+    public function userServices(): UserServices
     {
         return $this->userServices;
     }
@@ -168,7 +168,7 @@ class UserApi
     /**
      * @return OrganizationUsers
      */
-    public function organizationUsers()
+    public function organizationUsers(): OrganizationUsers
     {
         return $this->organizationUsers;
     }

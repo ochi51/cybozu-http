@@ -34,7 +34,7 @@ class File
      * @param int $guestSpaceId
      * @return string
      */
-    public function get($fileKey, $guestSpaceId = null)
+    public function get($fileKey, $guestSpaceId = null): string
     {
         $options = ['json' => ['fileKey' => $fileKey]];
         $response = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
@@ -50,7 +50,7 @@ class File
      * @param int $guestSpaceId
      * @return ResponseInterface
      */
-    public function getStreamResponse($fileKey, $guestSpaceId = null)
+    public function getStreamResponse($fileKey, $guestSpaceId = null): ResponseInterface
     {
         $options = [
             'json' => ['fileKey' => $fileKey],
@@ -66,7 +66,7 @@ class File
      * @param int|null $guestSpaceId
      * @return array [contents, contents, ...] The order of $fileKeys
      */
-    public function multiGet(array $fileKeys, $guestSpaceId = null)
+    public function multiGet(array $fileKeys, $guestSpaceId = null): array
     {
         $result = [];
         $concurrency = $this->client->getConfig('concurrency');
@@ -99,7 +99,7 @@ class File
      * @param string|null $filename
      * @return string
      */
-    public function post($path, $guestSpaceId = null, $filename = null)
+    public function post($path, $guestSpaceId = null, $filename = null): string
     {
         $options = ['multipart' => [self::createMultipart($path, $filename)]];
         $this->changeLocale();
@@ -118,7 +118,7 @@ class File
      * @return array [fileKey, fileKey, ...] The order of $fileNames
      * @throws \InvalidArgumentException
      */
-    public function multiPost(array $fileNames, $guestSpaceId = null)
+    public function multiPost(array $fileNames, $guestSpaceId = null): array
     {
         $this->changeLocale();
 
@@ -152,7 +152,7 @@ class File
      * @param string $name The new file name
      * @return string containing
      */
-    public static function getFilename($name)
+    public static function getFilename($name): string
     {
         $originalName = str_replace('\\', '/', $name);
         $pos = strrpos($originalName, '/');
@@ -161,7 +161,7 @@ class File
         return $originalName;
     }
 
-    private function changeLocale()
+    private function changeLocale(): void
     {
         $baseUri = $this->client->getConfig('base_uri');
         if (strpos($baseUri->getHost(), 'cybozu.com') > 0) { // Japanese kintone
@@ -174,7 +174,7 @@ class File
      * @param string|null $filename
      * @return array
      */
-    private static function createMultipart($path, $filename = null)
+    private static function createMultipart($path, $filename = null): array
     {
         return [
             'name' => 'file',
