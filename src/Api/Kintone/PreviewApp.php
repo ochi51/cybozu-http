@@ -31,7 +31,7 @@ class PreviewApp
      * @param boolean $revert
      * @return array
      */
-    public function deploy($id, $guestSpaceId = null, $revision = -1, $revert = false)
+    public function deploy($id, $guestSpaceId = null, $revision = -1, $revert = false): array
     {
         return $this->deployApps([[
             'app' => $id,
@@ -48,7 +48,7 @@ class PreviewApp
      * @param boolean $revert
      * @return array
      */
-    public function deployApps(array $apps, $guestSpaceId = null, $revert = false)
+    public function deployApps(array $apps, $guestSpaceId = null, $revert = false): array
     {
         $options = ['json' => compact('apps', 'revert')];
 
@@ -68,7 +68,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getDeployStatus($id, $guestSpaceId = null)
+    public function getDeployStatus($id, $guestSpaceId = null): array
     {
         return $this->getDeployStatuses([$id], $guestSpaceId)[0];
     }
@@ -81,7 +81,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getDeployStatuses(array $ids, $guestSpaceId = null)
+    public function getDeployStatuses(array $ids, $guestSpaceId = null): array
     {
         $options = ['json' => ['apps' => $ids]];
 
@@ -103,7 +103,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function post($name, $spaceId = null, $threadId = null, $guestSpaceId = null)
+    public function post($name, $spaceId = null, $threadId = null, $guestSpaceId = null): array
     {
         $options = ['json' => ['name' => $name]];
         if ($spaceId !== null) {
@@ -128,7 +128,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getSettings($id, $guestSpaceId = null, $lang = 'default')
+    public function getSettings($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -149,7 +149,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getFields($id, $guestSpaceId = null, $lang = 'default')
+    public function getFields($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -170,7 +170,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getLayout($id, $guestSpaceId = null, $lang = 'default')
+    public function getLayout($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -191,7 +191,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getViews($id, $guestSpaceId = null, $lang = 'default')
+    public function getViews($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -212,7 +212,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -233,7 +233,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getRecordAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getRecordAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -254,7 +254,7 @@ class PreviewApp
      * @param string $lang
      * @return array
      */
-    public function getFieldAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getFieldAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -274,7 +274,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getCustomize($id, $guestSpaceId = null)
+    public function getCustomize($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $id]];
 
@@ -295,7 +295,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getStatus($id, $lang = 'ja', $guestSpaceId = null)
+    public function getStatus($id, $lang = 'ja', $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -320,7 +320,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putSettings($id, $name, $description, array $icon, $theme, $guestSpaceId = null, $revision = -1)
+    public function putSettings($id, $name, $description, array $icon, $theme, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -349,7 +349,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function postFields($id, array $fields, $guestSpaceId = null, $revision = -1)
+    public function postFields($id, array $fields, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -375,7 +375,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putFields($id, array $fields, $guestSpaceId = null, $revision = -1)
+    public function putFields($id, array $fields, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -401,7 +401,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function deleteFields($id, array $fields, $guestSpaceId = null, $revision = -1)
+    public function deleteFields($id, array $fields, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -427,7 +427,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putLayout($id, array $layout, $guestSpaceId = null, $revision = -1)
+    public function putLayout($id, array $layout, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -453,7 +453,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putViews($id, array $views, $guestSpaceId = null, $revision = -1)
+    public function putViews($id, array $views, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -479,7 +479,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putAcl($id, array $rights, $guestSpaceId = null, $revision = -1)
+    public function putAcl($id, array $rights, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -505,7 +505,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putRecordAcl($id, array $rights, $guestSpaceId = null, $revision = -1)
+    public function putRecordAcl($id, array $rights, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => compact('id', 'rights', 'revision')];
 
@@ -527,7 +527,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putFieldAcl($id, array $rights, $guestSpaceId = null, $revision = -1)
+    public function putFieldAcl($id, array $rights, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => compact('id', 'rights', 'revision')];
 
@@ -552,7 +552,7 @@ class PreviewApp
      * @param integer $revision
      * @return array
      */
-    public function putCustomize($id, array $js = [], array $css = [], array $mobileJs = [], $guestSpaceId = null, $scope = 'ALL', $revision = -1)
+    public function putCustomize($id, array $js = [], array $css = [], array $mobileJs = [], $guestSpaceId = null, $scope = 'ALL', $revision = -1): array
     {
         $options = ['json' => [
             'app' => $id,
@@ -583,7 +583,7 @@ class PreviewApp
      * @param integer $guestSpaceId
      * @return array
      */
-    public function putStatus($id, array $states, array $actions, $enable = true, $guestSpaceId = null)
+    public function putStatus($id, array $states, array $actions, $enable = true, $guestSpaceId = null): array
     {
         $options = [
             'json' => [

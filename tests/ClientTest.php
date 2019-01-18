@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Tests;
 
+use PHPUnit\Framework\TestCase;
 use CybozuHttp\Client;
 use CybozuHttp\Exception\NotExistRequiredException;
 use CybozuHttp\Exception\RedirectResponseException;
@@ -13,16 +14,16 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
-    const NO_CHANGE = 0;
-    const CHANGE_SUB_DOMAIN = 1;
-    const CHANGE_LOGIN = 2;
-    const CHANGE_PASSWORD = 3;
-    const CHANGE_BASIC_LOGIN = 4;
-    const CHANGE_BASIC_PASSWORD = 5;
-    const CHANGE_CERT_FILE = 6;
-    const CHANGE_CERT_PASSWORD = 7;
+    public const NO_CHANGE = 0;
+    public const CHANGE_SUB_DOMAIN = 1;
+    public const CHANGE_LOGIN = 2;
+    public const CHANGE_PASSWORD = 3;
+    public const CHANGE_BASIC_LOGIN = 4;
+    public const CHANGE_BASIC_PASSWORD = 5;
+    public const CHANGE_CERT_FILE = 6;
+    public const CHANGE_CERT_PASSWORD = 7;
 
     /**
      * @var array
@@ -37,7 +38,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->config['logfile'] = __DIR__ . '/_output/connection.log';
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         try {
             new Client([
@@ -49,7 +50,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         } catch (NotExistRequiredException $e) {
             self::fail('ERROR!! NotExistRequiredException');
         }
-        self::assertTrue(true);
+        $this->assertTrue(true);
 
         try {
             new Client([
@@ -58,14 +59,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]);
             self::fail('Not throw NotExistRequiredException.');
         } catch (NotExistRequiredException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function testConnectionTest()
+    public function testConnectionTest(): void
     {
         $config = $this->config;
 
@@ -75,7 +76,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $config['use_basic'] = true;
             $config['use_client_cert'] = false;
             $this->successConnection($config, true, false);
-            $this->successConnection($config, false, true);
+            $this->successConnection($config, false);
         }
         $this->errorConnection($config, self::CHANGE_SUB_DOMAIN);
         $this->errorConnection($config, self::CHANGE_LOGIN);
@@ -96,7 +97,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      * @param bool $useCert
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function successConnection(array $config, $useBasic = true, $useCert = true)
+    private function successConnection(array $config, $useBasic = true, $useCert = true): void
     {
         $config['use_basic'] = $useBasic;
         $config['use_client_cert'] = $useCert;
@@ -112,7 +113,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
     /**
@@ -120,13 +121,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      * @param integer $pattern
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function errorConnection(array $config, $pattern = self::NO_CHANGE)
+    private function errorConnection(array $config, $pattern = self::NO_CHANGE): void
     {
         switch ($pattern) {
             case self::NO_CHANGE:
                 break;
             case self::CHANGE_SUB_DOMAIN:
-                $config['subdomain'] = 'change_me';
+                $config['subdomain'] = 'un-exist-subdomain';
                 break;
             case self::CHANGE_LOGIN:
                 $config['login'] = 'change_me';
@@ -150,11 +151,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = new Client($config);
         try {
             $client->connectionTest();
+            $this->assertTrue(false);
         } catch (ClientException $e) {
             switch ($pattern) {
                 case self::CHANGE_BASIC_LOGIN:
                 case self::CHANGE_BASIC_PASSWORD:
-                    self::assertTrue(true);
+                    $this->assertTrue(true);
                     break;
                 default:
                     file_put_contents(
@@ -168,7 +170,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             switch ($pattern) {
                 case self::CHANGE_LOGIN:
                 case self::CHANGE_PASSWORD:
-                    self::assertTrue(true);
+                    $this->assertTrue(true);
                     break;
                 default:
                     file_put_contents(
@@ -180,7 +182,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             }
         } catch (RedirectResponseException $e) {
             if ($pattern === self::CHANGE_SUB_DOMAIN) {
-                self::assertTrue(true);
+                $string = $e->getResponse()->getBody();
+                $this->assertNotEquals($string, strip_tags($string));
+                $this->assertTrue(true);
             } else {
                 file_put_contents(
                     __DIR__.'/_output/connectionTestError.html',

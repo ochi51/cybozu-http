@@ -11,7 +11,7 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class Users
 {
-    const MAX_GET_USERS = 100;
+    public const MAX_GET_USERS = 100;
 
     /**
      * @var Client
@@ -39,7 +39,7 @@ class Users
      * @param integer $limit
      * @return array
      */
-    public function get(array $ids = [], array $codes = [], $offset = 0, $limit = self::MAX_GET_USERS)
+    public function get(array $ids = [], array $codes = [], $offset = 0, $limit = self::MAX_GET_USERS): array
     {
         $options = ['json' => compact('ids', 'codes')];
         $options['json']['size'] = $limit;
@@ -60,7 +60,7 @@ class Users
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getByCsv()
+    public function getByCsv(): string
     {
         return $this->csv->get('user');
     }
@@ -73,7 +73,7 @@ class Users
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postByCsv($filename)
+    public function postByCsv($filename): int
     {
         return $this->csv->post('user', $filename);
     }

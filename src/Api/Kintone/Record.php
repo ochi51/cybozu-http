@@ -30,7 +30,7 @@ class Record
      * @param integer $guestSpaceId
      * @return array
      */
-    public function get($appId, $id, $guestSpaceId = null)
+    public function get($appId, $id, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $appId, 'id' => $id]];
 
@@ -51,7 +51,7 @@ class Record
      * @param integer $guestSpaceId
      * @return array
      */
-    public function post($appId, array $record, $guestSpaceId = null)
+    public function post($appId, array $record, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $appId, 'record' => $record]];
 
@@ -74,7 +74,7 @@ class Record
      * @param integer $revision
      * @return array
      */
-    public function put($appId, $id, array $record, $guestSpaceId = null, $revision = -1)
+    public function put($appId, $id, array $record, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => ['app' => $appId, 'id' => $id, 'revision' => $revision, 'record' => $record]];
 
@@ -96,7 +96,7 @@ class Record
      * @param integer $revision
      * @return array
      */
-    public function delete($appId, $id, $guestSpaceId = null, $revision = -1)
+    public function delete($appId, $id, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $appId,
@@ -124,7 +124,7 @@ class Record
      * @param integer $revision
      * @return array
      */
-    public function putStatus($appId, $id, $action, $assignee = null, $guestSpaceId = null, $revision = -1)
+    public function putStatus($appId, $id, $action, $assignee = null, $guestSpaceId = null, $revision = -1): array
     {
         $options = ['json' => [
             'app' => $appId,

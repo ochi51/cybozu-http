@@ -3,6 +3,7 @@
 namespace Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class CommentsTest extends \PHPUnit_Framework_TestCase
+class CommentsTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -18,7 +19,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -28,7 +29,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
@@ -40,7 +41,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
         $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $this->space['defaultThread']);
     }
 
-    public function testComments()
+    public function testComments(): void
     {
         $recordIds = [];
         $comments = [];
@@ -57,10 +58,10 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
         $result = $this->api->comments()->allByRecords($this->appId, $recordIds);
         $n = 0;
         foreach ($result as $recordId => $commentsResult) {
-            self::assertEquals($recordId, $recordIds[$n]);
+            $this->assertEquals($recordId, $recordIds[$n]);
             $m = 0;
             foreach ($commentsResult as $comment) {
-                self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment' . $m);
+                $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment' . $m);
                 $m++;
             }
             $n++;

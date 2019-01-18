@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class ThreadTest extends \PHPUnit_Framework_TestCase
+class ThreadTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -18,12 +19,12 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -34,30 +35,30 @@ class ThreadTest extends \PHPUnit_Framework_TestCase
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->put($space['defaultThread'], 'test thread', 'test thread body');
         // kintone does not have the get thread api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->api->thread()->put($guestSpace['defaultThread'], 'test thread', 'test thread body', $this->guestSpaceId);
         // kintone does not have the get thread api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $space = $this->api->space()->get($this->spaceId);
         $this->api->thread()->comment($this->spaceId, $space['defaultThread'], 'test thread comment');
         // kintone does not have the get thread api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->api->thread()->comment($this->guestSpaceId, $guestSpace['defaultThread'], 'test thread comment', [], [], $this->guestSpaceId);
         // kintone does not have the get thread api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 
     protected function tearDown()

@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
 use EasyCSV\Reader;
@@ -11,7 +12,7 @@ use CybozuHttp\Api\UserApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class OrganizationsTest extends \PHPUnit_Framework_TestCase
+class OrganizationsTest extends TestCase
 {
     /**
      * @var UserApi
@@ -23,7 +24,7 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testCsv()
+    public function testCsv(): void
     {
         $content = $this->api->organizations()->getByCsv();
         $path = __DIR__ . '/../../_output/export-organizations.csv';
@@ -37,7 +38,7 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -57,7 +58,7 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 $flg2 = true;
             }
         }
-        self::assertTrue($flg1 and $flg2);
+        $this->assertTrue($flg1 and $flg2);
 
         $filename = __DIR__ . '/../../_output/export-organizations.csv';
         $id = $this->api->organizations()->postByCsv($filename);
@@ -67,7 +68,7 @@ class OrganizationsTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }

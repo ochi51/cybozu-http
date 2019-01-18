@@ -1,0 +1,27 @@
+version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/php:7.1
+  working_directory: ~/app
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.json" }}
+            - composer-v1-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.json" }}
+          paths:
+            - vendor
+      - run: rm -f tests/_data/test.pem
+      - run: touch tests/_data/test.pem
+      - run: echo $CYBOZU_CERT_FILE_CONTENT > tests/_data/test.pem
+      - run: php ./bin/phpunit --coverage-text --coverage-clover=coverage.clover
+      - run: wget https://scrutinizer-ci.com/ocular.phar
+      - run: php ocular.phar code-coverage:upload --format=php-clover coverage.clover

@@ -11,7 +11,7 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class OrganizationUsers
 {
-    const MAX_GET_USERS = 100;
+    public const MAX_GET_USERS = 100;
 
     /**
      * @var Client
@@ -32,7 +32,7 @@ class OrganizationUsers
      * @param int $limit
      * @return array
      */
-    public function get($code, $offset = 0, $limit = self::MAX_GET_USERS)
+    public function get($code, $offset = 0, $limit = self::MAX_GET_USERS): array
     {
         $options = ['json' => [
             'code' => $code,

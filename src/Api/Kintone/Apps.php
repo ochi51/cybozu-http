@@ -11,7 +11,7 @@ use CybozuHttp\Middleware\JsonStream;
  */
 class Apps
 {
-    const MAX_GET_APPS = 100;
+    public const MAX_GET_APPS = 100;
 
     /**
      * @var Client
@@ -36,7 +36,7 @@ class Apps
      * @param integer $guestSpaceId
      * @return array
      */
-    public function get(array $ids = [], array $codes = [], $name = null, array $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null)
+    public function get(array $ids = [], array $codes = [], $name = null, array $spaceIds = [], $limit = self::MAX_GET_APPS, $offset = 0, $guestSpaceId = null): array
     {
         $options = ['json' => compact('ids', 'codes', 'name', 'spaceIds')];
         $options['json']['limit'] = $limit;

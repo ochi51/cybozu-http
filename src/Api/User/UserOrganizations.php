@@ -34,7 +34,7 @@ class UserOrganizations
      * @param string $code
      * @return array
      */
-    public function get($code)
+    public function get($code): array
     {
         $options = ['json' => ['code' => $code]];
 
@@ -53,7 +53,7 @@ class UserOrganizations
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getByCsv()
+    public function getByCsv(): string
     {
         return $this->csv->get('userOrganizations');
     }
@@ -66,7 +66,7 @@ class UserOrganizations
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postByCsv($filename)
+    public function postByCsv($filename): int
     {
         return $this->csv->post('userOrganizations', $filename);
     }

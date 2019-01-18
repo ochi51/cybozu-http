@@ -20,12 +20,15 @@ class UserTestHelper
      */
     private static $api;
 
-    public static function getConfig()
+    public static function getConfig(): array
     {
         return self::$config;
     }
 
-    public static function createUserApi()
+    /**
+     * @return UserApi
+     */
+    public static function createUserApi(): UserApi
     {
         $yml = Yaml::parse(file_get_contents(__DIR__ . '/../../parameters.yml'));
         $config = $yml['parameters'];
@@ -41,7 +44,10 @@ class UserTestHelper
         return self::$api;
     }
 
-    public static function getUserApi()
+    /**
+     * @return UserApi
+     */
+    public static function getUserApi(): UserApi
     {
         if (self::$api) {
             return self::$api;

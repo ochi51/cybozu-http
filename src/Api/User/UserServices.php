@@ -28,7 +28,7 @@ class UserServices
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getByCsv()
+    public function getByCsv(): string
     {
         return $this->csv->get('userServices');
     }
@@ -41,7 +41,7 @@ class UserServices
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postByCsv($filename)
+    public function postByCsv($filename): int
     {
         return $this->csv->post('userServices', $filename);
     }
