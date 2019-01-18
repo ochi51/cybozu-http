@@ -14,7 +14,7 @@ class Pfx
      * @return string
      * @throws \RuntimeException
      */
-    public static function toPem($pfx, $password)
+    public static function toPem($pfx, $password): string
     {
         $p12cert = array();
         $p12buf = self::read($pfx);
@@ -34,7 +34,7 @@ class Pfx
      * @return string
      * @throws \RuntimeException
      */
-    private static function read($pfx)
+    private static function read($pfx): string
     {
         try {
             $fd = fopen($pfx, 'rb');
@@ -54,7 +54,7 @@ class Pfx
      * @return array
      * @throws \RuntimeException
      */
-    private static function pkcs12Read($p12buf, array $p12cert, $password)
+    private static function pkcs12Read($p12buf, array $p12cert, $password): array
     {
         if (!openssl_pkcs12_read($p12buf, $p12cert, $password)) {
             throw new \RuntimeException('Invalid cert format or password.');
@@ -68,7 +68,7 @@ class Pfx
      * @param $p12cert
      * @return string
      */
-    private static function addExtracerts($pem, $p12cert)
+    private static function addExtracerts($pem, $p12cert): string
     {
         if (!empty($p12cert['extracerts'][0])) {
             $pem .= $p12cert['extracerts'][0];

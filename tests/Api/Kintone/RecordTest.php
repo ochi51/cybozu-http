@@ -3,15 +3,14 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
-
-use GuzzleHttp\Exception\RequestException;
 use CybozuHttp\Api\KintoneApi;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class RecordTest extends \PHPUnit_Framework_TestCase
+class RecordTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -19,7 +18,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -29,7 +28,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -39,12 +38,12 @@ class RecordTest extends \PHPUnit_Framework_TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -60,7 +59,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testRecord()
+    public function testRecord(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
 
@@ -70,17 +69,17 @@ class RecordTest extends \PHPUnit_Framework_TestCase
             if ($code === 'table') {
                 continue;
             }
-            self::assertEquals($field['value'], $record[$code]['value']);
+            $this->assertEquals($field['value'], $record[$code]['value']);
         }
 
         $this->api->record()->put($this->appId, $id, [
             'single_text' => ['value' => 'change single_text value']
         ]);
         $record = $this->api->record()->get($this->appId, $id);
-        self::assertEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals('change single_text value', $record['single_text']['value']);
         $this->api->record()->delete($this->appId, $id);
         $count = $this->api->records()->get($this->appId)['totalCount'];
-        self::assertEquals(0, $count);
+        $this->assertEquals(0, $count);
 
 
         $id = $this->api->record()
@@ -90,26 +89,25 @@ class RecordTest extends \PHPUnit_Framework_TestCase
             if ($code === 'table') {
                 continue;
             }
-            self::assertEquals($field['value'], $record[$code]['value']);
+            $this->assertEquals($field['value'], $record[$code]['value']);
         }
 
         $this->api->record()->put($this->guestAppId, $id, [
             'single_text' => ['value' => 'change single_text value']
         ], $this->guestSpaceId);
         $record = $this->api->record()->get($this->guestAppId, $id, $this->guestSpaceId);
-        self::assertEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals('change single_text value', $record['single_text']['value']);
         $this->api->record()->delete($this->guestAppId, $id, $this->guestSpaceId);
         $count = $this->api->records()->get($this->guestAppId, '', $this->guestSpaceId)['totalCount'];
-        self::assertEquals(0, $count);
+        $this->assertEquals(0, $count);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         // kintone does not have the get process api.
         $id = KintoneTestHelper::postTestRecord($this->appId);
-        try {
-            $this->api->record()->putStatus($this->appId, $id, 'sample', 'test@example.com');
-        } catch (RequestException $e) {}
+        $this->api->record()->putStatus($this->appId, $id, 'sample', KintoneTestHelper::getConfig()['login']);
+        $this->assertTrue(true);
     }
 
     protected function tearDown()

@@ -1,14 +1,16 @@
 <?php
 
-namespace CybozuHttp\tests\Middleware;
+namespace CybozuHttp\Middleware;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class FinishMiddlewareTest extends \PHPUnit_Framework_TestCase
+class FinishMiddlewareTest extends TestCase
 {
 
-    public function testCall()
+    public function testCall(): void
     {
     }
 }

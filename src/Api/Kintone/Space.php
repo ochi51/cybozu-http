@@ -29,7 +29,7 @@ class Space
      * @param integer $guestSpaceId
      * @return array
      */
-    public function get($id, $guestSpaceId = null)
+    public function get($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['id' => $id]];
 
@@ -53,7 +53,7 @@ class Space
      * @param boolean $fixedMember
      * @return array
      */
-    public function post($id, $name, array $members, $isPrivate = false, $isGuest = false, $fixedMember = false)
+    public function post($id, $name, array $members, $isPrivate = false, $isGuest = false, $fixedMember = false): array
     {
         $options = ['json' => compact('id', 'name', 'members', 'isPrivate', 'isGuest', 'fixedMember')];
 
@@ -73,7 +73,7 @@ class Space
      * @param integer $guestSpaceId
      * @return array
      */
-    public function delete($id, $guestSpaceId = null)
+    public function delete($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['id' => $id]];
 
@@ -94,7 +94,7 @@ class Space
      * @param integer $guestSpaceId
      * @return array
      */
-    public function putBody($id, $body, $guestSpaceId = null)
+    public function putBody($id, $body, $guestSpaceId = null): array
     {
         $options = ['json' => compact('id', 'body')];
 
@@ -114,7 +114,7 @@ class Space
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getMembers($id, $guestSpaceId = null)
+    public function getMembers($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['id' => $id]];
 
@@ -135,7 +135,7 @@ class Space
      * @param integer $guestSpaceId
      * @return array
      */
-    public function putMembers($id, array $members, $guestSpaceId = null)
+    public function putMembers($id, array $members, $guestSpaceId = null): array
     {
         $options = ['json' => compact('id', 'members')];
 
@@ -155,7 +155,7 @@ class Space
      * @param array   $guests
      * @return array
      */
-    public function putGuests($id, array $guests)
+    public function putGuests($id, array $guests): array
     {
         $options = ['json' => compact('id', 'guests')];
 

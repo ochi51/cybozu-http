@@ -29,7 +29,7 @@ class Graph
      * @param array $options
      * @return string
      */
-    public function get($appId, $id, $guestSpaceId = null, $isIframe = false, $isShowTitle = false, array $options = [])
+    public function get($appId, $id, $guestSpaceId = null, $isIframe = false, $isShowTitle = false, array $options = []): string
     {
         $url =  $guestSpaceId ? KintoneApi::GUEST_SPACE_PREFIX . $guestSpaceId . '/' : '/k/';
         $url .= $appId . '/report';

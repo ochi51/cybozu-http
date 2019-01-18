@@ -66,7 +66,7 @@ class Config
     }
 
 
-    private function configureAuth()
+    private function configureAuth(): void
     {
         if ($this->get('use_api_token')) {
             $this->config['headers']['X-Cybozu-API-Token'] = $this->get('token');
@@ -76,14 +76,14 @@ class Config
         }
     }
 
-    private function configureBasicAuth()
+    private function configureBasicAuth(): void
     {
         if ($this->get('use_basic')) {
             $this->config['auth'] = $this->getBasicAuthOptions();
         }
     }
 
-    private function configureCert()
+    private function configureCert(): void
     {
         if ($this->get('use_client_cert')) {
             $this->config['verify'] = true;
@@ -97,7 +97,7 @@ class Config
      * @return array
      * @throws NotExistRequiredException
      */
-    private function getBasicAuthOptions()
+    private function getBasicAuthOptions(): array
     {
         if ($this->hasRequiredOnBasicAuth()) {
             return [
@@ -112,7 +112,7 @@ class Config
      * @return array
      * @throws NotExistRequiredException
      */
-    private function getCertOptions()
+    private function getCertOptions(): array
     {
         if ($this->hasRequiredOnCert()) {
             return [
@@ -126,7 +126,7 @@ class Config
     /**
      * @return array
      */
-    public function toGuzzleConfig()
+    public function toGuzzleConfig(): array
     {
         $config = [
             'handler' => $this->get('handler'),
@@ -152,17 +152,13 @@ class Config
      */
     public function get($key)
     {
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
-        }
-
-        return false;
+        return $this->config[$key] ?? false;
     }
 
     /**
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -170,7 +166,7 @@ class Config
     /**
      * @return bool
      */
-    public function hasRequired()
+    public function hasRequired(): bool
     {
         foreach (self::$required as $r) {
             if (!array_key_exists($r, $this->config)) {
@@ -186,7 +182,7 @@ class Config
     /**
      * @return bool
      */
-    private function hasRequiredOnAuth()
+    private function hasRequiredOnAuth(): bool
     {
         if ($this->get('use_api_token')) {
             return !empty($this->get('token'));
@@ -198,7 +194,7 @@ class Config
     /**
      * @return bool
      */
-    private function hasRequiredOnBasicAuth()
+    private function hasRequiredOnBasicAuth(): bool
     {
         return $this->hasKeysByUse('use_basic', ['basic_login', 'basic_password']);
     }
@@ -206,7 +202,7 @@ class Config
     /**
      * @return bool
      */
-    private function hasRequiredOnCert()
+    private function hasRequiredOnCert(): bool
     {
         return $this->hasKeysByUse('use_client_cert', ['cert_file', 'cert_password']);
     }
@@ -216,7 +212,7 @@ class Config
      * @param string[] $keys
      * @return bool
      */
-    private function hasKeysByUse($use, array $keys)
+    private function hasKeysByUse($use, array $keys): bool
     {
         if (!$this->get($use)) {
             return true;
@@ -234,7 +230,7 @@ class Config
     /**
      * @return string
      */
-    public function getBaseUri()
+    public function getBaseUri(): string
     {
         $subdomain = $this->get('subdomain');
         $uri = 'https://'. $subdomain;

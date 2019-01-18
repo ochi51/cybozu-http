@@ -28,7 +28,7 @@ class Organizations
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function getByCsv()
+    public function getByCsv(): string
     {
         return $this->csv->get('organization');
     }
@@ -41,7 +41,7 @@ class Organizations
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postByCsv($filename)
+    public function postByCsv($filename): int
     {
         return $this->csv->post('organization', $filename);
     }

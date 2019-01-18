@@ -3,15 +3,14 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
-
-use GuzzleHttp\Exception\RequestException;
 use CybozuHttp\Api\KintoneApi;
 
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class RecordsTest extends \PHPUnit_Framework_TestCase
+class RecordsTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -19,22 +18,22 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -50,7 +49,7 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
-    public function testRecords()
+    public function testRecords(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
         $fields = array_keys($postRecord);
@@ -66,9 +65,9 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             if ($code === 'table') {
                 continue;
             }
-            self::assertEquals($field['value'], $record[$code]['value']);
+            $this->assertEquals($field['value'], $record[$code]['value']);
         }
-        self::assertEquals(5, $resp['totalCount']);
+        $this->assertEquals(5, $resp['totalCount']);
 
         $this->api->records()->put($this->appId, [[
             'id' => $ids[0],
@@ -77,13 +76,13 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             ]
         ]]);
         $record = $this->api->record()->get($this->appId, $ids[0]);
-        self::assertEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals('change single_text value', $record['single_text']['value']);
 
         $this->api->records()->delete($this->appId, [1]);
         $resp = $this->api->records()->get($this->appId);
         $record = $resp['records'][0];
-        self::assertEquals(4, $resp['totalCount']);
-        self::assertNotEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals(4, $resp['totalCount']);
+        $this->assertNotEquals('change single_text value', $record['single_text']['value']);
 
 
         $ids = $this->api->records()->post(
@@ -99,9 +98,9 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
             if ($code === 'table') {
                 continue;
             }
-            self::assertEquals($field['value'], $record[$code]['value']);
+            $this->assertEquals($field['value'], $record[$code]['value']);
         }
-        self::assertEquals(5, $resp['totalCount']);
+        $this->assertEquals(5, $resp['totalCount']);
 
         $this->api->records()->put($this->guestAppId, [[
             'id' => $ids[0],
@@ -111,17 +110,17 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         ]], $this->guestSpaceId);
         $record = $this->api->record()
             ->get($this->guestAppId, $ids[0], $this->guestSpaceId);
-        self::assertEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals('change single_text value', $record['single_text']['value']);
 
-        $this->api->records()->delete($this->guestAppId, [1], $this->guestSpaceId);
+        $this->api->records()->delete($this->guestAppId, [1], $this->guestSpaceId, [2]);
         $resp = $this->api->records()
             ->get($this->guestAppId, '', $this->guestSpaceId);
         $record = $resp['records'][0];
-        self::assertEquals(4, $resp['totalCount']);
-        self::assertNotEquals('change single_text value', $record['single_text']['value']);
+        $this->assertEquals(4, $resp['totalCount']);
+        $this->assertNotEquals('change single_text value', $record['single_text']['value']);
     }
 
-    public function testAll()
+    public function testAll(): void
     {
         $postRecord = KintoneTestHelper::getRecord();
         $fields = array_keys($postRecord);
@@ -132,7 +131,7 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         );
 
         $allRecords = $this->api->records()->all($this->appId);
-        self::assertCount(5, $allRecords);
+        $this->assertCount(5, $allRecords);
 
         $record100 = array_fill(0, 100, $postRecord);
         $this->api->records()->post($this->appId, $record100);
@@ -142,21 +141,21 @@ class RecordsTest extends \PHPUnit_Framework_TestCase
         $this->api->records()->post($this->appId, $record100);
 
         $allRecords = $this->api->records()->all($this->appId, '', null, $fields);
-        self::assertCount(505, $allRecords);
+        $this->assertCount(505, $allRecords);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         // kintone does not have the get process api. so can not test.
         $id = KintoneTestHelper::postTestRecord($this->appId);
-        try {
-            $this->api->records()->putStatus($this->appId, [
-                [
-                    'id' => $id,
-                    'action' => 'sample'
-                ]
-            ]);
-        } catch (RequestException $e) {}
+        $this->api->records()->putStatus($this->appId, [
+            [
+                'id' => $id,
+                'action' => 'sample',
+                'assignee' => KintoneTestHelper::getConfig()['login']
+            ]
+        ]);
+        $this->assertTrue(true);
     }
 
     protected function tearDown()

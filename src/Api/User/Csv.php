@@ -39,7 +39,7 @@ class Csv
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function get($type)
+    public function get($type): string
     {
         if (!in_array($type, self::$type, true)) {
             throw new \InvalidArgumentException('Invalid type parameter');
@@ -60,7 +60,7 @@ class Csv
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function post($type, $filename)
+    public function post($type, $filename): int
     {
         return $this->postKey($type, $this->file($filename));
     }
@@ -73,7 +73,7 @@ class Csv
      * @return int
      * @throws \InvalidArgumentException
      */
-    public function postKey($type, $fileKey)
+    public function postKey($type, $fileKey): int
     {
         if (!in_array($type, self::$type, true)) {
             throw new \InvalidArgumentException('Invalid type parameter');
@@ -96,7 +96,7 @@ class Csv
      * @param string $filename
      * @return string
      */
-    public function file($filename)
+    public function file($filename): string
     {
         $options = ['multipart' =>  [
             [
@@ -124,7 +124,7 @@ class Csv
      * @param int $id
      * @return array
      */
-    public function result($id)
+    public function result($id): array
     {
         $options = ['query' => ['id' => $id]];
 

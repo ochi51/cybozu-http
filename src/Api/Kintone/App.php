@@ -29,7 +29,7 @@ class App
      * @param integer $guestSpaceId
      * @return array
      */
-    public function get($id, $guestSpaceId = null)
+    public function get($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['id' => $id]];
 
@@ -50,7 +50,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getSettings($id, $guestSpaceId = null, $lang = 'default')
+    public function getSettings($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -70,7 +70,7 @@ class App
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getForm($id, $guestSpaceId = null)
+    public function getForm($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $id]];
 
@@ -91,7 +91,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getFields($id, $guestSpaceId = null, $lang = 'default')
+    public function getFields($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -112,7 +112,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getLayout($id, $guestSpaceId = null, $lang = 'default')
+    public function getLayout($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -133,7 +133,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getViews($id, $guestSpaceId = null, $lang = 'default')
+    public function getViews($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -154,7 +154,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -175,7 +175,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getRecordAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getRecordAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -196,7 +196,7 @@ class App
      * @param string $lang
      * @return array
      */
-    public function getFieldAcl($id, $guestSpaceId = null, $lang = 'default')
+    public function getFieldAcl($id, $guestSpaceId = null, $lang = 'default'): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 
@@ -216,7 +216,7 @@ class App
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getCustomize($id, $guestSpaceId = null)
+    public function getCustomize($id, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $id]];
 
@@ -237,7 +237,7 @@ class App
      * @param integer $guestSpaceId
      * @return array
      */
-    public function getStatus($id, $lang = 'ja', $guestSpaceId = null)
+    public function getStatus($id, $lang = 'ja', $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $id, 'lang' => $lang]];
 

@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
 use EasyCSV\Reader;
@@ -11,7 +12,7 @@ use CybozuHttp\Api\UserApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends TestCase
 {
     /**
      * @var UserApi
@@ -23,7 +24,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $content = $this->api->csv()->get('user');
 
@@ -36,17 +37,17 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 $flg = true;
             }
         }
-        self::assertTrue($flg);
+        $this->assertTrue($flg);
 
         try {
             $this->api->csv()->get('aaa');
             self::fail('Not throw InvalidArgumentException.');
         } catch (\InvalidArgumentException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $id = $this->api->csv()->post('user', __DIR__ . '/../../_data/users.csv');
         while (1) {
@@ -55,7 +56,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -69,7 +70,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             if ($result['success']) {
-                self::assertTrue(true);
+                $this->assertTrue(true);
             } else {
                 self::fail($result['errorCode']);
             }
@@ -77,13 +78,13 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testPostKey()
+    public function testPostKey(): void
     {
         try {
             $this->api->csv()->postKey('aaa', 'key');
             self::fail('Not throw InvalidArgumentException.');
         } catch (\InvalidArgumentException $e) {
-            self::assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 }

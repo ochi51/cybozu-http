@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,8 +11,10 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphTest extends TestCase
 {
+    private const OUTPUT_DIR = __DIR__ . '/../../_output/';
+
     /**
      * @var KintoneApi
      */
@@ -22,11 +25,16 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         $this->api = KintoneTestHelper::getKintoneApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $graph = KintoneTestHelper::getGraph();
-        $res = $this->api->graph()->get($graph['appId'], $graph['reportId']);
-        file_put_contents(__DIR__ . '/../../_output/graph.html', $res);
-        self::assertTrue(true);
+        $res1 = $this->api->graph()->get($graph['appId'], $graph['reportId']);
+        file_put_contents(self::OUTPUT_DIR . 'graph.html', $res1);
+        $this->assertTrue(true);
+
+        $res2 = $this->api->graph()->get($graph['appId'], $graph['reportId'], null, true);
+        file_put_contents(self::OUTPUT_DIR . 'iframe-graph.html', $res2);
+        $this->assertTrue(true);
+        $this->assertNotEquals($res1, $res2);
     }
 }

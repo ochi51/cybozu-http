@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use GuzzleHttp\Exception\RequestException;
@@ -11,7 +12,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class GuestsTest extends \PHPUnit_Framework_TestCase
+class GuestsTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -23,7 +24,7 @@ class GuestsTest extends \PHPUnit_Framework_TestCase
         $this->api = KintoneTestHelper::getKintoneApi();
     }
 
-    public function testPostAndDelete()
+    public function testPostAndDelete(): void
     {
         $guests = [[
             'code' => 'test1@example.com',
@@ -49,13 +50,13 @@ class GuestsTest extends \PHPUnit_Framework_TestCase
 
         $this->api->guests()->post($guests);
         // kintone does not have the get guest users api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
 
         $this->api->guests()->delete([
             'test1@example.com',
             'test2@example.com'
         ]);
         // kintone does not have the get guest users api.
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 }

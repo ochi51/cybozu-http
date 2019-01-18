@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\User;
 
 require_once __DIR__ . '/../../_support/UserTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
 use CybozuHttp\Api\UserApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\UserApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class OrganizationUsersTest extends \PHPUnit_Framework_TestCase
+class OrganizationUsersTest extends TestCase
 {
     /**
      * @var UserApi
@@ -22,10 +23,10 @@ class OrganizationUsersTest extends \PHPUnit_Framework_TestCase
         $this->api = UserTestHelper::getUserApi();
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $config = UserTestHelper::getConfig();
         $this->api->organizationUsers()->get($config['login']);
-        self::assertTrue(true);
+        $this->assertTrue(true);
     }
 }

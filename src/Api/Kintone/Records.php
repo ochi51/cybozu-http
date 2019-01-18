@@ -14,8 +14,8 @@ use CybozuHttp\Api\KintoneApi;
  */
 class Records
 {
-    const MAX_GET_RECORDS = 500;
-    const MAX_POST_RECORDS = 100;
+    public const MAX_GET_RECORDS = 500;
+    public const MAX_POST_RECORDS = 100;
 
     /**
      * @var Client
@@ -38,7 +38,7 @@ class Records
      * @param array|null $fields
      * @return array
      */
-    public function get($appId, $query = '', $guestSpaceId = null, $totalCount = true, array $fields = null)
+    public function get($appId, $query = '', $guestSpaceId = null, $totalCount = true, array $fields = null): array
     {
         $options = ['json' => ['app' => $appId, 'query' => $query]];
         if ($totalCount) {
@@ -64,7 +64,7 @@ class Records
      * @param array|null $fields
      * @return array
      */
-    public function all($appId, $query = '', $guestSpaceId = null, array $fields = null)
+    public function all($appId, $query = '', $guestSpaceId = null, array $fields = null): array
     {
         $result = [];
         $result[0] = $this->get($appId, $query . ' limit ' . self::MAX_GET_RECORDS, $guestSpaceId, true, $fields);
@@ -96,7 +96,7 @@ class Records
      * @param integer $totalCount
      * @return \Closure
      */
-    private function createGetRequestsCallback($appId, $query, $guestSpaceId, $fields, $totalCount)
+    private function createGetRequestsCallback($appId, $query, $guestSpaceId, $fields, $totalCount): callable
     {
         $headers = $this->client->getConfig('headers');
         $headers['Content-Type'] = 'application/json';
@@ -124,7 +124,7 @@ class Records
      * @param array $result
      * @return array
      */
-    private function convertResponseToRecords(array  $result)
+    private function convertResponseToRecords(array  $result): array
     {
         ksort($result);
         $allRecords = [];
@@ -148,7 +148,7 @@ class Records
      * @param integer $guestSpaceId
      * @return array
      */
-    public function post($appId, array $records, $guestSpaceId = null)
+    public function post($appId, array $records, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 
@@ -169,7 +169,7 @@ class Records
      * @param integer $guestSpaceId
      * @return array
      */
-    public function put($appId, array $records, $guestSpaceId = null)
+    public function put($appId, array $records, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 
@@ -191,7 +191,7 @@ class Records
      * @param array $revisions
      * @return array
      */
-    public function delete($appId, array $ids, $guestSpaceId = null, array $revisions = [])
+    public function delete($appId, array $ids, $guestSpaceId = null, array $revisions = []): array
     {
         $options = ['json' => ['app' => $appId, 'ids' => $ids]];
         if (count($revisions) && count($ids) === count($revisions)) {
@@ -215,7 +215,7 @@ class Records
      * @param integer $guestSpaceId
      * @return array
      */
-    public function putStatus($appId, array $records, $guestSpaceId = null)
+    public function putStatus($appId, array $records, $guestSpaceId = null): array
     {
         $options = ['json' => ['app' => $appId, 'records' => $records]];
 

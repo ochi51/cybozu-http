@@ -25,7 +25,7 @@ If you want to use Garoon API, please send Pull Request.
 Requirements
 ------------
 
-- PHP >=5.5
+- PHP >=7.1
 - Composer
 - To use the PHP stream handler, `allow_url_fopen` must be enabled in your system's php.ini.
 - To use the cURL handler, you must have a recent version of cURL >= 7.19.4 compiled with OpenSSL and zlib.
@@ -52,7 +52,7 @@ Alternatively, you can specify Cybozu HTTP as a dependency in your project's exi
 ```{.json}
     {
        "require": {
-          "ochi51/cybozu-http": "0.1.*@dev"
+          "ochi51/cybozu-http": "^1.4"
        }
     }
 ```

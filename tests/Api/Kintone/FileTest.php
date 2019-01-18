@@ -3,6 +3,7 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -18,7 +19,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -28,7 +29,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -38,12 +39,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -61,7 +62,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->post('test app', $this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId)['app'];
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $key = $this->api->file()->post($filename);
@@ -74,7 +75,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey);
-        self::assertStringEqualsFile($filename, $content);
+        $this->assertStringEqualsFile($filename, $content);
 
         $key = $this->api->file()->post($filename, $this->guestSpaceId, 'sample.js');
 
@@ -86,10 +87,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->guestAppId, $this->guestSpaceId)['desktop']['js'][0]['file']['fileKey'];
 
         $content = $this->api->file()->get($fileKey, $this->guestSpaceId);
-        self::assertStringEqualsFile($filename, $content);
+        $this->assertStringEqualsFile($filename, $content);
     }
 
-    public function testFileStream()
+    public function testFileStream(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $key = $this->api->file()->post($filename);
@@ -102,10 +103,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->getCustomize($this->appId)['desktop']['js'][0]['file']['fileKey'];
 
         $response = $this->api->file()->getStreamResponse($fileKey);
-        self::assertStringEqualsFile($filename, $response->getBody()->read(1024));
+        $this->assertStringEqualsFile($filename, $response->getBody()->read(1024));
     }
 
-    public function testMultiFile()
+    public function testMultiFile(): void
     {
         $filename = __DIR__ . '/../../_data/sample.js';
         $fileNames = array_fill(0, 10, $filename);
@@ -123,7 +124,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $results = $this->api->file()->multiGet($fileKeys);
         $content = file_get_contents($filename);
         foreach ($results as $body) {
-            self::assertEquals($content, $body);
+            $this->assertEquals($content, $body);
         }
     }
 

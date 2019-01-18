@@ -36,7 +36,7 @@ class Comments
      * @param int $guestSpaceId
      * @return array
      */
-    public function get($appId, $recordId, $order = 'desc', $offset = 0, $limit = 10, $guestSpaceId = null)
+    public function get($appId, $recordId, $order = 'desc', $offset = 0, $limit = 10, $guestSpaceId = null): array
     {
         $options = ['json' => [
             'app' => $appId,
@@ -60,7 +60,7 @@ class Comments
      * @param int|null $guestSpaceId
      * @return array [recordId => comments, ...]
      */
-    public function allByRecords($appId, array $recordIds, $guestSpaceId = null)
+    public function allByRecords($appId, array $recordIds, $guestSpaceId = null): array
     {
         $result = [];
         $concurrency = $this->client->getConfig('concurrency');
@@ -88,7 +88,7 @@ class Comments
      * @param int $offset
      * @return \Closure
      */
-    private function createGetRequestsCallback($appId, $recordIds, $guestSpaceId = null, $offset = 0)
+    private function createGetRequestsCallback($appId, $recordIds, $guestSpaceId = null, $offset = 0): callable
     {
         $headers = $this->client->getConfig('headers');
         $headers['Content-Type'] = 'application/json';
@@ -114,7 +114,7 @@ class Comments
      * @param array $ids
      * @return \Closure
      */
-    private function createMergeCommentsCallback(array &$result, array &$tmpIds, array $ids)
+    private function createMergeCommentsCallback(array &$result, array &$tmpIds, array $ids): callable
     {
         return function (ResponseInterface $response, $index) use (&$result, &$tmpIds, $ids) {
             $recordId = $ids[$index];
@@ -141,7 +141,7 @@ class Comments
      * @param int|null $guestSpaceId
      * @return array
      */
-    public function postByRecords($appId, $comments, $guestSpaceId = null)
+    public function postByRecords($appId, $comments, $guestSpaceId = null): array
     {
         $result = [];
         $concurrency = $this->client->getConfig('concurrency');
@@ -165,7 +165,7 @@ class Comments
      * @param int|null $guestSpaceId
      * @return \Closure
      */
-    private function createPostRequestsCallback($appId, array $comments, $guestSpaceId = null)
+    private function createPostRequestsCallback($appId, array $comments, $guestSpaceId = null): callable
     {
         $headers = $this->client->getConfig('headers');
         $headers['Content-Type'] = 'application/json';
@@ -192,7 +192,7 @@ class Comments
      * @param array $comments
      * @return \Closure
      */
-    private function createPostFinishedAtCallback(array &$result, array &$comments)
+    private function createPostFinishedAtCallback(array &$result, array &$comments): callable
     {
         $recordIds = array_keys($comments);
         return function (ResponseInterface $response, $index) use (&$result, &$comments, $recordIds) {

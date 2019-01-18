@@ -32,7 +32,7 @@ class Comment
      * @param integer $guestSpaceId
      * @return array
      */
-    public function post($appId, $record, $comment, array $mentions = [], $guestSpaceId = null)
+    public function post($appId, $record, $comment, array $mentions = [], $guestSpaceId = null): array
     {
         $options = ['json' => [
             'app' => $appId,
@@ -61,7 +61,7 @@ class Comment
      * @param integer $guestSpaceId
      * @return array
      */
-    public function delete($appId, $recordId, $id, $guestSpaceId = null)
+    public function delete($appId, $recordId, $id, $guestSpaceId = null): array
     {
         $options = ['json' => [
             'app' => $appId,

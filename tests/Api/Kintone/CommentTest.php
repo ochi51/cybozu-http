@@ -3,6 +3,7 @@
 namespace Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
 use CybozuHttp\Api\KintoneApi;
@@ -10,7 +11,7 @@ use CybozuHttp\Api\KintoneApi;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends TestCase
 {
     /**
      * @var KintoneApi
@@ -18,7 +19,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     private $api;
 
     /**
-     * @var integer
+     * @var int
      */
     private $spaceId;
 
@@ -28,7 +29,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     private $space;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestSpaceId;
 
@@ -38,12 +39,12 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     private $guestSpace;
 
     /**
-     * @var integer
+     * @var int
      */
     private $appId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $guestAppId;
 
@@ -63,7 +64,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         $this->api->record()->post($this->guestAppId, $postRecord, $this->guestSpaceId);
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $recordId = $this->api->record()->post($this->appId, KintoneTestHelper::getRecord())['id'];
 
@@ -71,15 +72,15 @@ class CommentTest extends \PHPUnit_Framework_TestCase
 
         $comments = $this->api->comments()->get($this->appId, $recordId, 'desc', 0, 1);
         $comment = reset($comments);
-        self::assertEquals($comment['id'], $id);
-        self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        $this->assertEquals($comment['id'], $id);
+        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
 
         $this->api->comment()->delete($this->appId, $recordId, $id);
         $comments = $this->api->comments()->get($this->appId, $recordId);
-        self::assertEquals(count($comments), 0);
+        $this->assertEquals(count($comments), 0);
     }
 
-    public function testGuestComment()
+    public function testGuestComment(): void
     {
         $recordId = $this->api->record()->post(
             $this->guestAppId,
@@ -100,8 +101,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             1,
             $this->guestSpaceId);
         $comment = reset($comments);
-        self::assertEquals($comment['id'], $id);
-        self::assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        $this->assertEquals($comment['id'], $id);
+        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
 
         $this->api->comment()->delete($this->guestAppId, $recordId, $id, $this->guestSpaceId);
         $comments = $this->api->comments()->get(
@@ -111,7 +112,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             0,
             10,
             $this->guestSpaceId);
-        self::assertEquals(count($comments), 0);
+        $this->assertEquals(count($comments), 0);
     }
 
     protected function tearDown()
