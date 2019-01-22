@@ -44,7 +44,7 @@ class Csv
             ->get(UserApi::generateUrl("csv/{$type}.csv"))
             ->getBody();
 
-        return substr($content, 0, strlen($content)-3);
+        return $content;
     }
 
     /**
