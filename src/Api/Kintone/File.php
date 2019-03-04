@@ -5,6 +5,7 @@ namespace CybozuHttp\Api\Kintone;
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
 use CybozuHttp\Middleware\JsonStream;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
@@ -48,17 +49,16 @@ class File
      *
      * @param string $fileKey
      * @param int $guestSpaceId
-     * @return ResponseInterface
+     * @return ResponseInterface|GuzzleException
      */
-    public function getStreamResponse($fileKey, $guestSpaceId = null): ResponseInterface
+    public function getStreamResponse($fileKey, $guestSpaceId = null)
     {
         $options = [
             'json' => ['fileKey' => $fileKey],
             'stream' => true
         ];
-        $response = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
 
-        return $response;
+        return $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
     }
 
     /**
