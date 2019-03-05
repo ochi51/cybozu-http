@@ -2,9 +2,8 @@
 
 namespace CybozuHttp\Middleware;
 
-use GuzzleHttp\Exception\ClientException;
+use CybozuHttp\Service\ResponseService;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -41,8 +40,9 @@ class FinishMiddleware
      */
     private function onFulfilled(RequestInterface $request): callable
     {
-        return function (ResponseInterface $response) {
-            if (self::isJsonResponse($response)) {
+        return function (ResponseInterface $response) use ($request) {
+            $service = new ResponseService($request, $response);
+            if ($service->isJsonResponse()) {
                 return $response->withBody(new JsonStream($response->getBody()));
             }
             return $response;
@@ -64,122 +64,14 @@ class FinishMiddleware
             if ($response === null || $response->getStatusCode() < 300) {
                 return $reason;
             }
-            if (self::isJsonResponse($response)) {
-                self::jsonError($request, $response);
+            $service = new ResponseService($request, $response);
+            if ($service->isJsonResponse()) {
+                $service->handleJsonError();
             } else {
-                self::domError($request, $response);
+                $service->handleDomError();
             }
 
             return $reason;
         };
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @return bool
-     */
-    private static function isJsonResponse(ResponseInterface $response): bool
-    {
-        $contentType = $response->getHeader('Content-Type');
-        $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
-
-        return is_string($contentType) && strpos($contentType, 'application/json') === 0;
-    }
-
-
-    /**
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * @throws RequestException
-     */
-    private static function domError(RequestInterface $request, ResponseInterface $response): void
-    {
-        $body = (string)$response->getBody()->getContents();
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadHTML($body);
-        if ($dom->loadHTML($body)) {
-            $title = $dom->getElementsByTagName('title');
-            if (is_object($title)) {
-                $title = $title->item(0)->nodeValue;
-            }
-            if ($title === 'Error') {
-                $message = $dom->getElementsByTagName('h3')->item(0)->nodeValue;
-                throw self::createException($message, $request, $response);
-            }
-            if ($title === 'Unauthorized') {
-                $message = $dom->getElementsByTagName('h2')->item(0)->nodeValue;
-                throw self::createException($message, $request, $response);
-            }
-
-            throw self::createException('Invalid auth.', $request, $response);
-        }
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * @throws RequestException
-     */
-    private static function jsonError(RequestInterface $request, ResponseInterface $response): void
-    {
-        try {
-            $body = (string)$response->getBody();
-            $json = \GuzzleHttp\json_decode($body, true);
-        } catch (\InvalidArgumentException $e) {
-            return;
-        } catch (\RuntimeException $e) {
-            return;
-        }
-
-        $message = $json['message'];
-        if (isset($json['errors']) && is_array($json['errors'])) {
-            $message .= self::addErrorMessages($json['errors']);
-        }
-
-        throw self::createException($message, $request, $response);
-    }
-
-    /**
-     * @param array $errors
-     * @return string
-     */
-    private static function addErrorMessages(array $errors): string
-    {
-        $message = ' (';
-        foreach ($errors as $k => $err) {
-            $message .= $k . ' : ';
-            if (is_array($err['messages'])) {
-                foreach ($err['messages'] as $m) {
-                    $message .= $m . ' ';
-                }
-            } else {
-                $message .= $err['messages'];
-            }
-        }
-        $message .= ' )';
-
-        return $message;
-    }
-
-    /**
-     * @param string $message
-     * @param RequestInterface $request
-     * @param ResponseInterface|null $response
-     * @return RequestException
-     */
-    private static function createException($message, RequestInterface $request, ResponseInterface $response): RequestException
-    {
-        $level = (int) floor($response->getStatusCode() / 100);
-        $className = RequestException::class;
-
-        if ($level === 4) {
-            $className = ClientException::class;
-        } elseif ($level === 5) {
-            $className = ServerException::class;
-        }
-
-        return new $className($message, $request, $response);
     }
 }

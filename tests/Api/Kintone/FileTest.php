@@ -3,6 +3,13 @@
 namespace CybozuHttp\Tests\Api\Kintone;
 
 require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
+
+use CybozuHttp\Api\Kintone\File;
+use CybozuHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
@@ -104,6 +111,35 @@ class FileTest extends TestCase
 
         $response = $this->api->file()->getStreamResponse($fileKey);
         $this->assertStringEqualsFile($filename, $response->getBody()->read(1024));
+    }
+
+    public function testFileStreamError(): void
+    {
+        $exception = new RequestException('foobar', new Request('GET', '/'));
+        /** @var Client|MockObject $client */
+        $client = $this->createMock(Client::class);
+        $client->method('__call')->willReturn($exception);
+        $file = new File($client);
+        try {
+            $file->getStreamResponse('');
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertEquals($e->getMessage(), 'foobar');
+        }
+
+        $body = json_encode(['message' => 'simple error']);
+        $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
+        $exception = new RequestException('foobar', new Request('GET', '/'), $response);
+        /** @var Client|MockObject $client */
+        $client = $this->createMock(Client::class);
+        $client->method('__call')->willReturn($exception);
+        $file = new File($client);
+        try {
+            $file->getStreamResponse('');
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertEquals($e->getMessage(), 'simple error');
+        }
     }
 
     public function testMultiFile(): void
