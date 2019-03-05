@@ -5,7 +5,8 @@ namespace CybozuHttp\Api\Kintone;
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
 use CybozuHttp\Middleware\JsonStream;
-use GuzzleHttp\Exception\GuzzleException;
+use CybozuHttp\Service\ResponseService;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
@@ -49,16 +50,37 @@ class File
      *
      * @param string $fileKey
      * @param int $guestSpaceId
-     * @return ResponseInterface|GuzzleException
+     * @return ResponseInterface
+     * @throws RequestException
      */
-    public function getStreamResponse($fileKey, $guestSpaceId = null)
+    public function getStreamResponse($fileKey, $guestSpaceId = null): ResponseInterface
     {
         $options = [
             'json' => ['fileKey' => $fileKey],
             'stream' => true
         ];
+        $result = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
+        if ($result instanceof RequestException) {
+            $this->handleJsonError($result);
+            throw $result;
+        }
 
-        return $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
+        return $result;
+    }
+
+    /**
+     * @param RequestException $result
+     * @throws RequestException
+     */
+    private function handleJsonError(RequestException $result): void
+    {
+        $response = $result->getResponse();
+        if ($response instanceof ResponseInterface) {
+            $service = new ResponseService($result->getRequest(), $response);
+            if ($service->isJsonResponse()) {
+                $service->handleJsonError();
+            }
+        }
     }
 
     /**
