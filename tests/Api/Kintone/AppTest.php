@@ -217,12 +217,12 @@ class AppTest extends TestCase
     {
         $customize = $this->api->app()->getCustomize($this->appId);
         $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => []]);
+        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
         $this->assertEquals($customize['scope'], 'ALL');
 
         $customize = $this->api->app()->getCustomize($this->guestAppId, $this->guestSpaceId);
         $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => []]);
+        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
         $this->assertEquals($customize['scope'], 'ALL');
     }
 
