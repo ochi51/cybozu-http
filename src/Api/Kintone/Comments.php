@@ -94,7 +94,7 @@ class Comments
         $headers['Content-Type'] = 'application/json';
         $url = KintoneApi::generateUrl('record/comments.json', $guestSpaceId);
 
-        return function () use ($appId, $recordIds, $url, $headers, $offset) {
+        return static function () use ($appId, $recordIds, $url, $headers, $offset) {
             foreach ($recordIds as $id) {
                 $body = \GuzzleHttp\json_encode([
                     'app' => $appId,
@@ -116,7 +116,7 @@ class Comments
      */
     private function createMergeCommentsCallback(array &$result, array &$tmpIds, array $ids): callable
     {
-        return function (ResponseInterface $response, $index) use (&$result, &$tmpIds, $ids) {
+        return static function (ResponseInterface $response, $index) use (&$result, &$tmpIds, $ids) {
             $recordId = $ids[$index];
             /** @var JsonStream $stream */
             $stream = $response->getBody();
@@ -171,7 +171,7 @@ class Comments
         $headers['Content-Type'] = 'application/json';
         $url = KintoneApi::generateUrl('record/comment.json', $guestSpaceId);
 
-        return function () use ($appId, $comments, $url, $headers) {
+        return static function () use ($appId, $comments, $url, $headers) {
             foreach ($comments as $recordId => $values) {
                 $comment = reset($values);
                 if (!isset($comment['text'])) {
@@ -195,7 +195,7 @@ class Comments
     private function createPostFinishedAtCallback(array &$result, array &$comments): callable
     {
         $recordIds = array_keys($comments);
-        return function (ResponseInterface $response, $index) use (&$result, &$comments, $recordIds) {
+        return static function (ResponseInterface $response, $index) use (&$result, &$comments, $recordIds) {
             /** @var JsonStream $stream */
             $stream = $response->getBody();
             $commentId = $stream->jsonSerialize()['id'];

@@ -77,7 +77,7 @@ class Records
         $requests = $this->createGetRequestsCallback($appId, $query, $guestSpaceId, $fields, $totalCount);
         $pool = new Pool($this->client, $requests(), [
             'concurrency' => $concurrency ?: 1,
-            'fulfilled' => function (ResponseInterface $response, $index) use (&$result) {
+            'fulfilled' => static function (ResponseInterface $response, $index) use (&$result) {
                 /** @var JsonStream $stream */
                 $stream = $response->getBody();
                 $result[$index+1] = array_merge($stream->jsonSerialize());
@@ -100,7 +100,7 @@ class Records
     {
         $headers = $this->client->getConfig('headers');
         $headers['Content-Type'] = 'application/json';
-        return function () use ($appId, $query, $guestSpaceId, $fields, $totalCount, $headers) {
+        return static function () use ($appId, $query, $guestSpaceId, $fields, $totalCount, $headers) {
             $num = ceil($totalCount / self::MAX_GET_RECORDS);
             for ($i = 1; $i < $num; $i++) {
                 $body = [
