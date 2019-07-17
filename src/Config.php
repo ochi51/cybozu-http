@@ -54,7 +54,7 @@ class Config
         $this->config = array_merge(self::$default, $config);
 
         $this->config['base_uri'] = $this->getBaseUri();
-        $this->config['handler'] = $handler =  HandlerStack::create();
+        $this->config['handler'] = $handler = $config['handler'] ?? HandlerStack::create();
 
         $this->configureAuth();
         $this->configureBasicAuth();
