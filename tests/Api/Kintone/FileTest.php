@@ -2,8 +2,6 @@
 
 namespace CybozuHttp\Tests\Api\Kintone;
 
-require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
-
 use CybozuHttp\Api\Kintone\File;
 use CybozuHttp\Client;
 use GuzzleHttp\Exception\RequestException;
