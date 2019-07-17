@@ -2,7 +2,6 @@
 
 namespace CybozuHttp\Tests\Api\Kintone;
 
-require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 

@@ -2,7 +2,6 @@
 
 namespace CybozuHttp\Tests\Api;
 
-require_once __DIR__ . '/../_support/UserTestHelper.php';
 use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
