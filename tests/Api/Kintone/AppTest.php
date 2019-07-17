@@ -2,7 +2,6 @@
 
 namespace CybozuHttp\Tests\Api\Kintone;
 
-require_once __DIR__ . '/../../_support/KintoneTestHelper.php';
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
@@ -217,12 +216,12 @@ class AppTest extends TestCase
     {
         $customize = $this->api->app()->getCustomize($this->appId);
         $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => []]);
+        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
         $this->assertEquals($customize['scope'], 'ALL');
 
         $customize = $this->api->app()->getCustomize($this->guestAppId, $this->guestSpaceId);
         $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => []]);
+        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
         $this->assertEquals($customize['scope'], 'ALL');
     }
 

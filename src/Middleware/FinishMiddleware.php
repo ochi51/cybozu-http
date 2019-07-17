@@ -40,7 +40,7 @@ class FinishMiddleware
      */
     private function onFulfilled(RequestInterface $request): callable
     {
-        return function (ResponseInterface $response) use ($request) {
+        return static function (ResponseInterface $response) use ($request) {
             $service = new ResponseService($request, $response);
             if ($service->isJsonResponse()) {
                 return $response->withBody(new JsonStream($response->getBody()));
@@ -56,7 +56,7 @@ class FinishMiddleware
      */
     private function onRejected(RequestInterface $request): callable
     {
-        return function ($reason) use ($request) {
+        return static function ($reason) use ($request) {
             if (!($reason instanceof RequestException)) {
                 return $reason;
             }

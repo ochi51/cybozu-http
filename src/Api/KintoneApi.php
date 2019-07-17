@@ -8,6 +8,7 @@ use CybozuHttp\Api\Kintone\Apps;
 use CybozuHttp\Api\Kintone\PreviewApp;
 use CybozuHttp\Api\Kintone\Record;
 use CybozuHttp\Api\Kintone\Records;
+use CybozuHttp\Api\Kintone\Cursor;
 use CybozuHttp\Api\Kintone\File;
 use CybozuHttp\Api\Kintone\Comment;
 use CybozuHttp\Api\Kintone\Comments;
@@ -56,6 +57,11 @@ class KintoneApi
     private $records;
 
     /**
+     * @var Cursor
+     */
+    private $cursor;
+
+    /**
      * @var File
      */
     private $file;
@@ -98,6 +104,7 @@ class KintoneApi
         $this->preview = new PreviewApp($client);
         $this->record = new Record($client);
         $this->records = new Records($client);
+        $this->cursor = new Cursor($client);
         $this->file = new File($client);
         $this->comment = new Comment($client);
         $this->comments = new Comments($client);
@@ -167,6 +174,14 @@ class KintoneApi
     public function records(): Records
     {
         return $this->records;
+    }
+
+    /**
+     * @return Cursor
+     */
+    public function cursor(): Cursor
+    {
+        return $this->cursor;
     }
 
     /**

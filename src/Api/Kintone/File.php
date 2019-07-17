@@ -95,7 +95,7 @@ class File
         $headers = $this->client->getConfig('headers');
         $headers['Content-Type'] = 'application/json';
         $url = KintoneApi::generateUrl('file.json', $guestSpaceId);
-        $requests = function () use ($fileKeys, $url, $headers) {
+        $requests = static function () use ($fileKeys, $url, $headers) {
             foreach ($fileKeys as $fileKey) {
                 $body = \GuzzleHttp\json_encode(['fileKey' => $fileKey]);
                 yield new Request('GET', $url, $headers, $body);
@@ -103,7 +103,7 @@ class File
         };
         $pool = new Pool($this->client, $requests(), [
             'concurrency' => $concurrency ?: 1,
-            'fulfilled' => function (ResponseInterface $response, $index) use (&$result) {
+            'fulfilled' => static function (ResponseInterface $response, $index) use (&$result) {
                 $result[$index] = (string)$response->getBody();
             }
         ]);
@@ -148,7 +148,7 @@ class File
         $concurrency = $this->client->getConfig('concurrency');
         $headers = $this->client->getConfig('headers');
         $url = KintoneApi::generateUrl('file.json', $guestSpaceId);
-        $requests = function () use ($fileNames, $url, $headers) {
+        $requests = static function () use ($fileNames, $url, $headers) {
             foreach ($fileNames as $filename) {
                 $body = new MultipartStream([self::createMultipart($filename)]);
                 yield new Request('POST', $url, $headers, $body);
@@ -156,7 +156,7 @@ class File
         };
         $pool = new Pool($this->client, $requests(), [
             'concurrency' => $concurrency ?: 1,
-            'fulfilled' => function (ResponseInterface $response, $index) use (&$result) {
+            'fulfilled' => static function (ResponseInterface $response, $index) use (&$result) {
                 /** @var JsonStream $stream */
                 $stream = $response->getBody();
                 $result[$index] = $stream->jsonSerialize()['fileKey'];
