@@ -10,7 +10,7 @@
   ],
   "require": {
     "php": ">=7.1",
-    "guzzlehttp/guzzle": "^6.2",
+    "guzzlehttp/guzzle": "~6.2|^7.0",
     "incenteev/composer-parameter-handler": "^2.1",
     "ext-fileinfo": "*",
     "ext-dom": "*",
