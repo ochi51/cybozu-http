@@ -139,7 +139,7 @@ class KintoneTestHelper
             [
                 'code' => 'datetime',
                 'defaultNowValue' => false,
-                'defaultValue' => '2012-07-19T00:00:00.000Z',
+                'defaultValue' => '2012-07-19T00:00',
                 'label' => 'Datetime',
                 'noLabel' => false,
                 'required' => false,
@@ -172,6 +172,8 @@ class KintoneTestHelper
             [
                 'code' => 'table',
                 'type' => 'SUBTABLE',
+                'label' => 'table',
+                'noLabel' => false,
                 'fields' =>
                     [
                         'single_text_in_table' =>
