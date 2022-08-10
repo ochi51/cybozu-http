@@ -116,7 +116,7 @@ class FileTest extends TestCase
         $exception = new RequestException('foobar', new Request('GET', '/'));
         /** @var Client|MockObject $client */
         $client = $this->createMock(Client::class);
-        $client->method('__call')->willReturn($exception);
+        $client->method('get')->willThrowException($exception);
         $file = new File($client);
         try {
             $file->getStreamResponse('');
@@ -127,10 +127,10 @@ class FileTest extends TestCase
 
         $body = json_encode(['message' => 'simple error']);
         $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
-        $exception = new RequestException('foobar', new Request('GET', '/'), $response);
+        $exception = new RequestException('simple error', new Request('GET', '/'), $response);
         /** @var Client|MockObject $client */
         $client = $this->createMock(Client::class);
-        $client->method('__call')->willReturn($exception);
+        $client->method('get')->willThrowException($exception);
         $file = new File($client);
         try {
             $file->getStreamResponse('');
