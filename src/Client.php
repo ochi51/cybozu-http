@@ -31,6 +31,7 @@ class Client extends GuzzleClient
      * @param string $prefix
      * @throws RedirectResponseException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @deprecated Due to changes in kintone specifications, this function is not working.
      */
     public function connectionTest($prefix = '/'): void
     {
