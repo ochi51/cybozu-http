@@ -30,7 +30,7 @@ class ClientTest extends TestCase
      */
     private $config;
 
-    protected function setup()
+    protected function setup(): void
     {
         $yml = Yaml::parse(file_get_contents(__DIR__ . '/../parameters.yml'));
         $this->config = $yml['parameters'];
