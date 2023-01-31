@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Api;
 
+use CybozuHttp\Api\Kintone\Apis;
 use CybozuHttp\Client;
 use CybozuHttp\Api\Kintone\App;
 use CybozuHttp\Api\Kintone\Apps;
@@ -30,6 +31,11 @@ class KintoneApi
      * @var Client
      */
     private $client;
+
+    /**
+     * @var Apis
+     */
+    private $apis;
 
     /**
      * @var App
@@ -99,6 +105,7 @@ class KintoneApi
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->apis = new Apis($client);
         $this->app = new App($client);
         $this->apps = new Apps($client);
         $this->preview = new PreviewApp($client);
@@ -122,7 +129,7 @@ class KintoneApi
     public static function generateUrl($api, $guestSpaceId = null): string
     {
         if ($guestSpaceId && is_numeric($guestSpaceId)) {
-            return self::GUEST_SPACE_PREFIX . $guestSpaceId .'/v1/'. $api;
+            return self::GUEST_SPACE_PREFIX . $guestSpaceId . '/v1/' . $api;
         }
 
         return self::API_PREFIX . $api;
@@ -134,6 +141,14 @@ class KintoneApi
     public function getClient(): Client
     {
         return $this->client;
+    }
+
+    /**
+     * @return Apis
+     */
+    public function apis(): Apis
+    {
+        return $this->apis;
     }
 
     /**
