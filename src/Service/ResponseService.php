@@ -45,6 +45,17 @@ class ResponseService
         return is_string($contentType) && strpos($contentType, 'application/json') === 0;
     }
 
+    /**
+     * @return bool
+     */
+    public function isHtmlResponse(): bool
+    {
+        $contentType = $this->response->getHeader('Content-Type');
+        $contentType = is_array($contentType) && isset($contentType[0]) ? $contentType[0] : $contentType;
+
+        return is_string($contentType) && strpos($contentType, 'text/html') === 0;
+    }
+
 
     /**
      * @throws RequestException

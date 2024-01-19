@@ -58,20 +58,20 @@ class FinishMiddleware
     {
         return static function ($reason) use ($request) {
             if (!($reason instanceof RequestException)) {
-                return $reason;
+                throw $reason;
             }
             $response = $reason->getResponse();
             if ($response === null || $response->getStatusCode() < 300) {
-                return $reason;
+                throw $reason;
             }
             $service = new ResponseService($request, $response);
             if ($service->isJsonResponse()) {
                 $service->handleJsonError();
-            } else {
+            } else if ($service->isHtmlResponse()) {
                 $service->handleDomError();
             }
 
-            return $reason;
+            throw $reason;
         };
     }
 }
