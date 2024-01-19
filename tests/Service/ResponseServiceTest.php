@@ -21,6 +21,21 @@ class ResponseServiceTest extends TestCase
         $this->assertTrue($service->isJsonResponse());
     }
 
+    public function testIsHtmlResponse(): void
+    {
+        $request = new Request('GET', '/');
+
+        $htmlResponse = new Response(200, ['Content-Type' => 'text/html; charset=utf-8']);
+        $service = new ResponseService($request, $htmlResponse);
+
+        $this->assertTrue($service->isHtmlResponse());
+
+        $jsonResponse = new Response(200, ['Content-Type' => 'application/json; charset=utf-8']);
+        $service = new ResponseService($request, $jsonResponse);
+
+        $this->assertFalse($service->isHtmlResponse());
+    }
+
     public function testIsNotJsonResponse(): void
     {
         $request = new Request('GET', '/');
