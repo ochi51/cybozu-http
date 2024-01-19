@@ -67,7 +67,7 @@ class FinishMiddleware
             $service = new ResponseService($request, $response);
             if ($service->isJsonResponse()) {
                 $service->handleJsonError();
-            } else {
+            } else if ($service->isHtmlResponse()) {
                 $service->handleDomError();
             }
 
