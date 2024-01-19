@@ -133,7 +133,8 @@ class Config
             'base_uri' => $this->get('base_uri'),
             'headers' => $this->get('headers'),
             'debug' => $this->get('debug') ? fopen($this->get('logfile'), 'ab') : false,
-            'concurrency' => $this->get('concurrency')
+            'concurrency' => $this->get('concurrency'),
+            'timeout' => $this->get('timeout')
         ];
         if ($this->get('auth')) {
             $config['auth'] = $this->get('auth');
