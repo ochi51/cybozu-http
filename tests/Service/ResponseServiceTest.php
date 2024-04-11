@@ -173,6 +173,20 @@ class ResponseServiceTest extends TestCase
         }
 
         $body = json_encode([
+            'reason' => 'simple error',
+        ]);
+        $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
+        try {
+            $service->handleError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(ClientException::class, $e);
+            $this->assertEquals($e->getMessage(), 'simple error');
+        }
+
+        $body = json_encode([
             'unknown' => 'simple error',
         ]);
         $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
