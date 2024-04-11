@@ -198,5 +198,21 @@ class ResponseServiceTest extends TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf(\InvalidArgumentException::class, $e);
         }
+
+        $body = json_encode([
+            'message' => 'simple error',
+        ]);
+        $response = new Response(400, ['Content-Type' => 'text/plain; charset=utf-8'], $body);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
+        try {
+            $service->handleError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
+            $this->assertEquals($e->getMessage(), 'Failed to extract error message because Content-Type of error response is unexpected.');
+            $this->assertEquals($e->getPrevious(), $exception);
+            $this->assertEquals($e->getContext()['responseBody'], $body);
+        }
     }
 }

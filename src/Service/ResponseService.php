@@ -81,7 +81,7 @@ class ResponseService
             $this->handleDomError();
         }
 
-        throw $this->previousThrowable;
+        throw $this->createRuntimeException('Failed to extract error message because Content-Type of error response is unexpected.');
     }
 
     /**
