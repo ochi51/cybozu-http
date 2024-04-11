@@ -134,7 +134,7 @@ class ResponseService
      * @param string $message
      * @return RequestException
      */
-    public function createException($message): RequestException
+    private function createException($message): RequestException
     {
         $level = (int) floor($this->response->getStatusCode() / 100);
         $className = RequestException::class;
