@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use GuzzleHttp\Exception\RequestException;
 
 class ResponseServiceTest extends TestCase
 {
@@ -51,7 +52,8 @@ class ResponseServiceTest extends TestCase
         $request = new Request('GET', '/');
         $dom = '<title>Bad request</title><div>bad request</div>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -63,7 +65,8 @@ class ResponseServiceTest extends TestCase
 
         $dom = '<title>Error</title>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -71,11 +74,13 @@ class ResponseServiceTest extends TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
+            $this->assertEquals($e->getPrevious(), $exception);
         }
 
         $dom = '<title>Error</title><h3>bad request</h3>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -87,7 +92,8 @@ class ResponseServiceTest extends TestCase
 
         $dom = '<title>Unauthorized</title>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -95,11 +101,13 @@ class ResponseServiceTest extends TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
+            $this->assertEquals($e->getPrevious(), $exception);
         }
 
         $dom = '<title>Unauthorized</title><h2>Bad authorized</h2>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -111,7 +119,8 @@ class ResponseServiceTest extends TestCase
 
         $dom = '<title>Bad server</title><div>bad server</div>';
         $response = new Response(500, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
 
         try {
             $service->handleDomError();
@@ -136,7 +145,8 @@ class ResponseServiceTest extends TestCase
             ]
         ]);
         $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
         try {
             $service->handleJsonError();
             $this->assertTrue(false);
@@ -154,7 +164,8 @@ class ResponseServiceTest extends TestCase
             ]
         ]);
         $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
         try {
             $service->handleJsonError();
             $this->assertTrue(false);
@@ -167,26 +178,30 @@ class ResponseServiceTest extends TestCase
             'unknown' => 'simple error',
         ]);
         $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
         try {
             $service->handleJsonError();
             $this->assertTrue(false);
         } catch (\Exception $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from JSON response.');
+            $this->assertEquals($e->getPrevious(), $exception);
         }
 
         /** @var Response|MockObject $response */
         $response = $this->createMock(Response::class);
         $response->method('getBody')->willThrowException(new \RuntimeException(''));
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
         $service->handleJsonError();
         $this->assertTrue(true);
 
         /** @var Response|MockObject $response */
         $response = $this->createMock(Response::class);
         $response->method('getBody')->willThrowException(new \InvalidArgumentException(''));
-        $service = new ResponseService($request, $response);
+        $exception = new RequestException('raw error', $request, $response);
+        $service = new ResponseService($request, $response, $exception);
         $service->handleJsonError();
         $this->assertTrue(true);
     }

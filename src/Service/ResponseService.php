@@ -25,14 +25,21 @@ class ResponseService
     private $response;
 
     /**
+     * @var \Throwable|null
+     */
+    private $previousThrowable;
+
+    /**
      * ResponseService constructor.
      * @param RequestInterface $request
      * @param ResponseInterface $response
+     * @param \Throwable|null $previousThrowable
      */
-    public function __construct(RequestInterface $request, ResponseInterface $response)
+    public function __construct(RequestInterface $request, ResponseInterface $response, ?\Throwable $previousThrowable = null)
     {
         $this->request = $request;
         $this->response = $response;
+        $this->previousThrowable = $previousThrowable;
     }
 
     /**
@@ -166,6 +173,10 @@ class ResponseService
      */
     private function createRuntimeException(string $message): RuntimeException
     {
-        return new RuntimeException($message);
+        return new RuntimeException(
+            $message,
+            0,
+            $this->previousThrowable
+        );
     }
 }
