@@ -117,8 +117,6 @@ class ResponseService
             $json = \GuzzleHttp\json_decode($body, true);
         } catch (\InvalidArgumentException $e) {
             return;
-        } catch (\RuntimeException $e) {
-            return;
         }
 
         $message = $json['message'];

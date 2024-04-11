@@ -194,14 +194,6 @@ class ResponseServiceTest extends TestCase
 
         /** @var Response|MockObject $response */
         $response = $this->createMock(Response::class);
-        $response->method('getBody')->willThrowException(new \RuntimeException(''));
-        $exception = new RequestException('raw error', $request, $response);
-        $service = new ResponseService($request, $response, $exception);
-        $service->handleJsonError();
-        $this->assertTrue(true);
-
-        /** @var Response|MockObject $response */
-        $response = $this->createMock(Response::class);
         $response->method('getBody')->willThrowException(new \InvalidArgumentException(''));
         $exception = new RequestException('raw error', $request, $response);
         $service = new ResponseService($request, $response, $exception);
