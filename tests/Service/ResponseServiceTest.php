@@ -7,7 +7,6 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Exception\RequestException;
 
@@ -192,12 +191,15 @@ class ResponseServiceTest extends TestCase
             $this->assertEquals($e->getContext()['responseBody'], $body);
         }
 
-        /** @var Response|MockObject $response */
-        $response = $this->createMock(Response::class);
-        $response->method('getBody')->willThrowException(new \InvalidArgumentException(''));
+        $body = 'invalid json';
+        $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
         $exception = new RequestException('raw error', $request, $response);
         $service = new ResponseService($request, $response, $exception);
-        $service->handleJsonError();
-        $this->assertTrue(true);
+        try {
+            $service->handleJsonError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
     }
 }
