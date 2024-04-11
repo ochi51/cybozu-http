@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Service;
 
+use CybozuHttp\Exception\RuntimeException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -59,6 +60,7 @@ class ResponseService
 
     /**
      * @throws RequestException
+     * @throws RuntimeException
      */
     public function handleDomError(): void
     {
@@ -73,10 +75,16 @@ class ResponseService
             }
             if ($title === 'Error') {
                 $message = $dom->getElementsByTagName('h3')->item(0)->nodeValue;
+                if (is_null($message)) {
+                    throw $this->createRuntimeException('Failed to extract error message from DOM response.');
+                }
                 throw $this->createException($message);
             }
             if ($title === 'Unauthorized') {
                 $message = $dom->getElementsByTagName('h2')->item(0)->nodeValue;
+                if (is_null($message)) {
+                    throw $this->createRuntimeException('Failed to extract error message from DOM response.');
+                }
                 throw $this->createException($message);
             }
 
@@ -88,6 +96,7 @@ class ResponseService
 
     /**
      * @throws RequestException
+     * @throws RuntimeException
      */
     public function handleJsonError(): void
     {
@@ -105,6 +114,9 @@ class ResponseService
             $message .= $this->addErrorMessages($json['errors']);
         }
 
+        if (is_null($message)) {
+            throw $this->createRuntimeException('Failed to extract error message from JSON response.');
+        }
         throw $this->createException($message);
     }
 
@@ -146,5 +158,14 @@ class ResponseService
         }
 
         return new $className($message, $this->request, $this->response);
+    }
+
+    /**
+     * @param string $message
+     * @return RuntimeException
+     */
+    private function createRuntimeException(string $message): RuntimeException
+    {
+        return new RuntimeException($message);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Service;
 
+use CybozuHttp\Exception\RuntimeException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
@@ -60,6 +61,18 @@ class ResponseServiceTest extends TestCase
             $this->assertEquals($e->getMessage(), 'Invalid auth.');
         }
 
+        $dom = '<title>Error</title>';
+        $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
+        $service = new ResponseService($request, $response);
+
+        try {
+            $service->handleDomError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
+            $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
+        }
+
         $dom = '<title>Error</title><h3>bad request</h3>';
         $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
         $service = new ResponseService($request, $response);
@@ -70,6 +83,18 @@ class ResponseServiceTest extends TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf(ClientException::class, $e);
             $this->assertEquals($e->getMessage(), 'bad request');
+        }
+
+        $dom = '<title>Unauthorized</title>';
+        $response = new Response(400, ['Content-Type' => 'text/html; charset=utf-8'], $dom);
+        $service = new ResponseService($request, $response);
+
+        try {
+            $service->handleDomError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
+            $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
         }
 
         $dom = '<title>Unauthorized</title><h2>Bad authorized</h2>';
@@ -136,6 +161,19 @@ class ResponseServiceTest extends TestCase
         } catch (\Exception $e) {
             $this->assertInstanceOf(ClientException::class, $e);
             $this->assertEquals($e->getMessage(), 'simple error (error2 : detail error)');
+        }
+
+        $body = json_encode([
+            'unknown' => 'simple error',
+        ]);
+        $response = new Response(400, ['Content-Type' => 'application/json; charset=utf-8'], $body);
+        $service = new ResponseService($request, $response);
+        try {
+            $service->handleJsonError();
+            $this->assertTrue(false);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(RuntimeException::class, $e);
+            $this->assertEquals($e->getMessage(), 'Failed to extract error message from JSON response.');
         }
 
         /** @var Response|MockObject $response */
