@@ -69,12 +69,26 @@ class ResponseService
         return is_string($contentType) && strpos($contentType, 'text/html') === 0;
     }
 
+    /**
+     * @throws RequestException
+     * @throws RuntimeException
+     */
+    public function handleError(): void
+    {
+        if ($this->isJsonResponse()) {
+            $this->handleJsonError();
+        } else if ($this->isHtmlResponse()) {
+            $this->handleDomError();
+        }
+
+        throw $this->previousThrowable;
+    }
 
     /**
      * @throws RequestException
      * @throws RuntimeException
      */
-    public function handleDomError(): void
+    private function handleDomError(): void
     {
         $body = $this->getResponseBody();
         $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -110,7 +124,7 @@ class ResponseService
      * @throws RequestException
      * @throws RuntimeException
      */
-    public function handleJsonError(): void
+    private function handleJsonError(): void
     {
         $body = $this->getResponseBody();
         $json = \GuzzleHttp\json_decode($body, true);

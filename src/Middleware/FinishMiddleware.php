@@ -65,13 +65,7 @@ class FinishMiddleware
                 throw $reason;
             }
             $service = new ResponseService($request, $response, $reason);
-            if ($service->isJsonResponse()) {
-                $service->handleJsonError();
-            } else if ($service->isHtmlResponse()) {
-                $service->handleDomError();
-            }
-
-            throw $reason;
+            $service->handleError();
         };
     }
 }
