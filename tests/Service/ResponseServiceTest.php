@@ -75,6 +75,7 @@ class ResponseServiceTest extends TestCase
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
             $this->assertEquals($e->getPrevious(), $exception);
+            $this->assertEquals($e->getContext()['responseBody'], $dom);
         }
 
         $dom = '<title>Error</title><h3>bad request</h3>';
@@ -102,6 +103,7 @@ class ResponseServiceTest extends TestCase
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from DOM response.');
             $this->assertEquals($e->getPrevious(), $exception);
+            $this->assertEquals($e->getContext()['responseBody'], $dom);
         }
 
         $dom = '<title>Unauthorized</title><h2>Bad authorized</h2>';
@@ -187,6 +189,7 @@ class ResponseServiceTest extends TestCase
             $this->assertInstanceOf(RuntimeException::class, $e);
             $this->assertEquals($e->getMessage(), 'Failed to extract error message from JSON response.');
             $this->assertEquals($e->getPrevious(), $exception);
+            $this->assertEquals($e->getContext()['responseBody'], $body);
         }
 
         /** @var Response|MockObject $response */

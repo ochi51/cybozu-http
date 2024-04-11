@@ -25,6 +25,11 @@ class ResponseService
     private $response;
 
     /**
+     * @var string|null
+     */
+    private $responseBody = null;
+
+    /**
      * @var \Throwable|null
      */
     private $previousThrowable;
@@ -71,7 +76,7 @@ class ResponseService
      */
     public function handleDomError(): void
     {
-        $body = (string)$this->response->getBody()->getContents();
+        $body = $this->getResponseBody();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
@@ -108,7 +113,7 @@ class ResponseService
     public function handleJsonError(): void
     {
         try {
-            $body = (string)$this->response->getBody()->getContents();
+            $body = $this->getResponseBody();
             $json = \GuzzleHttp\json_decode($body, true);
         } catch (\InvalidArgumentException $e) {
             return;
@@ -150,6 +155,19 @@ class ResponseService
     }
 
     /**
+     * In stream mode, contents can be obtained only once, so this method makes it reusable.
+     * @return string
+     */
+    private function getResponseBody(): string
+    {
+        if (is_null($this->responseBody)) {
+            $this->responseBody = $this->response->getBody()->getContents();
+        }
+
+        return $this->responseBody;
+    }
+
+    /**
      * @param string $message
      * @return RequestException
      */
@@ -176,7 +194,8 @@ class ResponseService
         return new RuntimeException(
             $message,
             0,
-            $this->previousThrowable
+            $this->previousThrowable,
+            ['responseBody' => $this->getResponseBody()]
         );
     }
 }
