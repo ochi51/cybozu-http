@@ -16,9 +16,9 @@ class GuestsTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
     }
@@ -43,7 +43,7 @@ class GuestsTest extends TestCase
                 'test2@example.com'
             ]);
             sleep(1);
-        } catch (RequestException $e) {
+        } catch (RequestException) {
             // If not exist test guest users, no problem
         }
 

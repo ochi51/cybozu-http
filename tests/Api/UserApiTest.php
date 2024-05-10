@@ -12,15 +12,11 @@ use CybozuHttp\Api\UserApi;
  */
 class UserApiTest extends TestCase
 {
-    /**
-     * @var UserApi
-     */
-    private $api;
 
-    protected function setup()
+    protected function setup(): void
     {
-        $this->api = UserTestHelper::getUserApi();
-        $this->assertTrue((bool)$this->api->getClient());
+        $api = UserTestHelper::getUserApi();
+        $this->assertTrue((bool)$api->getClient());
     }
 
     public function testGenerateUrl(): void

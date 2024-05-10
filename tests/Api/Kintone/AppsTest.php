@@ -15,39 +15,39 @@ class AppsTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
      * @var array
      */
-    private $space;
+    private array $space;
+
+    /**
+     * @var int|null
+     */
+    private ?int $guestSpaceId;
+
+    /**
+     * @var array|null
+     */
+    private ?array $guestSpace;
 
     /**
      * @var int
      */
-    private $guestSpaceId;
+    private int $appId;
 
     /**
-     * @var array
+     * @var int|null
      */
-    private $guestSpace;
+    private ?int $guestAppId;
 
-    /**
-     * @var int
-     */
-    private $appId;
-
-    /**
-     * @var int
-     */
-    private $guestAppId;
-
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
@@ -63,18 +63,18 @@ class AppsTest extends TestCase
     {
         $app = $this->api->apps()->get([$this->appId], [], null, [$this->spaceId])['apps'][0];
         $this->assertEquals($app['appId'], $this->appId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
+        $this->assertEquals('cybozu-http test app', $app['name']);
         $this->assertEquals($app['spaceId'], $this->spaceId);
         $this->assertEquals($app['threadId'], $this->space['defaultThread']);
 
         $app = $this->api->apps()->get([$this->guestAppId], [], null, [$this->guestSpaceId], 100, 0, $this->guestSpaceId)['apps'][0];
         $this->assertEquals($app['appId'], $this->guestAppId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
+        $this->assertEquals('cybozu-http test app', $app['name']);
         $this->assertEquals($app['spaceId'], $this->guestSpaceId);
         $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

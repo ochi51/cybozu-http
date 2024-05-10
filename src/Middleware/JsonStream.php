@@ -12,6 +12,8 @@ class JsonStream implements StreamInterface, \JsonSerializable
 {
     use StreamDecoratorTrait;
 
+    private $stream = null;
+
     // TODO: Specify return type as mixed when PHP 7.x support is dropped
     #[\ReturnTypeWillChange]
     public function jsonSerialize()

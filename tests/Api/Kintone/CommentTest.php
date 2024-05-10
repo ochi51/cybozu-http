@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Kintone;
+namespace CybozuHttp\Tests\Api\Kintone;
 
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
@@ -15,48 +15,38 @@ class CommentTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
-     * @var array
+     * @var int|null
      */
-    private $space;
-
-    /**
-     * @var int
-     */
-    private $guestSpaceId;
-
-    /**
-     * @var array
-     */
-    private $guestSpace;
+    private ?int $guestSpaceId;
 
     /**
      * @var int
      */
-    private $appId;
+    private int $appId;
 
     /**
      * @var int
      */
-    private $guestAppId;
+    private int $guestAppId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
-        $this->space = $this->api->space()->get($this->spaceId);
+        $space = $this->api->space()->get($this->spaceId);
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
-        $this->guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
+        $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
 
-        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $this->space['defaultThread']);
-        $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
+        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $space['defaultThread']);
+        $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $guestSpace['defaultThread'], $this->guestSpaceId);
 
         $postRecord = KintoneTestHelper::getRecord();
         $this->api->record()->post($this->appId, KintoneTestHelper::getRecord());
@@ -72,11 +62,11 @@ class CommentTest extends TestCase
         $comments = $this->api->comments()->get($this->appId, $recordId, 'desc', 0, 1);
         $comment = reset($comments);
         $this->assertEquals($comment['id'], $id);
-        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        $this->assertEquals('test comment', rtrim(ltrim($comment['text'])));
 
         $this->api->comment()->delete($this->appId, $recordId, $id);
         $comments = $this->api->comments()->get($this->appId, $recordId);
-        $this->assertEquals(count($comments), 0);
+        $this->assertCount(0, $comments);
     }
 
     public function testGuestComment(): void
@@ -101,7 +91,7 @@ class CommentTest extends TestCase
             $this->guestSpaceId);
         $comment = reset($comments);
         $this->assertEquals($comment['id'], $id);
-        $this->assertEquals(rtrim(ltrim($comment['text'])), 'test comment');
+        $this->assertEquals('test comment', rtrim(ltrim($comment['text'])));
 
         $this->api->comment()->delete($this->guestAppId, $recordId, $id, $this->guestSpaceId);
         $comments = $this->api->comments()->get(
@@ -111,10 +101,10 @@ class CommentTest extends TestCase
             0,
             10,
             $this->guestSpaceId);
-        $this->assertEquals(count($comments), 0);
+        $this->assertCount(0, $comments);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

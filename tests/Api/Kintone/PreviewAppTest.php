@@ -15,39 +15,39 @@ class PreviewAppTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
      * @var array
      */
-    private $space;
+    private array $space;
+
+    /**
+     * @var int|null
+     */
+    private ?int $guestSpaceId;
+
+    /**
+     * @var array|null
+     */
+    private ?array $guestSpace;
 
     /**
      * @var int
      */
-    private $guestSpaceId;
+    private int $appId;
 
     /**
-     * @var array
+     * @var int|null
      */
-    private $guestSpace;
+    private ?int $guestAppId;
 
-    /**
-     * @var int
-     */
-    private $appId;
-
-    /**
-     * @var int
-     */
-    private $guestAppId;
-
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
@@ -86,8 +86,8 @@ class PreviewAppTest extends TestCase
         }
 
         $app = $this->api->app()->get($appId);
-        $this->assertEquals($app['name'], 'test deploy app');
-        $this->assertEquals($app['description'], 'test deploy app description');
+        $this->assertEquals('test deploy app', $app['name']);
+        $this->assertEquals('test deploy app description', $app['description']);
         $this->assertEquals($app['spaceId'], $this->spaceId);
         $this->assertEquals($app['threadId'], $this->space['defaultThread']);
 
@@ -116,8 +116,8 @@ class PreviewAppTest extends TestCase
         }
 
         $app = $this->api->app()->get($appId, $this->guestSpaceId);
-        $this->assertEquals($app['name'], 'test deploy app');
-        $this->assertEquals($app['description'], 'test deploy app description');
+        $this->assertEquals('test deploy app', $app['name']);
+        $this->assertEquals('test deploy app description', $app['description']);
         $this->assertEquals($app['spaceId'], $this->guestSpaceId);
         $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
@@ -169,7 +169,7 @@ class PreviewAppTest extends TestCase
             ]
         ]);
         $fields = $this->api->preview()->getFields($this->appId)['properties'];
-        $this->assertEquals($fields['single_text']['label'], 'Single text change');
+        $this->assertEquals('Single text change', $fields['single_text']['label']);
 
         $this->api->preview()->deleteFields($this->appId, ['single_text']);
         $fields = $this->api->preview()->getFields($this->appId)['properties'];
@@ -188,7 +188,7 @@ class PreviewAppTest extends TestCase
             ]
         ], $this->guestSpaceId);
         $fields = $this->api->preview()->getFields($this->guestAppId, $this->guestSpaceId)['properties'];
-        $this->assertEquals($fields['single_text']['label'], 'Single text change');
+        $this->assertEquals('Single text change', $fields['single_text']['label']);
 
         $this->api->preview()->deleteFields($this->guestAppId, ['single_text'], $this->guestSpaceId);
         $fields = $this->api->preview()->getFields($this->guestAppId, $this->guestSpaceId)['properties'];
@@ -310,7 +310,7 @@ class PreviewAppTest extends TestCase
         $this->api->preview()->putFieldAcl($this->appId, $putAcl);
         $acl = $this->api->preview()->getFieldAcl($this->appId)['rights'];
         foreach ($putAcl as $k => $tmp) {
-            foreach ($putAcl[$k]['entities'] as $pv) {
+            foreach ($tmp['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
                     if ($pv['entity'] === $v['entity']) {
                         $this->assertEquals($pv, $v);
@@ -322,7 +322,7 @@ class PreviewAppTest extends TestCase
         $this->api->preview()->putFieldAcl($this->guestAppId, $putAcl, $this->guestSpaceId);
         $acl = $this->api->preview()->getFieldAcl($this->guestAppId, $this->guestSpaceId)['rights'];
         foreach ($putAcl as $k => $tmp) {
-            foreach ($putAcl[$k]['entities'] as $pv) {
+            foreach ($tmp['entities'] as $pv) {
                 foreach ($acl[$k]['entities'] as $v) {
                     if ($pv['entity'] === $v['entity']) {
                         $this->assertEquals($pv, $v);
@@ -345,18 +345,18 @@ class PreviewAppTest extends TestCase
             'url' => 'https://www.example.com/example-mobile.js'
         ]]);
         $customize = $this->api->preview()->getCustomize($this->appId);
-        $this->assertEquals($customize['desktop']['js'][0], [
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example.js'
-        ]);
-        $this->assertEquals($customize['desktop']['css'][0], [
+        ], $customize['desktop']['js'][0]);
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example.css'
-        ]);
-        $this->assertEquals($customize['mobile']['js'][0], [
+        ], $customize['desktop']['css'][0]);
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example-mobile.js'
-        ]);
+        ], $customize['mobile']['js'][0]);
 
         $this->api->preview()->putCustomize($this->guestAppId, [[
             'type' => 'URL',
@@ -369,19 +369,19 @@ class PreviewAppTest extends TestCase
             'url' => 'https://www.example.com/example-mobile.js'
         ]], $this->guestSpaceId, 'ADMIN');
         $customize = $this->api->preview()->getCustomize($this->guestAppId, $this->guestSpaceId);
-        $this->assertEquals($customize['desktop']['js'][0], [
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example.js'
-        ]);
-        $this->assertEquals($customize['desktop']['css'][0], [
+        ], $customize['desktop']['js'][0]);
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example.css'
-        ]);
-        $this->assertEquals($customize['mobile']['js'][0], [
+        ], $customize['desktop']['css'][0]);
+        $this->assertEquals([
             'type' => 'URL',
             'url' => 'https://www.example.com/example-mobile.js'
-        ]);
-        $this->assertEquals($customize['scope'], 'ADMIN');
+        ], $customize['mobile']['js'][0]);
+        $this->assertEquals('ADMIN', $customize['scope']);
     }
 
     public function testStatus(): void
@@ -431,18 +431,18 @@ class PreviewAppTest extends TestCase
 
         $this->api->preview()->putStatus($this->appId, $states, $actions);
         $response = $this->api->preview()->getStatus($this->appId);
-        $this->assertEquals($response['enable'], true);
+        $this->assertTrue($response['enable']);
         $this->assertEquals($response['states'], $states);
         $this->assertEquals($response['actions'], $actions);
 
         $this->api->preview()->putStatus($this->guestAppId, $states, $actions, true, $this->guestSpaceId);
         $response = $this->api->preview()->getStatus($this->guestAppId, 'ja', $this->guestSpaceId);
-        $this->assertEquals($response['enable'], true);
+        $this->assertTrue($response['enable']);
         $this->assertEquals($response['states'], $states);
         $this->assertEquals($response['actions'], $actions);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

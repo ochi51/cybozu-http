@@ -17,7 +17,7 @@ class KintoneApiTest extends TestCase
      */
     private $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->assertTrue((bool)$this->api->getClient());
