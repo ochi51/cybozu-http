@@ -110,7 +110,7 @@ class ResponseService
             throw $this->createException($message);
         }
 
-        throw new \InvalidArgumentException('Body is not DOM.');
+        throw $this->createRuntimeException('Failed to parse DOM response.');
     }
 
     /**
