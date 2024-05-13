@@ -13,12 +13,12 @@ class UserTestHelper
     /**
      * @var array
      */
-    private static $config;
+    private static array $config;
 
     /**
-     * @var UserApi
+     * @var UserApi|null
      */
-    private static $api;
+    private static ?UserApi $api = null;
 
     public static function getConfig(): array
     {

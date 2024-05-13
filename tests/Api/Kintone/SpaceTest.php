@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Tests\Api\Kintone;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
 
@@ -16,19 +17,19 @@ class SpaceTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $guestSpaceId;
+    private ?int $guestSpaceId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
@@ -40,18 +41,18 @@ class SpaceTest extends TestCase
         $space = $this->api->space()->get($this->spaceId);
         $this->assertEquals($this->spaceId, $space['id']);
         $this->assertEquals('cybozu-http test space', $space['name']);
-        $this->assertEquals(true, $space['isPrivate']);
+        $this->assertTrue($space['isPrivate']);
         $this->assertEquals(KintoneTestHelper::getConfig()['login'], $space['creator']['code']);
         $this->assertEquals(KintoneTestHelper::getConfig()['login'], $space['modifier']['code']);
-        $this->assertEquals(false, $space['isGuest']);
+        $this->assertFalse($space['isGuest']);
 
         $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->assertEquals($this->guestSpaceId, $guestSpace['id']);
         $this->assertEquals('cybozu-http test space', $guestSpace['name']);
-        $this->assertEquals(true, $guestSpace['isPrivate']);
+        $this->assertTrue($guestSpace['isPrivate']);
         $this->assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['creator']['code']);
         $this->assertEquals(KintoneTestHelper::getConfig()['login'], $guestSpace['modifier']['code']);
-        $this->assertEquals(true, $guestSpace['isGuest']);
+        $this->assertTrue($guestSpace['isGuest']);
     }
 
     public function testPost(): void
@@ -74,9 +75,9 @@ class SpaceTest extends TestCase
         try {
             $this->api->space()->get($id);
             self::fail('ERROR!! Not throw exception');
-        } catch (RequestException $e) {
+        } catch (RequestException) {
             $this->assertTrue(true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
     }
@@ -92,9 +93,9 @@ class SpaceTest extends TestCase
             try {
                 $this->api->space()->putBody($this->spaceId, '<p>Change body</p>');
                 self::fail('ERROR!! Not throw exception');
-            } catch (RequestException $e) {
+            } catch (RequestException) {
                 $this->assertTrue(true);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
             }
         }
@@ -108,9 +109,9 @@ class SpaceTest extends TestCase
             try {
                 $this->api->space()->putBody($this->guestSpaceId, 'Change body', $this->guestSpaceId);
                 self::fail('ERROR!! Not throw exception');
-            } catch (RequestException $e) {
+            } catch (RequestException) {
                 $this->assertTrue(true);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
             }
         }
@@ -164,13 +165,13 @@ class SpaceTest extends TestCase
                 ]);
             }
             if ($code === 'Administrators') {
-                $this->assertEquals($member, [
+                $this->assertEquals([
                     'entity' => [
                         'type' => 'GROUP',
                         'code' => 'Administrators'
                     ],
                     'isAdmin' => false
-                ]);
+                ], $member);
             }
         }
     }
@@ -195,7 +196,7 @@ class SpaceTest extends TestCase
                 'test2@example.com'
             ]);
             sleep(1);
-        } catch (RequestException $e) {
+        } catch (RequestException) {
             // If not exist test guest users, no problem
         }
 
@@ -208,7 +209,7 @@ class SpaceTest extends TestCase
         $this->assertTrue(true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

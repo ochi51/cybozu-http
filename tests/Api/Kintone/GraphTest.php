@@ -17,9 +17,9 @@ class GraphTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
     }

@@ -13,27 +13,27 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $config;
+    private static array $config;
 
     /**
-     * @var KintoneApi
+     * @var KintoneApi|null
      */
-    private static $api;
+    private static ?KintoneApi $api = null;
 
     /**
      * @var integer
      */
-    private static $spaceTemplateId;
+    private static int $spaceTemplateId;
 
     /**
      * @var array
      */
-    private static $graph;
+    private static array $graph;
 
     /**
      * @var array
      */
-    private static $fields = [
+    private static array $fields = [
         'single_text' =>
             [
                 'code' => 'single_text',
@@ -197,7 +197,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $layout = [
+    private static array $layout = [
         [
             'type' => 'ROW',
             'fields' => [
@@ -257,7 +257,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $views = [
+    private static array $views = [
         'test index' => [
             'type' => 'LIST',
             'name' => 'test index',
@@ -288,7 +288,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $appAcl = [
+    private static array $appAcl = [
         [
             'entity' => [
                 'code' => null,
@@ -322,7 +322,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $recordAcl = [[
+    private static array $recordAcl = [[
         'filterCond' => '',
         'entities' => [[
             'entity' => [
@@ -339,7 +339,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $fieldAcl = [
+    private static array $fieldAcl = [
         [
             'code' => 'number',
             'entities' => [[
@@ -367,7 +367,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $states = [
+    private static array $states = [
         'test1' => [
             'name' => 'test1',
             'index' => 0,
@@ -404,7 +404,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $actions = [
+    private static array $actions = [
         [
             'name' => 'sample',
             'from' => 'test1',
@@ -422,7 +422,7 @@ class KintoneTestHelper
     /**
      * @var array
      */
-    private static $record = [
+    private static array $record = [
         'single_text' => ['value' => 'single_text value'],
         'number' => ['value' => '10'],
         'radio_button' => ['value' => 'sample1'],
@@ -584,7 +584,7 @@ class KintoneTestHelper
      * @param bool $isGuest
      * @return int
      */
-    public static function createTestSpace($isGuest = false): int
+    public static function createTestSpace(bool $isGuest = false): int
     {
         $api = self::getKintoneApi();
         $members = [[
@@ -608,10 +608,10 @@ class KintoneTestHelper
     /**
      * @param int $spaceId
      * @param int $threadId
-     * @param int $guestSpaceId
+     * @param int|null $guestSpaceId
      * @return int
      */
-    public static function createTestApp($spaceId, $threadId, $guestSpaceId = null): int
+    public static function createTestApp(int $spaceId, int $threadId, ?int $guestSpaceId = null): int
     {
         $api = self::getKintoneApi();
         $resp = $api->preview()->post('cybozu-http test app', $spaceId, $threadId, $guestSpaceId);
@@ -641,10 +641,10 @@ class KintoneTestHelper
 
     /**
      * @param int $appId
-     * @param int $guestSpaceId
+     * @param int|null $guestSpaceId
      * @return int
      */
-    public static function postTestRecord($appId, $guestSpaceId = null): int
+    public static function postTestRecord(int $appId, ?int $guestSpaceId = null): int
     {
         $api = self::getKintoneApi();
         return $api->record()->post($appId, self::$record, $guestSpaceId)['id'];

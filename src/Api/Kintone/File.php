@@ -5,7 +5,6 @@ namespace CybozuHttp\Api\Kintone;
 use CybozuHttp\Client;
 use CybozuHttp\Api\KintoneApi;
 use CybozuHttp\Middleware\JsonStream;
-use CybozuHttp\Service\ResponseService;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\MultipartStream;
@@ -59,28 +58,7 @@ class File
             'json' => ['fileKey' => $fileKey],
             'stream' => true
         ];
-        $result = $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
-        if ($result instanceof RequestException) {
-            $this->handleJsonError($result);
-            throw $result;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param RequestException $result
-     * @throws RequestException
-     */
-    private function handleJsonError(RequestException $result): void
-    {
-        $response = $result->getResponse();
-        if ($response instanceof ResponseInterface) {
-            $service = new ResponseService($result->getRequest(), $response);
-            if ($service->isJsonResponse()) {
-                $service->handleJsonError();
-            }
-        }
+        return $this->client->get(KintoneApi::generateUrl('file.json', $guestSpaceId), $options);
     }
 
     /**

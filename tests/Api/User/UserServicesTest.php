@@ -5,7 +5,7 @@ namespace CybozuHttp\Tests\Api\User;
 use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
-use EasyCSV\Reader;
+use League\Csv\Reader;
 use CybozuHttp\Api\UserApi;
 
 /**
@@ -16,9 +16,9 @@ class UserServicesTest extends TestCase
     /**
      * @var UserApi
      */
-    private $api;
+    private UserApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = UserTestHelper::getUserApi();
 
@@ -56,24 +56,23 @@ class UserServicesTest extends TestCase
         }
 
         $content = $this->api->userServices()->getByCsv();
-        $path = __DIR__ . '/../../_output/export-user-services.csv';
-        file_put_contents($path, $content);
-        $getCsv = new Reader($path, 'r+', false);
-        while ($row = $getCsv->getRow()) {
+        $csv = Reader::createFromString($content);
+        $records = $csv->getRecords();
+        foreach ($records as $row) {
             if ('example-title1' === reset($row)) {
-                $this->assertEquals($row, [
+                $this->assertEquals([
                     'test1@example.com','ki','ga','sa','of'
-                ]);
+                ], $row);
             }
             if ('example-title2' === reset($row)) {
-                $this->assertEquals($row, [
+                $this->assertEquals([
                     'test2@example.com','ki','sa'
-                ]);
+                ], $row);
             }
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $filename = __DIR__ . '/../../_data/delete-users.csv';
         $id = $this->api->users()->postByCsv($filename);

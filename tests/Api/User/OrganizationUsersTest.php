@@ -15,9 +15,9 @@ class OrganizationUsersTest extends TestCase
     /**
      * @var UserApi
      */
-    private $api;
+    private UserApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = UserTestHelper::getUserApi();
     }

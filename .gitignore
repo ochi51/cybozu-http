@@ -3,6 +3,7 @@
 parameters.yml
 composer.lock
 /tests/_output
+/*.cache
 
 # PHPStorm
 .idea

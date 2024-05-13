@@ -1,3 +1,18 @@
+build:
+    image: default-bionic
+    nodes:
+        analysis:
+            dependencies:
+                override:
+                    - composer install -n --prefer-dist
+            tests:
+                override:
+                    - command: XDEBUG_MODE=coverage php ./bin/phpunit --coverage-text --coverage-clover=coverage.clover
+                      coverage:
+                          file: ./coverage.clover
+                          format: clover
+                    - php-scrutinizer-run
+
 checks:
     php:
         code_rating: true
@@ -7,7 +22,6 @@ filter:
     paths: ["src/*"]
 
 tools:
-    external_code_coverage: true
     php_code_coverage: true
     php_mess_detector: true
     php_pdepend: true

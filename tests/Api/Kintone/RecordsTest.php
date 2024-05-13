@@ -14,29 +14,29 @@ class RecordsTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
+
+    /**
+     * @var int|null
+     */
+    private ?int $guestSpaceId;
 
     /**
      * @var int
      */
-    private $guestSpaceId;
+    private int $appId;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $appId;
+    private ?int $guestAppId;
 
-    /**
-     * @var int
-     */
-    private $guestAppId;
-
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
@@ -157,7 +157,7 @@ class RecordsTest extends TestCase
         $this->assertTrue(true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);
