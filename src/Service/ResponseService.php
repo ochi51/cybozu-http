@@ -99,22 +99,15 @@ class ResponseService
             if (is_object($title)) {
                 $title = $title->item(0)->nodeValue;
             }
-            if ($title === 'Error') {
-                $message = $dom->getElementsByTagName('h3')->item(0)->nodeValue;
-                if (is_null($message)) {
-                    throw $this->createRuntimeException('Failed to extract error message from DOM response.');
-                }
-                throw $this->createException($message);
+            $message = match ($title) {
+                'Error' => $dom->getElementsByTagName('h3')->item(0)->nodeValue,
+                'Unauthorized' => $dom->getElementsByTagName('h2')->item(0)->nodeValue,
+                default => 'Invalid auth.',
+            };
+            if (is_null($message)) {
+                throw $this->createRuntimeException('Failed to extract error message from DOM response.');
             }
-            if ($title === 'Unauthorized') {
-                $message = $dom->getElementsByTagName('h2')->item(0)->nodeValue;
-                if (is_null($message)) {
-                    throw $this->createRuntimeException('Failed to extract error message from DOM response.');
-                }
-                throw $this->createException($message);
-            }
-
-            throw $this->createException('Invalid auth.');
+            throw $this->createException($message);
         }
 
         throw new \InvalidArgumentException('Body is not DOM.');
