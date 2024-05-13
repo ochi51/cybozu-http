@@ -22,12 +22,12 @@ class PfxTest extends TestCase
             self::fail('ERROR!! ' . get_class($e) . ' : ' . $e->getMessage());
         }
 
-//        try {
-//            Pfx::toPem($dir . 'not-exist.pfx', 'test');
-//            self::fail('Not throw Failed load cert file exception!');
-//        } catch (Exception) {
-//            $this->assertTrue(true);
-//        }
+        try {
+            Pfx::toPem($dir . 'not-exist.pfx', 'test');
+            self::fail('Not throw Failed load cert file exception!');
+        } catch (Exception) {
+            $this->assertTrue(true);
+        }
 
         try {
             Pfx::toPem($dir . 'test.pfx', 'test');
