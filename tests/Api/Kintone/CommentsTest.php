@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Kintone;
+namespace CybozuHttp\Tests\Api\Kintone;
 
 use PHPUnit\Framework\TestCase;
 use KintoneTestHelper;
@@ -15,29 +15,24 @@ class CommentsTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
-
-    /**
-     * @var array
-     */
-    private $space;
+    private int $spaceId;
 
     /**
      * @var int
      */
-    private $appId;
+    private int $appId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
-        $this->space = $this->api->space()->get($this->spaceId);
-        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $this->space['defaultThread']);
+        $space = $this->api->space()->get($this->spaceId);
+        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $space['defaultThread']);
     }
 
     public function testComments(): void
@@ -67,7 +62,7 @@ class CommentsTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
     }

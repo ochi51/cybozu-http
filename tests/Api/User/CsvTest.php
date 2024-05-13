@@ -5,7 +5,7 @@ namespace CybozuHttp\Tests\Api\User;
 use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
-use EasyCSV\Reader;
+use League\Csv\Reader;
 use CybozuHttp\Api\UserApi;
 
 /**
@@ -16,9 +16,9 @@ class CsvTest extends TestCase
     /**
      * @var UserApi
      */
-    private $api;
+    private UserApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = UserTestHelper::getUserApi();
     }
@@ -26,14 +26,13 @@ class CsvTest extends TestCase
     public function testGet(): void
     {
         $content = $this->api->csv()->get('user');
-
-        $path = __DIR__ . '/../../_output/export-csv.csv';
-        file_put_contents($path, $content);
-        $getCsv = new Reader($path, 'r+', false);
+        $csv = Reader::createFromString($content);
+        $records = $csv->getRecords();
         $flg = false;
-        while ($row = $getCsv->getRow()) {
-            if (UserTestHelper::getConfig()['login'] === reset($row)) {
+        foreach ($records as $record) {
+            if (UserTestHelper::getConfig()['login'] === reset($record)) {
                 $flg = true;
+                break;
             }
         }
         $this->assertTrue($flg);

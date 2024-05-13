@@ -14,48 +14,38 @@ class RecordTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
-     * @var array
+     * @var int|null
      */
-    private $space;
-
-    /**
-     * @var int
-     */
-    private $guestSpaceId;
-
-    /**
-     * @var array
-     */
-    private $guestSpace;
+    private ?int $guestSpaceId;
 
     /**
      * @var int
      */
-    private $appId;
+    private int $appId;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $guestAppId;
+    private ?int $guestAppId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
-        $this->space = $this->api->space()->get($this->spaceId);
+        $space = $this->api->space()->get($this->spaceId);
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
-        $this->guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
+        $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
 
-        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $this->space['defaultThread']);
-        $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId);
+        $this->appId = KintoneTestHelper::createTestApp($this->spaceId, $space['defaultThread']);
+        $this->guestAppId = KintoneTestHelper::createTestApp($this->guestSpaceId, $guestSpace['defaultThread'], $this->guestSpaceId);
     }
 
     public function testRecord(): void
@@ -109,7 +99,7 @@ class RecordTest extends TestCase
         $this->assertTrue(true);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

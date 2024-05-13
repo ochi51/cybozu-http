@@ -12,7 +12,7 @@ class ApisTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     protected function setup(): void
     {

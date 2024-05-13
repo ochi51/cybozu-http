@@ -15,39 +15,39 @@ class AppTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
      * @var array
      */
-    private $space;
+    private array $space;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $guestSpaceId;
+    private ?int $guestSpaceId;
 
     /**
      * @var array
      */
-    private $guestSpace;
+    private array $guestSpace;
 
     /**
      * @var int
      */
-    private $appId;
+    private int $appId;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $guestAppId;
+    private ?int $guestAppId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
@@ -63,13 +63,13 @@ class AppTest extends TestCase
     {
         $app = $this->api->app()->get($this->appId);
         $this->assertEquals($app['appId'], $this->appId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
+        $this->assertEquals('cybozu-http test app', $app['name']);
         $this->assertEquals($app['spaceId'], $this->spaceId);
         $this->assertEquals($app['threadId'], $this->space['defaultThread']);
 
         $app = $this->api->app()->get($this->guestAppId, $this->guestSpaceId);
         $this->assertEquals($app['appId'], $this->guestAppId);
-        $this->assertEquals($app['name'], 'cybozu-http test app');
+        $this->assertEquals('cybozu-http test app', $app['name']);
         $this->assertEquals($app['spaceId'], $this->guestSpaceId);
         $this->assertEquals($app['threadId'], $this->guestSpace['defaultThread']);
     }
@@ -174,55 +174,55 @@ class AppTest extends TestCase
     public function testGetAcl(): void
     {
         $acl = $this->api->app()->getAcl($this->appId)['rights'];
-        $this->assertEquals($acl[0]['entity'], [
+        $this->assertEquals([
             'code' => null,
             'type' => 'CREATOR'
-        ]);
-        $this->assertEquals($acl[1]['entity'], [
+        ], $acl[0]['entity']);
+        $this->assertEquals([
             'code' => 'everyone',
             'type' => 'GROUP'
-        ]);
+        ], $acl[1]['entity']);
 
         $acl = $this->api->app()->getAcl($this->guestAppId, $this->guestSpaceId)['rights'];
-        $this->assertEquals($acl[0]['entity'], [
+        $this->assertEquals([
             'code' => null,
             'type' => 'CREATOR'
-        ]);
-        $this->assertEquals($acl[1]['entity'], [
+        ], $acl[0]['entity']);
+        $this->assertEquals([
             'code' => 'everyone',
             'type' => 'GROUP'
-        ]);
+        ], $acl[1]['entity']);
     }
 
     public function testGetRecordAcl(): void
     {
         $acl = $this->api->app()->getRecordAcl($this->appId)['rights'];
-        $this->assertEquals($acl, []);
+        $this->assertEquals([], $acl);
 
         $acl = $this->api->app()->getRecordAcl($this->guestAppId, $this->guestSpaceId)['rights'];
-        $this->assertEquals($acl, []);
+        $this->assertEquals([], $acl);
     }
 
     public function testGetFieldAcl(): void
     {
         $acl = $this->api->app()->getFieldAcl($this->appId)['rights'];
-        $this->assertEquals($acl, []);
+        $this->assertEquals([], $acl);
 
         $acl = $this->api->app()->getFieldAcl($this->guestAppId, $this->guestSpaceId)['rights'];
-        $this->assertEquals($acl, []);
+        $this->assertEquals([], $acl);
     }
 
     public function testGetCustomize(): void
     {
         $customize = $this->api->app()->getCustomize($this->appId);
-        $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['scope'], 'ALL');
+        $this->assertEquals(['js' => [], 'css' => []], $customize['desktop']);
+        $this->assertEquals(['js' => [], 'css' => []], $customize['mobile']);
+        $this->assertEquals('ALL', $customize['scope']);
 
         $customize = $this->api->app()->getCustomize($this->guestAppId, $this->guestSpaceId);
-        $this->assertEquals($customize['desktop'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['mobile'], ['js' => [], 'css' => []]);
-        $this->assertEquals($customize['scope'], 'ALL');
+        $this->assertEquals(['js' => [], 'css' => []], $customize['desktop']);
+        $this->assertEquals(['js' => [], 'css' => []], $customize['mobile']);
+        $this->assertEquals('ALL', $customize['scope']);
     }
 
     public function testGetStatus(): void
@@ -230,19 +230,19 @@ class AppTest extends TestCase
         $states = KintoneTestHelper::getStates();
         $actions = KintoneTestHelper::getActions();
         $response = $this->api->app()->getStatus($this->appId);
-        $this->assertEquals($response['enable'], true);
+        $this->assertTrue($response['enable']);
         $this->assertEquals($response['states']['test1']['name'], $states['test1']['name']);
         $this->assertEquals($response['states']['test2']['name'], $states['test2']['name']);
         $this->assertEquals($response['actions'], $actions);
 
         $response = $this->api->app()->getStatus($this->guestAppId, 'ja', $this->guestSpaceId);
-        $this->assertEquals($response['enable'], true);
+        $this->assertTrue($response['enable']);
         $this->assertEquals($response['states']['test1']['name'], $states['test1']['name']);
         $this->assertEquals($response['states']['test2']['name'], $states['test2']['name']);
         $this->assertEquals($response['actions'], $actions);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

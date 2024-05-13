@@ -4,6 +4,7 @@ namespace CybozuHttp\Tests\Api\Kintone;
 
 use CybozuHttp\Api\Kintone\File;
 use CybozuHttp\Client;
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -21,50 +22,40 @@ class FileTest extends TestCase
     /**
      * @var KintoneApi
      */
-    private $api;
+    private KintoneApi $api;
 
     /**
      * @var int
      */
-    private $spaceId;
+    private int $spaceId;
 
     /**
-     * @var array
+     * @var int|null
      */
-    private $space;
-
-    /**
-     * @var int
-     */
-    private $guestSpaceId;
-
-    /**
-     * @var array
-     */
-    private $guestSpace;
+    private ?int $guestSpaceId;
 
     /**
      * @var int
      */
-    private $appId;
+    private int $appId;
 
     /**
-     * @var int
+     * @var int|null
      */
-    private $guestAppId;
+    private ?int $guestAppId;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = KintoneTestHelper::getKintoneApi();
         $this->spaceId = KintoneTestHelper::createTestSpace();
-        $this->space = $this->api->space()->get($this->spaceId);
+        $space = $this->api->space()->get($this->spaceId);
         $this->appId = $this->api->preview()
-            ->post('test app', $this->spaceId, $this->space['defaultThread'])['app'];
+            ->post('test app', $this->spaceId, $space['defaultThread'])['app'];
 
         $this->guestSpaceId = KintoneTestHelper::createTestSpace(true);
-        $this->guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
+        $guestSpace = $this->api->space()->get($this->guestSpaceId, $this->guestSpaceId);
         $this->guestAppId = $this->api->preview()
-            ->post('test app', $this->guestSpaceId, $this->guestSpace['defaultThread'], $this->guestSpaceId)['app'];
+            ->post('test app', $this->guestSpaceId, $guestSpace['defaultThread'], $this->guestSpaceId)['app'];
     }
 
     public function testFile(): void
@@ -120,9 +111,9 @@ class FileTest extends TestCase
         $file = new File($client);
         try {
             $file->getStreamResponse('');
-            $this->assertTrue(false);
-        } catch (\Exception $e) {
-            $this->assertEquals($e->getMessage(), 'foobar');
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertEquals('foobar', $e->getMessage());
         }
 
         $body = json_encode(['message' => 'simple error']);
@@ -134,9 +125,9 @@ class FileTest extends TestCase
         $file = new File($client);
         try {
             $file->getStreamResponse('');
-            $this->assertTrue(false);
-        } catch (\Exception $e) {
-            $this->assertEquals($e->getMessage(), 'simple error');
+            $this->fail();
+        } catch (Exception $e) {
+            $this->assertEquals('simple error', $e->getMessage());
         }
     }
 
@@ -162,7 +153,7 @@ class FileTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->api->space()->delete($this->spaceId);
         $this->api->space()->delete($this->guestSpaceId, $this->guestSpaceId);

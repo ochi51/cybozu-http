@@ -5,7 +5,7 @@ namespace CybozuHttp\Tests\Api\User;
 use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
-use EasyCSV\Reader;
+use League\Csv\Reader;
 use CybozuHttp\Api\UserApi;
 
 /**
@@ -16,9 +16,9 @@ class GroupsTest extends TestCase
     /**
      * @var UserApi
      */
-    private $api;
+    private UserApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = UserTestHelper::getUserApi();
     }
@@ -41,11 +41,10 @@ class GroupsTest extends TestCase
         }
 
         $content = $this->api->groups()->getByCsv();
-        $path = __DIR__ . '/../../_output/export-groups1.csv';
-        file_put_contents($path, $content);
-        $getCsv = new Reader($path, 'r+', false);
+        $csv = Reader::createFromString($content);
+        $records = $csv->getRecords();
         $flg1 = $flg2 = false;
-        while ($row = $getCsv->getRow()) {
+        foreach ($records as $row) {
             if ('example-group1' === reset($row)) {
                 $flg1 = true;
             }

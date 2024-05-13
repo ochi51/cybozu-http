@@ -38,6 +38,9 @@ class Pfx
     {
         try {
             $fd = fopen($pfx, 'rb');
+            if ($fd === false) {
+                throw new \RuntimeException('Failed load cert file.');
+            }
             $p12buf = fread($fd, filesize($pfx));
             fclose($fd);
         } catch (\Exception $e) {

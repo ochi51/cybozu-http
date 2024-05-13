@@ -5,7 +5,7 @@ namespace CybozuHttp\Tests\Api\User;
 use PHPUnit\Framework\TestCase;
 use UserTestHelper;
 
-use EasyCSV\Reader;
+use League\Csv\Reader;
 use CybozuHttp\Api\UserApi;
 
 /**
@@ -16,9 +16,9 @@ class OrganizationsTest extends TestCase
     /**
      * @var UserApi
      */
-    private $api;
+    private UserApi $api;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->api = UserTestHelper::getUserApi();
     }
@@ -26,8 +26,8 @@ class OrganizationsTest extends TestCase
     public function testCsv(): void
     {
         $content = $this->api->organizations()->getByCsv();
-        $path = __DIR__ . '/../../_output/export-organizations.csv';
-        file_put_contents($path, $content);
+        $exportFilepath = __DIR__ . '/../../_output/export-organizations.csv';
+        file_put_contents($exportFilepath, $content);
 
         $filename = __DIR__ . '/../../_data/orgs.csv';
         $id = $this->api->organizations()->postByCsv($filename);
@@ -45,11 +45,10 @@ class OrganizationsTest extends TestCase
         }
 
         $content = $this->api->organizations()->getByCsv();
-        $path = __DIR__ . '/../../_output/export-organizations1.csv';
-        file_put_contents($path, $content);
-        $getCsv = new Reader($path, 'r+', false);
+        $csv = Reader::createFromString($content);
+        $records = $csv->getRecords();
         $flg1 = $flg2 = false;
-        while ($row = $getCsv->getRow()) {
+        foreach ($records as $row) {
             if ('example-org1' === reset($row)) {
                 $flg1 = true;
             }
@@ -59,8 +58,7 @@ class OrganizationsTest extends TestCase
         }
         $this->assertTrue($flg1 and $flg2);
 
-        $filename = __DIR__ . '/../../_output/export-organizations.csv';
-        $id = $this->api->organizations()->postByCsv($filename);
+        $id = $this->api->organizations()->postByCsv($exportFilepath);
         while (1) {
             $result = $this->api->csv()->result($id);
             if (!$result['done']) {
