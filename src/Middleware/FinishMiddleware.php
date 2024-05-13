@@ -64,14 +64,8 @@ class FinishMiddleware
             if ($response === null || $response->getStatusCode() < 300) {
                 throw $reason;
             }
-            $service = new ResponseService($request, $response);
-            if ($service->isJsonResponse()) {
-                $service->handleJsonError();
-            } else if ($service->isHtmlResponse()) {
-                $service->handleDomError();
-            }
-
-            throw $reason;
+            $service = new ResponseService($request, $response, $reason);
+            $service->handleError();
         };
     }
 }

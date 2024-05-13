@@ -2,6 +2,7 @@
 
 namespace CybozuHttp\Service;
 
+use CybozuHttp\Exception\RuntimeException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -24,14 +25,26 @@ class ResponseService
     private $response;
 
     /**
+     * @var string|null
+     */
+    private $responseBody = null;
+
+    /**
+     * @var \Throwable|null
+     */
+    private $previousThrowable;
+
+    /**
      * ResponseService constructor.
      * @param RequestInterface $request
      * @param ResponseInterface $response
+     * @param \Throwable|null $previousThrowable
      */
-    public function __construct(RequestInterface $request, ResponseInterface $response)
+    public function __construct(RequestInterface $request, ResponseInterface $response, ?\Throwable $previousThrowable = null)
     {
         $this->request = $request;
         $this->response = $response;
+        $this->previousThrowable = $previousThrowable;
     }
 
     /**
@@ -56,13 +69,28 @@ class ResponseService
         return is_string($contentType) && strpos($contentType, 'text/html') === 0;
     }
 
+    /**
+     * @throws RequestException
+     * @throws RuntimeException
+     */
+    public function handleError(): void
+    {
+        if ($this->isJsonResponse()) {
+            $this->handleJsonError();
+        } else if ($this->isHtmlResponse()) {
+            $this->handleDomError();
+        }
+
+        throw $this->createRuntimeException('Failed to extract error message because Content-Type of error response is unexpected.');
+    }
 
     /**
      * @throws RequestException
+     * @throws RuntimeException
      */
-    public function handleDomError(): void
+    private function handleDomError(): void
     {
-        $body = (string)$this->response->getBody()->getContents();
+        $body = $this->getResponseBody();
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
@@ -71,40 +99,44 @@ class ResponseService
             if (is_object($title)) {
                 $title = $title->item(0)->nodeValue;
             }
-            if ($title === 'Error') {
-                $message = $dom->getElementsByTagName('h3')->item(0)->nodeValue;
-                throw $this->createException($message);
+            $message = match ($title) {
+                'Error' => $dom->getElementsByTagName('h3')->item(0)->nodeValue,
+                'Unauthorized' => $dom->getElementsByTagName('h2')->item(0)->nodeValue,
+                default => 'Invalid auth.',
+            };
+            if (is_null($message)) {
+                throw $this->createRuntimeException('Failed to extract error message from DOM response.');
             }
-            if ($title === 'Unauthorized') {
-                $message = $dom->getElementsByTagName('h2')->item(0)->nodeValue;
-                throw $this->createException($message);
-            }
-
-            throw $this->createException('Invalid auth.');
+            throw $this->createException($message);
         }
 
-        throw new \InvalidArgumentException('Body is not DOM.');
+        throw $this->createRuntimeException('Failed to parse DOM response.');
     }
 
     /**
      * @throws RequestException
+     * @throws RuntimeException
      */
-    public function handleJsonError(): void
+    private function handleJsonError(): void
     {
+        $body = $this->getResponseBody();
         try {
-            $body = (string)$this->response->getBody()->getContents();
             $json = \GuzzleHttp\json_decode($body, true);
-        } catch (\InvalidArgumentException $e) {
-            return;
-        } catch (\RuntimeException $e) {
-            return;
+        } catch (\InvalidArgumentException) {
+            throw $this->createRuntimeException('Failed to decode JSON response.');
         }
 
         $message = $json['message'];
         if (isset($json['errors']) && is_array($json['errors'])) {
             $message .= $this->addErrorMessages($json['errors']);
         }
+        if (is_null($message) && isset($json['reason'])) {
+            $message = $json['reason'];
+        }
 
+        if (is_null($message)) {
+            throw $this->createRuntimeException('Failed to extract error message from JSON response.');
+        }
         throw $this->createException($message);
     }
 
@@ -131,10 +163,23 @@ class ResponseService
     }
 
     /**
+     * In stream mode, contents can be obtained only once, so this method makes it reusable.
+     * @return string
+     */
+    private function getResponseBody(): string
+    {
+        if (is_null($this->responseBody)) {
+            $this->responseBody = $this->response->getBody()->getContents();
+        }
+
+        return $this->responseBody;
+    }
+
+    /**
      * @param string $message
      * @return RequestException
      */
-    public function createException($message): RequestException
+    private function createException(string $message): RequestException
     {
         $level = (int) floor($this->response->getStatusCode() / 100);
         $className = RequestException::class;
@@ -146,5 +191,19 @@ class ResponseService
         }
 
         return new $className($message, $this->request, $this->response);
+    }
+
+    /**
+     * @param string $message
+     * @return RuntimeException
+     */
+    private function createRuntimeException(string $message): RuntimeException
+    {
+        return new RuntimeException(
+            $message,
+            0,
+            $this->previousThrowable,
+            ['responseBody' => $this->getResponseBody()]
+        );
     }
 }

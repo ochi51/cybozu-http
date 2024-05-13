@@ -7,7 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @author ochi51 <ochiai07@gmail.com>
  */
-class RedirectResponseException extends \Exception
+class RedirectResponseException extends \Exception implements ExceptionInterface
 {
     /**
      * @var ResponseInterface
