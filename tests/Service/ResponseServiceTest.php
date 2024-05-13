@@ -210,7 +210,10 @@ class ResponseServiceTest extends TestCase
             $service->handleError();
             $this->assertTrue(false);
         } catch (\Exception $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+            $this->assertInstanceOf(RuntimeException::class, $e);
+            $this->assertEquals($e->getMessage(), 'Failed to decode JSON response.');
+            $this->assertEquals($e->getPrevious(), $exception);
+            $this->assertEquals($e->getContext()['responseBody'], $body);
         }
 
         $body = json_encode([
